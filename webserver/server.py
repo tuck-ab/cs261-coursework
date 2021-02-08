@@ -7,17 +7,21 @@ class WebServer:
     def __init__(self, name):
         template_dir = os.path.dirname(__file__) + "/templates"
         static_dir = os.path.dirname(__file__) + "/static"
-        
+
         self.app = Flask(name, 
                          template_folder=template_dir,
                          static_folder=static_dir,
                          static_url_path="/webserver/static",
         )
         
-        self.app.add_url_rule("/", "index", WebServer.index) 
+        self.app.add_url_rule("/", "index", index) 
+        self.app.add_url_rule("/create", "create", create_meeting)
 
     def run(self):
         self.app.run(debug="True")
 
-    def index():
-        return render_template("index.html")
+def index():
+    return render_template("index.html")
+
+def create_meeting():
+    return render_template("create.html")

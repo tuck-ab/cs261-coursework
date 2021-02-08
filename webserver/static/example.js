@@ -1,1 +1,1 @@
-alert("Example JavaScript code execution");
+console.log("Example JavaScript code execution");
