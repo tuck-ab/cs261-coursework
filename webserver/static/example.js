@@ -1,0 +1,1 @@
+alert("Example JavaScript code execution");
