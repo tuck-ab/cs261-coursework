@@ -16,6 +16,9 @@ class WebServer:
         
         self.app.add_url_rule("/", "index", index) 
         self.app.add_url_rule("/create", "create", create_meeting)
+        self.app.add_url_rule("/join", "join", join_meeting, ["POST"])
+
+        self.app.add_url_rule("/meeting", "meeting", host_page)
 
     def run(self):
         self.app.run(debug="True")
@@ -25,3 +28,13 @@ def index():
 
 def create_meeting():
     return render_template("create.html")
+
+def join_meeting():
+    ## -- redirect to attendee page using code as jintja parameter
+    pass
+
+def host_page():
+    return render_template("host.html") 
+
+def attendee_page():
+    return render_template("attendee.html")
