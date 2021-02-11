@@ -1,5 +1,5 @@
 DROP TABLE hosts CASCADE;
-CREATE TABLE host (
+CREATE TABLE hosts (
     hostid  INTEGER,
     PRIMARY KEY (hostid)
 );
@@ -16,6 +16,7 @@ DROP TABLE feedback CASCADE;
 CREATE TABLE feedback (
     feedbackid    INTEGER,
     meetingid     INTEGER,
+    userid        INTEGER NOT NULL,
     feedbacktype  VARCHAR(8) NOT NULL CHECK (feedbacktype IN ('Error','Question','Response','Mood')),
     PRIMARY KEY (feedbackid),
     FOREIGN KEY (meetingid)
