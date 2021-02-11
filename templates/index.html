@@ -2,10 +2,13 @@
 <html>
     <head>
         <title>CS261</title>
-        <script src="{{ url_for('static', filename='example.js') }}"></script>
     </head>
     <body>
         <p>Index page</p>
         <p><a href="{{ url_for('create_meeting') }}">Create Meeting</a></p>
+        <form action="/join" method="post">
+            <input type="text" id="meetingCode" name="meetingCode"><br>
+            <input type="submit" value="Join">
+        </form>
     </body>
 </html>
