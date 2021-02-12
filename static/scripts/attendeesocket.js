@@ -14,3 +14,7 @@ socket.on("meeting_details", function(data) {
     }
     console.log("message_recieved");
 });
+
+socket.on("update_from_server", function (data) {
+    console.log(data);
+})

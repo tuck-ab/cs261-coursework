@@ -2,7 +2,7 @@ import os
 import json
 
 from flask import Flask, render_template, request, redirect, url_for, make_response
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit, join_room, leave_room
 
 import classes
 
@@ -74,7 +74,8 @@ def attendee_connect(data):
     
     if meeting:
         to_send["connection_status"] = "connected"
-        meeting.add_attendee(request.namespace)
+        meeting.add_attendee(request.sid)
+        join_room(meeting.attendee_room)
     else:
         to_send["connection_status"] = "not_connected"
 
@@ -83,7 +84,9 @@ def attendee_connect(data):
 
 @socketio.on("update_from_host")
 def update_from_host(data):
-    meeting = controller.get_meeting_from_token(data["token"])
+    meeting = controller.get_meeting_from_token(data["cookie"])
+
+    emit("update_from_server", {"test":"testmsg"}, room=meeting.attendee_room)
 
 ## -- Running the server
 if __name__ == "__main__":

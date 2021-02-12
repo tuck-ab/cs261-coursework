@@ -11,6 +11,10 @@ socket.on("meeting_details", function(data) {
     console.log("Message recieved");
 });
 
+function sendUpdate() {
+    socket.emit("update_from_host", {"cookie" : getCookie("meeting_token")});
+}
+
 function getCookie(name) {
     const value =  `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
