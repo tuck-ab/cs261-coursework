@@ -64,6 +64,27 @@ def host_connect(data):
     meeting = controller.get_meeting_from_token(cookie)
     emit("meeting_details", {"meeting_code":meeting.code})
 
+@socketio.on("connect_as_attendee")
+def attendee_connect(data):
+    code = data["code"]
+
+    to_send = {}
+
+    meeting = controller.get_meeting_from_code(str(code))
+    
+    if meeting:
+        to_send["connection_status"] = "connected"
+        meeting.add_attendee(request.namespace)
+    else:
+        to_send["connection_status"] = "not_connected"
+
+    emit("meeting_details", to_send)
+
+
+@socketio.on("update_from_host")
+def update_from_host(data):
+    meeting = controller.get_meeting_from_token(data["token"])
+
 ## -- Running the server
 if __name__ == "__main__":
     socketio.run(app)

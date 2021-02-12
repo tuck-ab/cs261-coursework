@@ -7,7 +7,8 @@ socket.on("connection_response", function(data) {
 });
 
 socket.on("meeting_details", function(data) {
-    document.getElementById("meeting_code").innerHTML = data["meeting_code"]; 
+    document.getElementById("meeting_code").innerHTML = data["meeting_code"];
+    console.log("Message recieved");
 });
 
 function getCookie(name) {

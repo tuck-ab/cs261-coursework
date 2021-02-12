@@ -4,12 +4,12 @@
         <script src="https://cdn.socket.io/3.1.1/socket.io.min.js"></script>
 
         <script type="text/javascript">
-            var meetingCode = {{ meeting_code }};
+            var meetingcode = "{{ meeting_code }}";
         </script>
-        
+
         <script src="{{ url_for('static', filename='scripts/attendeesocket.js') }}"></script>
     </head>
     <body>
-
+        <h3 id="connection_status"></h3>
     </body>
 </html>
