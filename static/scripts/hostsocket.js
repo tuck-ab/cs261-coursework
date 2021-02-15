@@ -11,6 +11,10 @@ socket.on("meeting_details", function(data) {
     console.log("Message recieved");
 });
 
+socket.on("test_emit", function(data) {
+    console.log(data);
+});
+
 function sendUpdate() {
     socket.emit("update_from_host", {"cookie" : getCookie("meeting_token")});
 }

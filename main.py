@@ -4,8 +4,7 @@ import json
 from flask import Flask, render_template, request, redirect, url_for, make_response
 from flask_socketio import SocketIO, emit, join_room, leave_room
 
-import classes
-
+from classes import *
 
 
 app = Flask(__name__)
@@ -14,7 +13,7 @@ app.config["SECRET_KEY"] = "SecretKey"
 socketio = SocketIO(app)
 socketio.init_app(app, cors_allowed_origins="*")
 
-controller = classes.Controller()
+controller = Controller()
 
 
 ## -- Mapping pages
@@ -62,7 +61,14 @@ def connected():
 def host_connect(data):
     cookie = data["cookie"]
     meeting = controller.get_meeting_from_token(cookie)
+
+    host = Host(request.sid, meeting=meeting)
+    join_room(host.get_room())
+
+    meeting.set_host(host)
+
     emit("meeting_details", {"meeting_code":meeting.code})
+    emit("test_emit", "test", room=host.get_room())
 
 @socketio.on("connect_as_attendee")
 def attendee_connect(data):
