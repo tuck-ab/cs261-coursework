@@ -1,16 +1,14 @@
 from .attendee import Attendee
 
 class Meeting:
-    def __init__(self, token):
-        self.code = self.generate_code()
+    def __init__(self, token, code):
         self.host_token = token
+        self.code = code
 
         self.host_room = token + "_h"
         self.attendee_room = token + "_a"
 
-        self.data = None
-
-        self.host = None 
+        self.host = None
         self.attendees = set()
 
     def attendee_in_meeting(self, attendee):
@@ -23,18 +21,14 @@ class Meeting:
     def get_attendee(self):
         pass 
 
-    # def send_to_attendees(self, data):
-    #     for attendee in self.attendees:
-    #         attendee.send(data)
-
     def set_host(self, host):
-        pass 
+        self.host = host
 
     def get_host(self):
-        pass
+        if self.host == None:
+            print("Host has not been set yet")
 
-    def generate_code(self):
-        return "123"
+        return self.host
 
     def __str__(self):
         out_str = "\nMeeting:\n"
