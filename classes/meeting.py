@@ -14,9 +14,8 @@ class Meeting:
     def attendee_in_meeting(self, attendee):
         pass
 
-    def add_attendee(self, sid):
-        new_attendee = Attendee(sid)
-        self.attendees.add(new_attendee)
+    def add_attendee(self, attendee):
+        self.attendees.add(attendee)
 
     def get_attendee(self):
         pass 

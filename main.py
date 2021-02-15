@@ -62,30 +62,33 @@ def host_connect(data):
     cookie = data["cookie"]
     meeting = controller.get_meeting_from_token(cookie)
 
-    host = Host(request.sid, meeting=meeting)
-    join_room(host.get_room())
-
-    meeting.set_host(host)
+    new_host = Host(request.sid, meeting=meeting)
+    meeting.set_host(new_host)
+    join_room(new_host.get_room())
+    join_room(meeting.host_room)    
 
     emit("meeting_details", {"meeting_code":meeting.code})
-    emit("test_emit", "test", room=host.get_room())
+    emit("test_emit", "test", room=new_host.get_room())
 
 @socketio.on("connect_as_attendee")
 def attendee_connect(data):
+    to_send_back = {}
+
     code = data["code"]
-
-    to_send = {}
-
     meeting = controller.get_meeting_from_code(str(code))
     
     if meeting:
-        to_send["connection_status"] = "connected"
-        meeting.add_attendee(request.sid)
+        to_send_back["connection_status"] = "connected"
+
+        new_attendee = Attendee(request.sid, meeting=meeting)
+        meeting.add_attendee(new_attendee)
+        join_room(new_attendee.get_room())
         join_room(meeting.attendee_room)
+
     else:
         to_send["connection_status"] = "not_connected"
 
-    emit("meeting_details", to_send)
+    emit("meeting_details", to_send_back)
 
 
 @socketio.on("update_from_host")
