@@ -4,22 +4,33 @@ CREATE TABLE hosts (
     PRIMARY KEY (hostid)
 );
 
+DROP TABLE IF EXISTS attendees;
+CREATE TABLE attendees (
+    attendeeid INTEGER,
+    meetingid  INTEGER,
+    PRIMARY KEY (attendeeid),
+    FOREIGN KEY (meetingid) REFERENCES meetings(meetingid)
+);
+
 DROP TABLE IF EXISTS meetings;
 CREATE TABLE meetings (
     meetingid  INTEGER,
+    hostid     INTEGER,
     title      VARCHAR(30) NOT NULL,
     runtime    TIME NOT NULL,
-    PRIMARY KEY (meetingid)
+    PRIMARY KEY (meetingid),
+    FOREIGN KEY (hostid) REFERENCES hosts(hostid)
 );
 
 DROP TABLE IF EXISTS feedback;
 CREATE TABLE feedback (
     feedbackid    INTEGER,
     meetingid     INTEGER,
-    userid        INTEGER NOT NULL,
+    attendeeid        INTEGER,
     feedbacktype  VARCHAR(8) NOT NULL CHECK (feedbacktype IN ('Error','Question','Response','Mood')),
     PRIMARY KEY (feedbackid),
-    FOREIGN KEY (meetingid) REFERENCES meetings(meetingid)
+    FOREIGN KEY (meetingid) REFERENCES meetings(meetingid),
+    FOREIGN KEY (attendeeid) REFERENCES attendees(attendeeid)
 );
 
 DROP TABLE IF EXISTS errors;
