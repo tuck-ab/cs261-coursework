@@ -33,8 +33,6 @@ class Controller:
                 return code
 
     def get_attendee(self, sid):
-        print(self.meetings_by_token)
-        print(self.meetings_by_token.values())
         for meeting in self.meetings_by_token.values():
             result = meeting.get_attendee(sid)
             if result != None:
