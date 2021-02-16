@@ -17,4 +17,9 @@ socket.on("meeting_details", function(data) {
 
 socket.on("update_from_server", function (data) {
     console.log(data);
-})
+});
+
+function sendTest() {
+    console.log("test sending");
+    socket.emit("question_response", {"data":document.getElementById("test").value});
+}

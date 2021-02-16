@@ -97,6 +97,11 @@ def update_from_host(data):
 
     emit("update_from_server", {"test":"testmsg"}, room=meeting.attendee_room)
 
+@socketio.on("question_response")
+def question_response(data):
+    attendee = controller.get_attendee(request.sid)
+    print(attendee)
+
 ## -- Running the server
 if __name__ == "__main__":
     socketio.run(app)

@@ -32,6 +32,16 @@ class Controller:
             if not code in self.meetings_by_code:
                 return code
 
+    def get_attendee(self, sid):
+        print(self.meetings_by_token)
+        print(self.meetings_by_token.values())
+        for meeting in self.meetings_by_token.values():
+            result = meeting.get_attendee(sid)
+            if result != None:
+                return result
+
+        return None
+
     def get_meeting_from_attendee(self):
         pass
 
@@ -53,6 +63,6 @@ class Controller:
     def host_disconnect(self):
         pass 
 
-    def client_disconnect(self):
+    def attendee_disconnect(self):
         pass
 

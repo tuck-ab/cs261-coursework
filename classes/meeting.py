@@ -9,16 +9,19 @@ class Meeting:
         self.attendee_room = token + "_a"
 
         self.host = None
-        self.attendees = set()
+        self.attendees = {}
 
     def attendee_in_meeting(self, attendee):
         pass
 
     def add_attendee(self, attendee):
-        self.attendees.add(attendee)
+        self.attendees[attendee.sid] = attendee
 
-    def get_attendee(self):
-        pass 
+    def get_attendee(self, sid):
+        if sid in self.attendees:
+            return self.attendees[sid]
+        else:
+            return None
 
     def set_host(self, host):
         self.host = host
