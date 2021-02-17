@@ -5,5 +5,5 @@
 ### Dependencies
 * Python Flask
     * To install: "pip3 install flask"
-* Python 'Websockets' library
-    * To install: "pip3 install websockets"
+* Python Flask Socketio
+    * To install: "pip3 install flask-socketio"
