@@ -8,7 +8,3 @@ class Response(generalFeedbackObj.GeneralFeedback):
     
     def getResponsePrompt(self):
         return self.responsePrompt
-
-
-test = Response(True, 100101, "this is your prompt")
-
