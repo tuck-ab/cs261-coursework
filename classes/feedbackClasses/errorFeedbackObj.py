@@ -12,11 +12,3 @@ class ErrorFeedback(generalFeedbackObj.GeneralFeedback):
     
     def getErrorMessage(self):
         return self.errorMessage
-
-
-test = ErrorFeedback(True, 100101, 2, "we cant hear u")
-
-print(test.getErrorMessage())
-print(test.getErrorType())
-print(test.getAnon())
-print(test.getAttendee())
