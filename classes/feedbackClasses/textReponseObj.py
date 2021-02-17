@@ -8,11 +8,3 @@ class TextResponse(responseObj.Response):
     
     def getResponseText(self):
         return self.responseText
-
-
-test = TextResponse(True, 100101, "this is your prompt", "this is your response")
-
-print(test.getResponseText())
-print(test.getResponsePrompt())
-print(test.getAnon())
-print(test.getAttendee())
