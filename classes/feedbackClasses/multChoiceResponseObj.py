@@ -8,11 +8,3 @@ class MultChoiceResponse(responseObj.Response):
     
     def getResponseChoice(self):
         return self.responseChoice
-
-
-test = MultChoiceResponse(True, 100101, "this is your prompt", 2)
-
-print(test.getResponseChoice())
-print(test.getResponsePrompt())
-print(test.getAnon())
-print(test.getAttendee())
