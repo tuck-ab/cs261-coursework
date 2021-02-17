@@ -27,6 +27,8 @@ def create_meeting():
     if request.method == "GET":
         return render_template("create.html")
     elif request.method == "POST":
+        template = json.loads(request.form["templateJSON"])
+        
         ## -- Make new meeting
         new_meeting = controller.create_meeting()
 
