@@ -8,10 +8,3 @@ class Question(generalFeedbackObj.GeneralFeedback):
     
     def getQuestionText(self):
         return self.questionText
-
-
-test = Question(True, 100101, "this is your question")
-
-print(test.getQuestionText())
-print(test.getAnon())
-print(test.getAttendee())
