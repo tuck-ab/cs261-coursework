@@ -1,4 +1,4 @@
-import generalFeedbackObj
+from .generalFeedbackObj import GeneralFeedback
 
 class Question(generalFeedbackObj.GeneralFeedback):
 
