@@ -1,6 +1,6 @@
 from .responseObj import Response
 
-class TextResponse(responseObj.Response):
+class TextResponse(Response):
 
     def __init__(self, anonFlag, attendeeID, responsePrompt, responseText):
         super().__init__(anonFlag, attendeeID, responsePrompt)
