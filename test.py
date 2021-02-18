@@ -1,4 +1,4 @@
-import classes
+from classes import *
 
 test = TextMood(True, 100101, 0.7, "this is the text")
 
