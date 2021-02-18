@@ -3,3 +3,5 @@ from .controller import *
 from .host import *
 from .meeting import *
 from .template import *
+from .feedbackClasses import *
+from .promptClasses import *
