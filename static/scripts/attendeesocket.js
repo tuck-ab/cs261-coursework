@@ -33,21 +33,6 @@ class HostQuestions {
     }
 }
 
-class Question {
-    constructor(type) {
-        this.type = type;
-        this.question = "";
-    }
-
-    setQuestion(question) {
-        this.question = question;
-    }
-
-    getJSONString() {
-        return `{"question":"` + this.question + `", "type":"` + this.type + `"}`;
-    }
-}
-
 var hostQuestions = new HostQuestions();
 
 socket.on("connection_response", function(data) {
