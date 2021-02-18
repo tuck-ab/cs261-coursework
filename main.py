@@ -27,10 +27,11 @@ def create_meeting():
     if request.method == "GET":
         return render_template("create.html")
     elif request.method == "POST":
-        template = json.loads(request.form["templateJSON"])
+        template = Template().fromJSON(json.loads(request.form["templateJSON"]))
         
         ## -- Make new meeting
         new_meeting = controller.create_meeting()
+        new_meeting.set_template(template)
 
         ## -- Send the response with token
         resp = make_response(redirect(url_for("host_page")))
@@ -85,7 +86,9 @@ def attendee_connect(data):
         new_attendee = Attendee(request.sid, meeting=meeting)
         meeting.add_attendee(new_attendee)
         join_room(new_attendee.get_room())
-        join_room(meeting.attendee_room)
+        join_room(meeting.attendee_room)#
+        
+        to_send_back["template"] = json.dumps(meeting.get_template().getJSON())
 
     else:
         to_send["connection_status"] = "not_connected"

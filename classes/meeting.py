@@ -8,8 +8,16 @@ class Meeting:
         self.host_room = token + "_h"
         self.attendee_room = token + "_a"
 
+        self.template = None
+
         self.host = None
         self.attendees = {}
+
+    def set_template(self, template):
+        self.template = template
+
+    def get_template(self):
+        return self.template
 
     def attendee_in_meeting(self, attendee):
         pass
