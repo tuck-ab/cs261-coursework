@@ -1,6 +1,6 @@
 from .generalFeedbackObj import GeneralFeedback
 
-class Mood(generalFeedbackObj.GeneralFeedback):
+class Mood(GeneralFeedback):
 
     def __init__(self, anonFlag, attendeeID, moodScore):
         super().__init__(anonFlag, attendeeID)
