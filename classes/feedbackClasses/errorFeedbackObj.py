@@ -1,6 +1,6 @@
 from .generalFeedbackObj import GeneralFeedback
 
-class ErrorFeedback(generalFeedbackObj.GeneralFeedback):
+class ErrorFeedback(GeneralFeedback):
 
     def __init__(self, anonFlag, attendeeID, errorType, errorMessage):
         super().__init__(anonFlag, attendeeID)
