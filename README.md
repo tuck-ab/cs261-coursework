@@ -1,6 +1,6 @@
 # CS261-coursework
 
-### To start the servers, run the 'run.sh' bash script
+### To start the servers, run the 'main.py' file
 
 ### Dependencies
 * Python Flask
