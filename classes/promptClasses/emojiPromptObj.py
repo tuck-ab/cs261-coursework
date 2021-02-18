@@ -1,6 +1,6 @@
 from .generalPromptObj import GeneralPrompt
 
-class EmojiPrompt(generalPromptObj.GeneralPrompt):
+class EmojiPrompt(GeneralPrompt):
 
     def __init__(self, hostID, promptText, allowedEmojis = list()):
         super().__init__(hostID, promptText)
