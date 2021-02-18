@@ -1,4 +1,4 @@
-import moodObj
+from .moodObj import Mood
 
 class TextMood(moodObj.Mood):
 
