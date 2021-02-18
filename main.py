@@ -27,6 +27,7 @@ def create_meeting():
     if request.method == "GET":
         return render_template("create.html")
     elif request.method == "POST":
+        print(request.form["templateJSON"])
         template = Template().fromJSON(json.loads(request.form["templateJSON"]))
         
         ## -- Make new meeting
@@ -88,7 +89,7 @@ def attendee_connect(data):
         join_room(new_attendee.get_room())
         join_room(meeting.attendee_room)#
         
-        to_send_back["template"] = json.dumps(meeting.get_template().getJSON())
+        to_send_back["template"] = meeting.get_template().getJSON()
 
     else:
         to_send["connection_status"] = "not_connected"
@@ -105,7 +106,11 @@ def update_from_host(data):
 @socketio.on("question_response")
 def question_response(data):
     attendee = controller.get_attendee(request.sid)
+    question = json.loads(data["question"])
+    answer = data["answer"]
     print(attendee)
+    print(question)
+    print(answer)
 
 @socketio.on("general_feedback")
 def general_feedback(data):

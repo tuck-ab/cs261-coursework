@@ -11,7 +11,7 @@ class Question {
     }
 
     getJSONString() {
-        return "{\"question\":\"" + this.question + "\"}"
+        return `{"question":"` + this.question + `", "type":"` + this.type + `"}`;
     }
 }
 
