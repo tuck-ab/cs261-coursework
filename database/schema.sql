@@ -26,7 +26,7 @@ DROP TABLE IF EXISTS feedback;
 CREATE TABLE feedback (
     feedbackid    INTEGER,
     meetingid     INTEGER,
-    attendeeid        INTEGER,
+    attendeeid    INTEGER,
     feedbacktype  VARCHAR(8) NOT NULL CHECK (feedbacktype IN ('Error','Question','Response','Mood')),
     PRIMARY KEY (feedbackid),
     FOREIGN KEY (meetingid) REFERENCES meetings(meetingid),

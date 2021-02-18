@@ -4,7 +4,7 @@ conn = sqlite3.connect('live_feedback.db')
 
 c = conn.cursor()
 
-schema = open("schema.sql")
+schema = open("database/schema.sql")
 schema_string = schema.read()
 c.executescript(schema_string)
 
