@@ -1,4 +1,4 @@
-import generalPromptObj
+from .generalPromptObj import GeneralPrompt
 
 class MultChoicePrompt(generalPromptObj.GeneralPrompt):
 
