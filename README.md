@@ -1,9 +1,9 @@
 # CS261-coursework
 
-### To start the servers, run the 'run.sh' bash script
+### To start the servers, run the 'main.py' file
 
 ### Dependencies
 * Python Flask
     * To install: "pip3 install flask"
-* Python 'Websockets' library
-    * To install: "pip3 install websockets"
+* Python Flask Socketio
+    * To install: "pip3 install flask-socketio"
