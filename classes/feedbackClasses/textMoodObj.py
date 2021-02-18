@@ -1,6 +1,6 @@
 from .moodObj import Mood
 
-class TextMood(moodObj.Mood):
+class TextMood(Mood):
 
     def __init__(self, anonFlag, attendeeID, moodScore, moodText):
         super().__init__(anonFlag, attendeeID, moodScore)
