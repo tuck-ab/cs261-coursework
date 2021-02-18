@@ -19,6 +19,11 @@ socket.on("update_from_server", function (data) {
     console.log(data);
 });
 
+function sendGeneralFeedback() {
+    console.log(document.getElementById("generalFeedbackInput").value)
+    socket.emit("general_feedback", {"feedback":document.getElementById("generalFeedbackInput").value});
+}
+
 function sendTest() {
     console.log("test sending");
     socket.emit("question_response", {"data":document.getElementById("test").value});

@@ -107,6 +107,11 @@ def question_response(data):
     attendee = controller.get_attendee(request.sid)
     print(attendee)
 
+@socketio.on("general_feedback")
+def general_feedback(data):
+    feedback = data["feedback"]
+    print(feedback)
+    
 ## -- Running the server
 if __name__ == "__main__":
     socketio.run(app)
