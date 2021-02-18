@@ -1,6 +1,6 @@
 from .generalPromptObj import GeneralPrompt
 
-class MultChoicePrompt(generalPromptObj.GeneralPrompt):
+class MultChoicePrompt(GeneralPrompt):
 
     def __init__(self, hostID, promptText, multChoices = list()):
         super().__init__(hostID, promptText)
