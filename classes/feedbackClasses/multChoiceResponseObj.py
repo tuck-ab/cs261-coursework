@@ -1,4 +1,4 @@
-import responseObj
+from .responseObj import Response
 
 class MultChoiceResponse(responseObj.Response):
 
