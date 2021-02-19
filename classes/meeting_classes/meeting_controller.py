@@ -2,7 +2,7 @@ import random
 
 from .meeting import Meeting
 
-class Controller:
+class Meeting_Controller:
     def __init__(self):
         self.meetings_by_token = {}
         self.meetings_by_code = {}

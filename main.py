@@ -7,23 +7,33 @@ from flask_socketio import SocketIO, emit, join_room, leave_room
 from classes import *
 
 
+controller = Meeting_Controller()
+
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "SecretKey"
 
 socketio = SocketIO(app)
 socketio.init_app(app, cors_allowed_origins="*")
 
-controller = Controller()
-
-
 ## -- Mapping pages
 
 @app.route("/")
 def index():
+    """
+    Renders and returns the index page to a client when they connect to the website
+    """
     return render_template("index.html")
 
 @app.route("/create", methods=["GET","POST"])
 def create_meeting():
+    """
+    Deals with requests for the URL/create page
+
+    If the request is a GET request then it returns the webpage to the client
+
+    If the request is a POST request then it deals with the template recieved and redirects
+    the client to the 'host' page for a meeting along with the necessary identifiers as cookies.
+    """
     if request.method == "GET":
         return render_template("create.html")
     elif request.method == "POST":
@@ -41,17 +51,27 @@ def create_meeting():
 
 @app.route("/join", methods=["POST"])
 def join_meeting():
-    ## -- redirect to attendee page using code as jintja parameter
+    """
+    Deals with POST request to the URL/join page
+
+    Redirects the client to the 'attendee_page' adding the room code to the HTML
+    """
     code = request.form["meetingCode"]
 
     return redirect(url_for("attendee_page", code=code))
 
 @app.route("/meeting/host")
 def host_page():
+    """
+    Renders and returns the page for a meeting's host
+    """
     return render_template("host.html") 
 
 @app.route("/meeting/attendee/<code>")
 def attendee_page(code):
+    """
+    Renders and returns the page for a meeting's attendee
+    """
     return render_template("attendee.html", meeting_code=code)
 
 
@@ -59,10 +79,21 @@ def attendee_page(code):
 
 @socketio.on("connect")
 def connected():
+    """
+    Function called when a user first connects to the socket.
+
+    Sends back a response to verify the connection and to trigger any required
+    client side functions.
+    """
     emit("connection_response", "connected")
 
 @socketio.on("connect_as_host")
 def host_connect(data):
+    """
+    Used when the host responds to the connected message
+
+    Works out which room the host is using and sends back necessary details eg. room code
+    """
     cookie = data["cookie"]
     meeting = controller.get_meeting_from_token(cookie)
 
@@ -76,6 +107,11 @@ def host_connect(data):
 
 @socketio.on("connect_as_attendee")
 def attendee_connect(data):
+    """
+    Used when the attendee responds to the connected message
+
+    Works out which room the attendee is using and sends back necessary details eg. question template
+    """
     to_send_back = {}
 
     code = data["code"]
@@ -87,7 +123,7 @@ def attendee_connect(data):
         new_attendee = Attendee(request.sid, meeting=meeting)
         meeting.add_attendee(new_attendee)
         join_room(new_attendee.get_room())
-        join_room(meeting.attendee_room)#
+        join_room(meeting.attendee_room)
         
         to_send_back["template"] = meeting.get_template().getJSON()
 
@@ -105,6 +141,15 @@ def update_from_host(data):
 
 @socketio.on("question_response")
 def question_response(data):
+    """
+    Function called when an attendee responds to a normal question.
+    TODO - Sends the data to be analysed and emits any change to the host
+
+    Parameters:
+        data (dict): JSON data from the socket connection
+                     {"question": question(dict), "answer": answer(str)}
+
+    """
     attendee = controller.get_attendee(request.sid)
     question = json.loads(data["question"])
     answer = data["answer"]
@@ -114,6 +159,14 @@ def question_response(data):
 
 @socketio.on("general_feedback")
 def general_feedback(data):
+    """
+    Function called when the client sends general feedback during the presentation
+    TODO - Sends the data to be analysed and emits any change to the host
+
+    Parameters:
+        data (dict): JSON data from the socket connection
+                     {"feedback": feedback(str)}
+    """
     feedback = data["feedback"]
     print(feedback)
     
