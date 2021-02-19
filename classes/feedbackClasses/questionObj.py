@@ -1,6 +1,6 @@
 from .generalFeedbackObj import GeneralFeedback
 
-class Question(GeneralFeedback):
+class QuestionFeedback(GeneralFeedback):
 
     def __init__(self, anonFlag, attendeeID, meetingID, questionText):
         super().__init__(anonFlag, attendeeID, meetingID)
@@ -8,3 +8,6 @@ class Question(GeneralFeedback):
     
     def getQuestionText(self):
         return self.questionText
+
+
+test7 = QuestionFeedback(True,23,43,"kj")
