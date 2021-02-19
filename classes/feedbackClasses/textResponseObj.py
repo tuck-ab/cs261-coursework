@@ -2,8 +2,8 @@ from .responseObj import Response
 
 class TextResponse(Response):
 
-    def __init__(self, anonFlag, attendeeID, responsePrompt, responseText):
-        super().__init__(anonFlag, attendeeID, responsePrompt)
+    def __init__(self, anonFlag, attendeeID, meetingID, responsePrompt, responseText):
+        super().__init__(anonFlag, attendeeID, meetingID, responsePrompt)
         self.responseText = responseText
     
     def getResponseText(self):
