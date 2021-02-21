@@ -17,7 +17,7 @@ CREATE TABLE meetings (
     meetingid  INTEGER,
     hostid     INTEGER,
     title      VARCHAR(30) NOT NULL,
-    runtime    TIME NOT NULL,
+    runtime    INTEGER NOT NULL,
     PRIMARY KEY (meetingid),
     FOREIGN KEY (hostid) REFERENCES hosts(hostid)
 );
@@ -28,6 +28,7 @@ CREATE TABLE feedback (
     meetingid     INTEGER,
     attendeeid    INTEGER,
     feedbacktype  VARCHAR(8) NOT NULL CHECK (feedbacktype IN ('Error','Question','Response','Mood')),
+    anon          INTEGER NOT NULL CHECK (anon IN (0,1)),
     PRIMARY KEY (feedbackid),
     FOREIGN KEY (meetingid) REFERENCES meetings(meetingid),
     FOREIGN KEY (attendeeid) REFERENCES attendees(attendeeid)
@@ -56,7 +57,7 @@ CREATE TABLE moods (
     feedbackid  INTEGER,
     moodtype    VARCHAR(5) NOT NULL CHECK (moodtype IN ('Text','Emoji')),
     score       FLOAT NOT NULL,
-    timeofmood  TIME NOT NULL,
+    timeofmood  INTEGER NOT NULL,
     PRIMARY KEY (moodid),
     FOREIGN KEY (feedbackid) REFERENCES feedback(feedbackid)
 );
@@ -105,9 +106,9 @@ CREATE TABLE emoji_responses (
 
 DROP TABLE IF EXISTS mult_choice_responses;
 CREATE TABLE mult_choice_responses (
-    responseid     INTEGER,
-    correctanswer  VARCHAR(10) NOT NULL,
-    useranswer     VARCHAR(10) NOT NULL,
+    responseid      INTEGER,
+    correctanswer   VARCHAR(10) NOT NULL,
+    attendeeanswer  VARCHAR(10) NOT NULL,
     PRIMARY KEY (responseid),
     FOREIGN KEY (responseid) REFERENCES responses(responseid)
 );
