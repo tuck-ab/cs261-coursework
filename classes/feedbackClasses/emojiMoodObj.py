@@ -2,8 +2,8 @@ from .moodObj import Mood
 
 class EmojiMood(Mood):
 
-    def __init__(self, anonFlag, attendeeID, moodScore, moodEmoji):
-        super().__init__(anonFlag, attendeeID, moodScore)
+    def __init__(self, anonFlag, attendeeID, meetingID, moodScore, moodEmoji):
+        super().__init__(anonFlag, attendeeID, meetingID, moodScore)
         self.moodEmoji = moodEmoji
     
     def getMoodEmoji(self):
