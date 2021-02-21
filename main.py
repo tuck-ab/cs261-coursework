@@ -139,6 +139,10 @@ def update_from_host(data):
 
     emit("update_from_server", {"test":"testmsg"}, room=meeting.attendee_room)
 
+@socketio.on("template_update")
+def template_update(data):
+    print("template update detected")
+
 @socketio.on("question_response")
 def question_response(data):
     """

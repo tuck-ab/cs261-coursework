@@ -3,6 +3,7 @@
     <head>
         <script src="https://cdn.socket.io/3.1.1/socket.io.min.js"></script>
         <script src="{{ url_for('static', filename='scripts/question.js') }}"></script>
+        <script src="{{ url_for('static', filename='scripts/makeQuestionPopup.js') }}"></script>
         <script src="{{ url_for('static', filename='scripts/hostsocket.js') }}"></script>
 
         <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/hiddenpopup.css') }}">
@@ -10,8 +11,21 @@
     <body>
         <p>The code for this meeting is: <div id="meeting_code"></div></p>
 
-        <div id="Popup" class="popup">
-            
+        <div id="createQuestion" class="popup">
+            <div class="popup-content">
+
+                <span class="close" onclick="closePopup()">Close</span><br>
+
+                
+                <select name="questionTypes" id="questionType" onchange="questionTypeUpdate()">
+                    <option value="" selected disabled hidden>Choose Question Type</option>
+                    <option value="normal">Normal Question</option>
+                    <!-- <option value="mult-choice">Multiple Choice Question</option> -->
+                </select>
+                <div id="questionInputer">
+
+                </div>
+            </div>
         </div>
 
         <div id="templateDisplay">
@@ -19,7 +33,7 @@
             <div id="currentTemplate">
 
             </div>
-            <input type="button" onclick="displayPopup()" value="Add Question">
+            <input type="button" onclick="openPopup()" value="Add Question">
         </div>
 
         <input type="button" onclick="sendUpdate()" value="Test">

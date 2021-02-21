@@ -1,6 +1,6 @@
 var socket = io.connect('http://localhost:5000');
 
-var templateQuestions = [];
+var template = [];
 
 function sendUpdate() {
     socket.emit("update_from_host", {"cookie" : getCookie("meeting_token")});
@@ -15,11 +15,15 @@ function getCookie(name) {
 function displayTemplate() {
     var HTMLString = "";
 
-    for (i = 0; i < templateQuestions.length; i++) {
-        HTMLString += `<p>` + templateQuestions[i].question + `</p>`;
+    for (i = 0; i < template.length; i++) {
+        HTMLString += `<p>` + template[i].question + `</p>`;
     }
 
     document.getElementById("currentTemplate").innerHTML = HTMLString;
+}
+
+function updateTemplateDisplay() {
+    socket.emit("template_update", "");
 }
 
 socket.on("template_update", function(data) {
@@ -30,7 +34,7 @@ socket.on("template_update", function(data) {
     for (i = 0; i < questions.length; i++) {
         newQuestion = new Question(questions[i]["type"].type);
         newQuestion.setQuestion(questions[i]["question"]);
-        templateQuestions.push(newQuestion);
+        template.push(newQuestion);
     }
     displayTemplate();
 });
