@@ -34,8 +34,11 @@ def create_meeting():
     If the request is a POST request then it deals with the template recieved and redirects
     the client to the 'host' page for a meeting along with the necessary identifiers as cookies.
     """
+
     if request.method == "GET":
         return render_template("create.html")
+
+
     elif request.method == "POST":
         print(request.form["templateJSON"])
         template = Template().fromJSON(json.loads(request.form["templateJSON"]))
@@ -56,6 +59,7 @@ def join_meeting():
 
     Redirects the client to the 'attendee_page' adding the room code to the HTML
     """
+
     code = request.form["meetingCode"]
 
     return redirect(url_for("attendee_page", code=code))
@@ -65,6 +69,7 @@ def host_page():
     """
     Renders and returns the page for a meeting's host
     """
+
     return render_template("host.html") 
 
 @app.route("/meeting/attendee/<code>")
@@ -141,7 +146,13 @@ def update_from_host(data):
 
 @socketio.on("template_update")
 def template_update(data):
-    print("template update detected")
+    meeting = controller.get_meeting_from_token(data["cookie"])
+    questions = json.loads(data["template"])
+
+    meeting.get_template().fromJSON(questions)
+
+    emit("template_update", meeting.get_template().getJSON())
+
 
 @socketio.on("question_response")
 def question_response(data):

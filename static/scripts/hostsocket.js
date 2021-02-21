@@ -20,16 +20,30 @@ function displayTemplate() {
     }
 
     document.getElementById("currentTemplate").innerHTML = HTMLString;
+    console.log(template);
+}
+
+function getTemplateJSONString() {
+    var JSONString = "{\"questions\":[";
+
+    for (i = 0; i < template.length; i++) {
+        JSONString += template[i].getJSONString() + ",";
+    }
+
+    JSONString = JSONString.substring(0, JSONString.length - 1) + "]}";
+    return JSONString
 }
 
 function updateTemplateDisplay() {
-    socket.emit("template_update", "");
+    socket.emit("template_update", {"cookie":getCookie("meeting_token"), "template": getTemplateJSONString()});
 }
 
 socket.on("template_update", function(data) {
     // data (json): {"questions":[{"question", "type"}]}
     var questions = data["questions"];
     var newQuestion;
+
+    template = [];
 
     for (i = 0; i < questions.length; i++) {
         newQuestion = new Question(questions[i]["type"].type);

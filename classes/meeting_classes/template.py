@@ -3,7 +3,7 @@ class Template:
         self.questions = []
 
     def fromJSON(self, json_dict):
-        """Uses the JSON string given in the POST request to create a Template object
+        """Maps the JSON dictionary given to the correct format for this object
 
         The current JSON format used is:
             {"questions": [{"question": "", "type":""}, ... , {"question": "", "type":""}]}
@@ -11,6 +11,7 @@ class Template:
         """
 
         questions = json_dict["questions"]
+        self.questions = []
 
         for question in questions:
             self.questions.append(Question(question["type"]))
@@ -22,7 +23,7 @@ class Template:
         """
         Returns a python dictionary to be used to send the template in a JSON format 
         """
-        
+
         json_dict = {"questions": []}
         for item in self.questions:
             json_dict["questions"].append(item.get_json())

@@ -23,7 +23,6 @@ function getTemplateJSONString() {
     }
 
     JSONString = JSONString.substring(0, JSONString.length - 1) + "]}";
-    console.log(JSONString);
     return JSONString
 }
 
