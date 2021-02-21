@@ -1,21 +1,18 @@
 from classes import *
 
-test1 = EmojiMood(False,1011,0,1)
-test2 = EmojiResponse(True,1111,"this is the prompt",2)
-test3 = ErrorFeedback(True,1234,"Audio","We cant hear you")
-test4 = GeneralFeedback(False,3333)
-test5 = Mood(False, 4311, 0.6)
-test6 = MultChoiceResponse(True, 9377, "this is my prompt", 3)
-test7 = Question(False, 5372, "is this a question?")
-test8 = Response(True, 3336,"this is another response")
-test9 = TextMood(True, 1001, 0.7, "this is the text")
-test10 = TextResponse(False, 8559,"This is another prompt","this is response")
-test11 = EmojiPrompt(3111, "This is the host prompt",[1,2,3,4])
-test12 = GeneralPrompt(4422, "prompt prompt prompt")
-test13 = MultChoicePrompt(5532, "prrrromppt",["a","b","c","d"])
-
-
-
+test1 = EmojiMood(False,1011,1333,0,1)
+test2 = EmojiResponse(True,1111,1333,"this is the prompt",2)
+test3 = ErrorFeedback(True,1234,1333,"Audio","We cant hear you")
+test4 = GeneralFeedback(False,3333,1333)
+test5 = Mood(False, 4311,1333, 0.6)
+test6 = MultChoiceResponse(True, 9377,1333, "this is my prompt", 3)
+test7 = QuestionFeedback(False, 5372,1333,"is this a question?")
+test8 = Response(True, 3336,1333,"this is another response")
+test9 = TextMood(True, 1001,1333, 0.7, "this is the text")
+test10 = TextResponse(False, 8559,1333,"This is another prompt","this is response")
+test11 = EmojiPrompt(3111,1333, "This is the host prompt",[1,2,3,4])
+test12 = GeneralPrompt(4422,1333, "prompt prompt prompt")
+test13 = MultChoicePrompt(5532,1333, "prrrromppt",["a","b","c","d"])
 
 
 print(test1.getMoodEmoji())
