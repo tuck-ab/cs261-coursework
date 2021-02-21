@@ -19,6 +19,10 @@ class Template:
         return self
 
     def getJSON(self):
+        """
+        Returns a python dictionary to be used to send the template in a JSON format 
+        """
+        
         json_dict = {"questions": []}
         for item in self.questions:
             json_dict["questions"].append(item.get_json())

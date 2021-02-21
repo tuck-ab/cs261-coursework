@@ -103,7 +103,7 @@ def host_connect(data):
     join_room(meeting.host_room)    
 
     emit("meeting_details", {"meeting_code":meeting.code})
-    emit("test_emit", "test", room=new_host.get_room())
+    emit("template_update", meeting.get_template().getJSON())
 
 @socketio.on("connect_as_attendee")
 def attendee_connect(data):

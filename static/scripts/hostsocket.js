@@ -1,8 +1,43 @@
 var socket = io.connect('http://localhost:5000');
 
+var templateQuestions = [];
+
+function sendUpdate() {
+    socket.emit("update_from_host", {"cookie" : getCookie("meeting_token")});
+}
+
+function getCookie(name) {
+    const value =  `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+function displayTemplate() {
+    var HTMLString = "";
+
+    for (i = 0; i < templateQuestions.length; i++) {
+        HTMLString += `<p>` + templateQuestions[i].question + `</p>`;
+    }
+
+    document.getElementById("currentTemplate").innerHTML = HTMLString;
+}
+
+socket.on("template_update", function(data) {
+    // data (json): {"questions":[{"question", "type"}]}
+    var questions = data["questions"];
+    var newQuestion;
+
+    for (i = 0; i < questions.length; i++) {
+        newQuestion = new Question(questions[i]["type"].type);
+        newQuestion.setQuestion(questions[i]["question"]);
+        templateQuestions.push(newQuestion);
+    }
+    displayTemplate();
+});
+
 socket.on("connection_response", function(data) {
     if (data == "connected") {
-        socket.emit("connect_as_host", {"cookie" : getCookie("meeting_token")})
+        socket.emit("connect_as_host", {"cookie" : getCookie("meeting_token")});
     }
 });
 
@@ -14,13 +49,3 @@ socket.on("meeting_details", function(data) {
 socket.on("test_emit", function(data) {
     console.log(data);
 });
-
-function sendUpdate() {
-    socket.emit("update_from_host", {"cookie" : getCookie("meeting_token")});
-}
-
-function getCookie(name) {
-    const value =  `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts.pop().split(';').shift();
-}
