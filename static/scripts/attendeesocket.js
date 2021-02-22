@@ -24,6 +24,7 @@ class HostQuestions {
 
     setQuestionsFromJSON(JSONObj) {
         var newQuestion;
+        this.questions = [];
 
         for (var i = 0; i < JSONObj["questions"].length; i++) {
             newQuestion = new Question(JSONObj["questions"][i]["type"]);
@@ -44,7 +45,6 @@ socket.on("connection_response", function(data) {
 socket.on("meeting_details", function(data) {
     if (data["connection_status"] == "connected") {
         document.getElementById("connection_status").innerHTML = "Connected to room " + meetingcode.toString();
-        console.log(data["template"]);
         hostQuestions.setQuestionsFromJSON(data["template"]);
         hostQuestions.updateDisplay();
     } else {
@@ -53,8 +53,13 @@ socket.on("meeting_details", function(data) {
     console.log("message_recieved");
 });
 
-socket.on("update_from_server", function (data) {
+socket.on("update_from_server", function (data){
     console.log(data);
+});
+
+socket.on("template_update", function(data) {
+    hostQuestions.setQuestionsFromJSON(data["template"]);
+    hostQuestions.updateDisplay();
 });
 
 function sendGeneralFeedback() {

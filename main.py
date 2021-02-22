@@ -152,6 +152,7 @@ def template_update(data):
     meeting.get_template().fromJSON(questions)
 
     emit("template_update", meeting.get_template().getJSON())
+    emit("template_update", {"template": meeting.get_template().getJSON()}, room=meeting.attendee_room)
 
 
 @socketio.on("question_response")
