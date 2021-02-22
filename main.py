@@ -105,7 +105,7 @@ def host_connect(data):
     new_host = Host(request.sid, meeting=meeting)
     meeting.set_host(new_host)
     join_room(new_host.get_room())
-    join_room(meeting.host_room)    
+    join_room(meeting.host_room)
 
     emit("meeting_details", {"meeting_code":meeting.code})
     emit("template_update", meeting.get_template().getJSON())

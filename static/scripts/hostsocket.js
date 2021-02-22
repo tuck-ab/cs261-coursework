@@ -46,7 +46,7 @@ socket.on("template_update", function(data) {
     template = [];
 
     for (i = 0; i < questions.length; i++) {
-        newQuestion = new Question(questions[i]["type"].type);
+        newQuestion = new Question(questions[i]["type"]);
         newQuestion.setQuestion(questions[i]["question"]);
         template.push(newQuestion);
     }

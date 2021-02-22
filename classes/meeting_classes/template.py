@@ -30,6 +30,9 @@ class Template:
 
         return json_dict
 
+    def __str__(self):
+        return str(self.getJSON())
+
 class Question:
     def __init__(self, q_type):
         self.type = q_type
