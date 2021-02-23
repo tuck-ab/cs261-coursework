@@ -46,26 +46,31 @@ class Sentiment:
             return sum / n, sum, sqr_sum, n
         else:
             print(str(round(single_sentiment, 3)) + " is a inlier")
-            self.sentiment_sumsum=t_sum
-            self.sentiment_sqr_sum= t_sqr_sum
+            self.sentiment_sum = t_sum
+            self.sentiment_sqr_sum = t_sqr_sum
             self.num_responses = t_n
+            self.average = t_mean
             return t_mean, t_sum, t_sqr_sum, t_n
-    
-    def set_Average(self):
-        new_average = self.average / (self.num_responses - 1) + self.last_sentiment
-        new_average /= self.num_responses
-        self.average = self.num_responses 
 
     def calculate_percentage(self, average):
         percent = (average + 1) * 50
         return round(percent, 1)
 
+    def get_percentage(self):
+        return self.calculate_percentage(self.average)
+
 
 s = Sentiment(0,0,0,0,0)
 s.setSentiment("The platform provides universal access to the world's best education, partnering with top universities and organizations to offer courses online.")
 print(s.getSentiment())
+
 print("Values after first sentiment: ", s.set_AverageSentiment())
-    
+print("AverAGE", s.get_AverageSentiment())  
+print("Percentage: ", s.get_percentage())
+
 s.setSentiment("wonderful")
 print(s.getSentiment())
 print("Values after second sentiment: ", s.set_AverageSentiment())
+print("AverAGE", s.get_AverageSentiment())
+print("Percentage: ", s.get_percentage())
+
