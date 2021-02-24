@@ -64,9 +64,32 @@ socket.on("meeting_details", function(data) {
     console.log("Message recieved");
 });
 
+class CurrentErrors {
+    constructor() {
+        this.errors = [];
+    }
+
+    addError(error) {
+        this.errors.push(error);
+    }
+
+    getDisplayString() {
+        var outString = "";
+
+        for (i = 0; i < this.errors.length; i++) {
+            outString += `<p>` + this.errors[i] + `</p>`
+        }
+
+        return outString;
+    }
+}
+
+var currentErrors = new CurrentErrors()
+
 socket.on("error_response", function(data) {
     var errorDisplay = document.getElementById("errorFeedbackDisplay");
-    console.log(data);
+    currentErrors.addError(data["error"]);
+    errorDisplay.innerHTML = currentErrors.getDisplayString();
 });
 
 socket.on("test_emit", function(data) {
