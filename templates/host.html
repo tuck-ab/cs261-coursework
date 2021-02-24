@@ -2,9 +2,13 @@
 <html>
     <head>
         <script src="https://cdn.socket.io/3.1.1/socket.io.min.js"></script>
-        <script src="{{ url_for('static', filename='scripts/question.js') }}"></script>
+        <script src="{{ url_for('static', filename='scripts/socketConnection.js') }}"></script>
+
+        <script src="{{ url_for('static', filename='classes/question.js') }}"></script>
+        <script src="{{ url_for('static', filename='classes/questionTemplate.js') }}"></script>
+
         <script src="{{ url_for('static', filename='scripts/makeQuestionPopup.js') }}"></script>
-        <script src="{{ url_for('static', filename='scripts/hostsocket.js') }}"></script>
+        <script src="{{ url_for('static', filename='scripts/host.js') }}"></script>
 
         <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/hiddenpopup.css') }}">
     </head>

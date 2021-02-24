@@ -20,6 +20,7 @@ function questionTypeUpdate() {
 
 function submitNormalQuestion() {
     addNormalQuestion(document.getElementById("mainQuestion").value);
+    onTemplateUpdate();
     closePopup();
 }
 
@@ -27,5 +28,4 @@ function addNormalQuestion(question) {
     var newQuestion = new Question("normal");
     newQuestion.setQuestion(question);
     questionTemplate.addQuestion(newQuestion);
-    questionTemplate.displayTemplate(document.getElementById("templateDisplay"));
 }

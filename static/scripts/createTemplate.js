@@ -17,3 +17,7 @@ function submitTemplate() {
     form.submit();
 
 }
+
+function onTemplateUpdate() {
+    questionTemplate.displayTemplate(document.getElementById("templateDisplay"));
+}
