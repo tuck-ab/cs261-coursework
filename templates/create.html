@@ -1,5 +1,65 @@
 <!DOCTYPE html>
 <html>
+    <style>
+        body{
+            background-color: rgb(250, 231, 144); 
+            color: rgb(0, 0, 0);  
+            font-size: 15px; 
+            font-family:Verdana, Geneva, Tahoma, sans-serif;
+            text-align: center;
+        }
+
+        #header{
+            background-color: #69addb;
+            padding: 30px;
+            margin: 0;
+        }
+
+        #template-display{
+            background-color: #8dec61b2;
+            border: 5px solid rgb(98, 100, 99);
+            padding: 30px 30px 30px;
+            display: block;
+            margin: 20px;
+        }
+
+        #createQuestion{
+            background-color: #6ea6db86;
+        }
+
+        #createdQuestions{
+            font-size: medium;
+            background-color: rgb(255, 255, 255);
+            padding: 15px;
+        }
+
+        input{
+            font-weight: bold;
+            font-size: medium;
+            border-radius: 10px;
+            padding: 20px 20px 20px;
+            width: 150px;
+            border-width: 3px;
+        }
+
+        #addButton{
+            border-color: #ff6600;
+            background-color: rgb(255, 210, 158);
+        }
+       
+        #closeButton{
+            border-color: #ff0000;
+            background-color: #c769699d;
+            padding: auto;
+            border-width: 2.5px;
+            text-shadow: #ff0000;
+        }
+        #submitButton{
+            border-color: green ;
+            background-color: rgb(177, 255, 177);
+        }
+
+    </style>
     <head>
         <title>Create Meeting</title>
         <script src="{{ url_for('static', filename='scripts/question.js') }}"></script>
@@ -7,14 +67,16 @@
         <script src="{{ url_for('static', filename='scripts/makeQuestionPopup.js') }}"></script>
         <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/hiddenpopup.css') }}">
     </head>
+
     <body>
-        <p>Template Page</p>
-
-
+        <div id="header">
+            <h1>Template Page</h1>
+            <p>[EXAMPLE] Host ID:123456</p>
+        </div>
         <div id="createQuestion" class="popup">
             <div class="popup-content">
 
-                <span class="close" onclick="closePopup()">Close</span><br>
+                <span id="closeButton" class="close" onclick="closePopup()">Close</span><br>
 
                 
                 <select name="questionTypes" id="questionType" onchange="questionTypeUpdate()">
@@ -32,7 +94,7 @@
 
         </div>
 
-        <input type="button" onclick="openPopup()" value="Add Question">
-        <input type="button" onclick="submitTemplate()" value="Submit">
+        <input id="addButton" type="button" onclick="openPopup()" value="Add Question">
+        <input id ="submitButton" type="button" onclick="submitTemplate()" value="Submit">
     </body>
 </html>
