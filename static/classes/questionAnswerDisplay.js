@@ -4,13 +4,16 @@ class QuestionAnswerDisplay{
     }
 
     addQuestionAnswerPair(question, answer) {
-        this.questioinAnswerList.push({"question":question, "answer":answer});
+        this.questionAnswerList.push({"question":question, "answer":answer});
+        if (this.questionAnswerList.length > 5) {
+            this.questionAnswerList.splice(0,1);
+        }
     }
 
     getHTMLString() {
         var HTMLString = "";
 
-        for (var i = 0; i < this.questionAnswerList; i++) {
+        for (var i = 0; i < this.questionAnswerList.length; i++) {
             HTMLString += `<p>Question: ` + this.questionAnswerList[i]["question"] + `</p>`;
             HTMLString += `<p>Answer: ` + this.questionAnswerList[i]["answer"] + `</p>`;
         }
@@ -19,6 +22,7 @@ class QuestionAnswerDisplay{
     }
 
     displayQuestionAnswer(node) {
+        console.log(this.getHTMLString())
         node.innerHTML = this.getHTMLString();
     }
 }
