@@ -1,4 +1,5 @@
 var questionTemplate = new QuestionTemplate();
+var errorDisplay = new ErrorDisplay();
 
 function getCookie(name) {
     const value =  `; ${document.cookie}`;
@@ -30,6 +31,6 @@ socket.on("meeting_details", function(data) {
 });
 
 socket.on("error_response", function(data) {
-    var errorDisplay = document.getElementById("errorFeedbackDisplay");
-    console.log(data);
+    errorDisplay.addError(data["error"]);
+    errorDisplay.displayErrors(document.getElementById("errorFeedbackDisplay"));
 });
