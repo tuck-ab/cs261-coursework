@@ -184,6 +184,9 @@ def general_feedback(data):
                      {"feedback": feedback(str)}
     """
     feedback = data["feedback"]
+    meeting = controller.get_meeting_from_attendee(request.sid)
+    host = meeting.get_host()
+
     print(feedback)
 
 @socketio.on("error_feedback")
@@ -198,6 +201,8 @@ def error_feedback(data):
     """
 
     error = data["error"]
+    meeting = controller.get_meeting_from_attendee(request.sid)
+    host = meeting.get_host()
     print(error)
     
 ## -- Running the server
