@@ -26,6 +26,6 @@ function submitNormalQuestion() {
 function addNormalQuestion(question) {
     var newQuestion = new Question("normal");
     newQuestion.setQuestion(question);
-    template.push(newQuestion);
-    updateTemplateDisplay();
+    questionTemplate.addQuestion(newQuestion);
+    questionTemplate.displayTemplate(document.getElementById("templateDisplay"));
 }

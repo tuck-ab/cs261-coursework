@@ -1,4 +1,4 @@
-var template = new QuestionTemplate();
+var questionTemplate = new QuestionTemplate();
 
 function submitTemplate() {
     var url = window.location.href;
@@ -10,7 +10,7 @@ function submitTemplate() {
     var hiddenInput = document.createElement("input");
     hiddenInput.type = "hidden";
     hiddenInput.name = "templateJSON";
-    hiddenInput.value = template.getTemplateJSONString();
+    hiddenInput.value = questionTemplate.getJSONString();
     form.appendChild(hiddenInput);
 
     document.body.appendChild(form);

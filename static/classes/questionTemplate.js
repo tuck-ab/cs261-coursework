@@ -9,9 +9,10 @@ class QuestionTemplate{
 
     getDisplayString() {
         var outString = "";
-        for (i = 0; i < this.questions.length; i++) {
+        for (var i = 0; i < this.questions.length; i++) {
             outString += `<p>` + this.questions[i].question + `</p>`
         }
+        return outString;
     }
 
     displayTemplate(node) {
@@ -21,7 +22,7 @@ class QuestionTemplate{
     getJSONString() {
         var JSONString = `{"questions":[`;
 
-        for (i = 0; i < this.questions; i++) {
+        for (var i = 0; i < this.questions.length; i++) {
             JSONString += this.questions[i].getJSONString() + ",";
         }
 
