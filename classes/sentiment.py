@@ -60,16 +60,16 @@ class Sentiment:
         return self.calculate_percentage(self.average)
 
 
-s = Sentiment(0,0,0,0,0)
-s.setSentiment("The platform provides universal access to the world's best education, partnering with top universities and organizations to offer courses online.")
-print(s.getSentiment())
+#s = Sentiment(0,0,0,0,0)
+#s.setSentiment("The platform provides universal access to the world's best education, partnering with top universities and organizations to offer courses online.")
+#print(s.getSentiment())
 
-print("Values after first sentiment: ", s.set_AverageSentiment())
-print("AverAGE", s.get_AverageSentiment())  
-print("Percentage: ", s.get_percentage())
+#print("Values after first sentiment: ", s.set_AverageSentiment())
+#print("AverAGE", s.get_AverageSentiment())  
+#print("Percentage: ", s.get_percentage())
 
-s.setSentiment("wonderful")
-print(s.getSentiment())
-print("Values after second sentiment: ", s.set_AverageSentiment())
-print("AverAGE", s.get_AverageSentiment())
-print("Percentage: ", s.get_percentage())
+#s.setSentiment("wonderful")
+#print(s.getSentiment())
+#print("Values after second sentiment: ", s.set_AverageSentiment())
+#print("AverAGE", s.get_AverageSentiment())
+#print("Percentage: ", s.get_percentage())
