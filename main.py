@@ -134,8 +134,9 @@ def attendee_connect(data):
         to_send_back["template"] = meeting.get_template().getJSON()
 
     else:
-        to_send["connection_status"] = "not_connected"
+        to_send_back["connection_status"] = "not_connected"
 
+    print(to_send_back)
     emit("meeting_details", to_send_back)
 
 

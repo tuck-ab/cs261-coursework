@@ -15,7 +15,7 @@ function onTemplateUpdate() {
 }
 
 socket.on("template_update", function(data) {
-    questionTemplate.fromJSON(data["questions"]);
+    questionTemplate.fromJSON(data);
     questionTemplate.displayTemplate(document.getElementById("currentTemplate"))
 });
 

@@ -32,12 +32,13 @@ class QuestionTemplate{
 
     fromJSON(data) {
         this.questions = [];
-
+        
+        var newQuestions = data["questions"];
         var newQuestion;
 
-        for(var i = 0; i < data.length; i++) {
-            newQuestion = new Question(data[i]["type"]);
-            newQuestion.setQuestion(data[i]["question"]);
+        for(var i = 0; i < newQuestions.length; i++) {
+            newQuestion = new Question(newQuestions[i]["type"]);
+            newQuestion.setQuestion(newQuestions[i]["question"]);
             this.questions.push(newQuestion)
         }
     }

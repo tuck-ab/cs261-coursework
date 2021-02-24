@@ -2,12 +2,16 @@
 <html>
     <head>
         <script src="https://cdn.socket.io/3.1.1/socket.io.min.js"></script>
+        <script src="{{ url_for('static', filename='scripts/socketConnection.js') }}"></script>
 
         <script type="text/javascript">
             var meetingcode = "{{ meeting_code }}";
         </script>
-        <script src="{{ url_for('static', filename='scripts/question.js') }}"></script>
-        <script src="{{ url_for('static', filename='scripts/attendeesocket.js') }}"></script>
+
+        <script src="{{ url_for('static', filename='classes/question.js') }}"></script>
+        <script src="{{ url_for('static', filename='classes/questionTemplate.js') }}"></script>
+
+        <script src="{{ url_for('static', filename='scripts/attendee.js') }}"></script>
     </head>
     <body>
         <h3 id="connection_status"></h3>
