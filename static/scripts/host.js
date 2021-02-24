@@ -34,3 +34,8 @@ socket.on("error_response", function(data) {
     errorDisplay.addError(data["error"]);
     errorDisplay.displayErrors(document.getElementById("errorFeedbackDisplay"));
 });
+
+function removeError(id) {
+    errorDisplay.removeError(id);
+    errorDisplay.displayErrors(document.getElementById("errorFeedbackDisplay"));
+}
