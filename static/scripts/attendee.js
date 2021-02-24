@@ -1,4 +1,4 @@
-var questionTemplate = new QuestionTemplate();
+var hostQuestions = new HostQuestions();
 
 socket.on("connection_response", function(data) {
     if (data == "connected") {
@@ -10,8 +10,8 @@ socket.on("meeting_details", function(data) {
     if (data["connection_status"] == "connected") {
         document.getElementById("connection_status").innerHTML = "Connected to room " + meetingcode.toString();
         
-        questionTemplate.fromJSON(data["template"]);
-        questionTemplate.displayTemplate(document.getElementById("hostQuestions"));
+        hostQuestions.fromJSON(data["template"]);
+        hostQuestions.displayTemplate(document.getElementById("hostQuestions"));
     } else {
         document.getElementById("connection_status").innerHTML = "Connection failed";
     }
@@ -19,8 +19,8 @@ socket.on("meeting_details", function(data) {
 
 socket.on("template_update", function(data) {
     console.log(data);
-    questionTemplate.fromJSON(data["template"]);
-    questionTemplate.displayTemplate(document.getElementById("hostQuestions"));
+    hostQuestions.fromJSON(data["template"]);
+    hostQuestions.displayTemplate(document.getElementById("hostQuestions"));
 });
 
 function sendGeneralFeedback() {
@@ -29,4 +29,10 @@ function sendGeneralFeedback() {
 
 function sendErrorFeedback() {
     socket.emit("error_feedback", {"error":document.getElementById("errorFeedbackInput").value});
+}
+
+function sendQuestionAnswer(id) {
+    var answer = document.getElementById("question_" + id).value;
+    var question = hostQuestions.template.questions[Number(id)].getJSONString();
+    socket.emit("question_response", {"question":question, "answer":answer});
 }
