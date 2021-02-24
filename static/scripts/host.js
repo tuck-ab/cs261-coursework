@@ -31,6 +31,10 @@ socket.on("meeting_details", function(data) {
     document.getElementById("meeting_code").innerHTML = data["meeting_code"];
 });
 
+socket.on("question_answer_response", function(data) {
+    console.log(data);
+});
+
 socket.on("feedback_response", function(data) {
     feedbackDisplay.addFeedback(data["feedback"]);
     feedbackDisplay.displayFeedback(document.getElementById("recentFeedbackDisplay"));

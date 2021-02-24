@@ -181,11 +181,7 @@ def question_response(data):
 
 
     #----- The responses can be sent to the host with currentObj.getResponseText()
-
-
-    print(attendee)
-    print(question)
-    print(answer)
+    emit("question_answer_response", {"question":question["question"], "answer":answer}, room=meeting.host_room)
 
 @socketio.on("general_feedback")
 def general_feedback(data):
