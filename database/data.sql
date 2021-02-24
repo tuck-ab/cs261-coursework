@@ -11,18 +11,18 @@ INSERT INTO attendees VALUES(1,1);
 INSERT INTO attendees VALUES(2,1);
 INSERT INTO attendees VALUES(3,1);
 INSERT INTO attendees VALUES(4,1);
-INSERT INTO attendees VALUES(5,2);
-INSERT INTO attendees VALUES(6,2);
-INSERT INTO attendees VALUES(7,2);
-INSERT INTO attendees VALUES(8,2);
-INSERT INTO attendees VALUES(9,3);
-INSERT INTO attendees VALUES(10,3);
-INSERT INTO attendees VALUES(11,3);
-INSERT INTO attendees VALUES(12,3);
-INSERT INTO attendees VALUES(13,4);
-INSERT INTO attendees VALUES(14,4);
-INSERT INTO attendees VALUES(15,4);
-INSERT INTO attendees VALUES(16,4);
+INSERT INTO attendees VALUES(1,2);
+INSERT INTO attendees VALUES(2,2);
+INSERT INTO attendees VALUES(3,2);
+INSERT INTO attendees VALUES(4,2);
+INSERT INTO attendees VALUES(1,3);
+INSERT INTO attendees VALUES(2,3);
+INSERT INTO attendees VALUES(3,3);
+INSERT INTO attendees VALUES(4,3);
+INSERT INTO attendees VALUES(1,4);
+INSERT INTO attendees VALUES(2,4);
+INSERT INTO attendees VALUES(3,4);
+INSERT INTO attendees VALUES(4,4);
 
 INSERT INTO feedback VALUES(1,1,1,"Error",1);
 INSERT INTO feedback VALUES(2,1,2,"Question",1);
@@ -61,3 +61,15 @@ INSERT INTO text_moods VALUES(3,"I can't believe how absolutely amazing this eve
 
 INSERT INTO emoji_moods VALUES(2,":smile:");
 INSERT INTO emoji_moods VALUES(4,":angry:");
+
+INSERT INTO responses VALUES(1,4,"Text","Express f = \x -> \y -> x * y using syntactic sugar");
+INSERT INTO responses VALUES(2,8,"Emoji","How comfortable are you with mutex locks?");
+INSERT INTO responses VALUES(3,12,"MultChoice","True or False: A rational agent is successful all of the time");
+INSERT INTO responses VALUES(4,16,"Text","What is the asymptotic running time of the early-finish-time first algorithm?");
+
+INSERT INTO text_responses VALUES(1,"f x y = x * y");
+INSERT INTO text_responses VALUES(4,"O(nlogn)");
+
+INSERT INTO emoji_responses VALUES(2,":thumbsup:");
+
+INSERT INTO mult_choice_responses VALUES(3,"False","True");

@@ -1,21 +1,21 @@
 DROP TABLE IF EXISTS hosts;
 CREATE TABLE hosts (
-    hostid  INTEGER,
+    hostid  INTEGER NOT NULL,
     PRIMARY KEY (hostid)
 );
 
 DROP TABLE IF EXISTS attendees;
 CREATE TABLE attendees (
-    attendeeid INTEGER,
-    meetingid  INTEGER,
-    PRIMARY KEY (attendeeid),
+    attendeeid INTEGER NOT NULL,
+    meetingid  INTEGER NOT NULL,
+    PRIMARY KEY (attendeeid, meetingid),
     FOREIGN KEY (meetingid) REFERENCES meetings(meetingid)
 );
 
 DROP TABLE IF EXISTS meetings;
 CREATE TABLE meetings (
-    meetingid  INTEGER,
-    hostid     INTEGER,
+    meetingid  INTEGER NOT NULL,
+    hostid     INTEGER NOT NULL,
     title      VARCHAR(30) NOT NULL,
     runtime    INTEGER NOT NULL,
     PRIMARY KEY (meetingid),
@@ -24,9 +24,9 @@ CREATE TABLE meetings (
 
 DROP TABLE IF EXISTS feedback;
 CREATE TABLE feedback (
-    feedbackid    INTEGER,
-    meetingid     INTEGER,
-    attendeeid    INTEGER,
+    feedbackid    INTEGER NOT NULL,
+    meetingid     INTEGER NOT NULL,
+    attendeeid    INTEGER NOT NULL,
     feedbacktype  VARCHAR(8) NOT NULL CHECK (feedbacktype IN ('Error','Question','Response','Mood')),
     anon          INTEGER NOT NULL CHECK (anon IN (0,1)),
     PRIMARY KEY (feedbackid),
@@ -36,7 +36,7 @@ CREATE TABLE feedback (
 
 DROP TABLE IF EXISTS errors;
 CREATE TABLE errors (
-    feedbackid  INTEGER,
+    feedbackid  INTEGER NOT NULL,
     errortype   VARCHAR(10) NOT NULL,
     errmessage  VARCHAR(50) NOT NULL,
     PRIMARY KEY (feedbackid),
@@ -45,7 +45,7 @@ CREATE TABLE errors (
 
 DROP TABLE IF EXISTS questions;
 CREATE TABLE questions (
-    feedbackid  INTEGER,
+    feedbackid  INTEGER NOT NULL,
     qmessage    VARCHAR(50) NOT NULL,
     PRIMARY KEY (feedbackid),
     FOREIGN KEY (feedbackid) REFERENCES feedback(feedbackid)
@@ -53,8 +53,8 @@ CREATE TABLE questions (
 
 DROP TABLE IF EXISTS moods;
 CREATE TABLE moods (
-    moodid      INTEGER,
-    feedbackid  INTEGER,
+    moodid      INTEGER NOT NULL,
+    feedbackid  INTEGER NOT NULL,
     moodtype    VARCHAR(5) NOT NULL CHECK (moodtype IN ('Text','Emoji')),
     score       FLOAT NOT NULL,
     timeofmood  INTEGER NOT NULL,
@@ -64,7 +64,7 @@ CREATE TABLE moods (
 
 DROP TABLE IF EXISTS text_moods;
 CREATE TABLE text_moods (
-    moodid      INTEGER,
+    moodid      INTEGER NOT NULL,
     txtmessage  VARCHAR(50) NOT NULL,
     PRIMARY KEY (moodid),
     FOREIGN KEY (moodid) REFERENCES moods(moodid)
@@ -72,7 +72,7 @@ CREATE TABLE text_moods (
 
 DROP TABLE IF EXISTS emoji_moods;
 CREATE TABLE emoji_moods (
-    moodid     INTEGER,
+    moodid     INTEGER NOT NULL,
     emojitype  VARCHAR(10) NOT NULL,
     PRIMARY KEY (moodid),
     FOREIGN KEY (moodid) REFERENCES moods(moodid)
@@ -80,8 +80,8 @@ CREATE TABLE emoji_moods (
 
 DROP TABLE IF EXISTS responses;
 CREATE TABLE responses (
-    responseid     INTEGER,
-    feedbackid     INTEGER,
+    responseid     INTEGER NOT NULL,
+    feedbackid     INTEGER NOT NULL,
     responsetype   VARCHAR(10) NOT NULL CHECK (responsetype IN ('Text','Emoji','MultChoice')),
     questionasked  VARCHAR(50) NOT NULL,
     PRIMARY KEY (responseid),
@@ -90,7 +90,7 @@ CREATE TABLE responses (
 
 DROP TABLE IF EXISTS text_responses;
 CREATE TABLE text_responses (
-    responseid  INTEGER,
+    responseid  INTEGER NOT NULL,
     txtmessage  VARCHAR(50) NOT NULL,
     PRIMARY KEY (responseid),
     FOREIGN KEY (responseid) REFERENCES responses(responseid)
@@ -98,7 +98,7 @@ CREATE TABLE text_responses (
 
 DROP TABLE IF EXISTS emoji_responses;
 CREATE TABLE emoji_responses (
-    responseid  INTEGER,
+    responseid  INTEGER NOT NULL,
     emojitype   VARCHAR(10) NOT NULL,
     PRIMARY KEY (responseid),
     FOREIGN KEY (responseid) REFERENCES responses(responseid)
@@ -106,7 +106,7 @@ CREATE TABLE emoji_responses (
 
 DROP TABLE IF EXISTS mult_choice_responses;
 CREATE TABLE mult_choice_responses (
-    responseid      INTEGER,
+    responseid      INTEGER NOT NULL,
     correctanswer   VARCHAR(10) NOT NULL,
     attendeeanswer  VARCHAR(10) NOT NULL,
     PRIMARY KEY (responseid),

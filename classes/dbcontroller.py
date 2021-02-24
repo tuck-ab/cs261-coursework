@@ -1,37 +1,71 @@
+# TODO: Add 'try...except' to catch sqlite3.Error's
+# TODO: Add rollback to prevent false inserts
+
 import sqlite3
 
-from feedbackClasses import *
+from .feedbackClasses import *
 
 class DBController:
 
     def __init__(self):
-        self.conn = sqlite3.connect('~/cs261-coursework/live_feedback.db')
-        self.cursor = conn.cursor()
+        try:
+            self.conn = sqlite3.connect('live_feedback.db')
+            self.cursor = self.conn.cursor()
+        except sqlite3.Error as error:
+            print("Failed to open database connection", error)
 
     def close(self):
         self.conn.close()
 
-    def insertFeedback(self, meeting, attendee, ftype, anon):
-
-        self.cursor.execute("INSERT INTO feedback VALUES (:meeting, :attendee, :type, :anon)",{'meeting':meeting, 'attendee':attendee, 'type':ftype, 'anon':anon})
-        self.conn.commit()
-
-        self.cursor.execute("SELECT last_insert_rowid()")
-        return self.cursor.fetchone()
-
-
-    def insertError(self, errorFeedbackObj):
-        meeting = 420
-        anonB = errorFeedbackObj.getAnon
-        if anonB == True:
+    def getGeneralAttributes(self, feedbackObj):
+        meeting = feedbackObj.getMeeting()
+        anonBool = feedbackObj.getAnon()
+        if anonBool == True:
             anon = 1
         else:
             anon = 0
-        attendee = errorFeedbackObj.getAttendee
-        errType = errorFeedbackObj.getErrorType
-        errMsg = errorFeedbackObj.getErrorMessage
+        attendee = feedbackObj.getAttendee()
+        return (meeting, anon, attendee)
+
+    def insertFeedback(self, meeting, attendee, ftype, anon):
+        try:
+            self.cursor.execute("INSERT INTO feedback VALUES (NULL, :m, :a, :t, :n)",{'m':meeting, 'a':attendee, 't':ftype, 'n':anon})
+            self.cursor.execute("SELECT last_insert_rowid()")
+            return self.cursor.fetchone()[0]
+        except sqlite3.Error as error:
+            return error
+
+    def insertError(self, errorFeedback):
+        (meeting, anon, attendee) = self.getGeneralAttributes(errorFeedback)
+        errType = errorFeedback.getErrorType()
+        errMsg = errorFeedback.getErrorMessage()
 
         feedback = self.insertFeedback(meeting, attendee, "Error", anon)
 
-        self.cursor.execute("INSERT INTO errors VALUES (:feedback, :type, :msg)",{'feedback':feedback, 'type':errType, 'msg':errMsg})
-        self.conn.commit()
+        if type(feedback) is int:
+            try:
+                self.cursor.execute("INSERT INTO errors VALUES (:f, :t, :m)",{'f':feedback, 't':errType, 'm':errMsg})
+                self.conn.commit()
+            except sqlite3.Error as error:
+                print("Error inserting into table errors", error)
+                self.conn.rollback()
+        else:
+            print("Error inserting into table feedback", feedback)
+            self.conn.rollback()
+
+    def insertQuestion(self, question):
+        (meeting, anon, attendee) = self.getGeneralAttributes(question)
+        qstnMsg = question.getQuestionText()
+
+        feedback = self.insertFeedback(meeting, attendee, "Question", anon)
+
+        if type(feedback) is int:
+            try:
+                self.cursor.execute("INSERT INTO questions VALUES (:f, :m)",{'f':feedback, 'm':qstnMsg})
+                self.conn.commit()
+            except sqlite3.Error as error:
+                print("Error inserting into table questions", error)
+                self.conn.rollback()
+        else:
+            print("Error inserting into table feedback", feedback)
+            self.conn.rollback()
