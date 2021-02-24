@@ -93,6 +93,10 @@ def connected():
     """
     emit("connection_response", "connected")
 
+@socketio.on("disconnect")
+def disconnected():
+    print("person disconnected")
+
 @socketio.on("connect_as_host")
 def host_connect(data):
     """
