@@ -176,7 +176,7 @@ def question_response(data):
 @socketio.on("general_feedback")
 def general_feedback(data):
     """
-    Function called when the client sends general feedback during the presentation
+    Function called when the attendee sends general feedback during the presentation
     TODO - Sends the data to be analysed and emits any change to the host
 
     Parameters:
@@ -185,6 +185,20 @@ def general_feedback(data):
     """
     feedback = data["feedback"]
     print(feedback)
+
+@socketio.on("error_feedback")
+def error_feedback(data):
+    """
+    Function called when the attendee reports an error to the host during a presentation
+    TODO - Sends the error to the database
+
+    Parameters:
+        data (dict): JSON data from the socket connection
+                     {"error": error{str}}
+    """
+
+    error = data["error"]
+    print(error)
     
 ## -- Running the server
 if __name__ == "__main__":

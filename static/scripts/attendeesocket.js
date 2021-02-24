@@ -66,6 +66,10 @@ function sendGeneralFeedback() {
     socket.emit("general_feedback", {"feedback":document.getElementById("generalFeedbackInput").value});
 }
 
+function sendErrorFeedback() {
+    socket.emit("error_feedback", {"error":document.getElementById("errorFeedbackInput").value});
+}
+
 function sendQuestionAnswer(id) {
     var answer = document.getElementById("question_" + id).value;
     socket.emit("question_response", {"question":hostQuestions.questions[Number(id)].getJSONString(), "answer":answer})
