@@ -7,3 +7,5 @@
     * To install: "pip3 install flask"
 * Python Flask Socketio
     * To install: "pip3 install flask-socketio"
+* TextBlob
+    * To install: "pip3 install -U textblob"

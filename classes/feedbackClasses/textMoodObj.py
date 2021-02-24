@@ -2,8 +2,8 @@ from .moodObj import Mood
 
 class TextMood(Mood):
 
-    def __init__(self, anonFlag, attendeeID, meetingID, moodScore, moodText):
-        super().__init__(anonFlag, attendeeID, meetingID, moodScore)
+    def __init__(self, anonFlag, attendeeID, meetingID, moodType, moodScore, moodText):
+        super().__init__(anonFlag, attendeeID, meetingID, moodType, moodScore)
         self.moodText = moodText
     
     def getMoodText(self):
