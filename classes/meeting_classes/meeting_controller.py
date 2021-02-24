@@ -40,8 +40,13 @@ class Meeting_Controller:
 
         return None
 
-    def get_meeting_from_attendee(self):
-        pass
+    def get_meeting_from_attendee(self, sid):
+        for meeting in self.meetings_by_token.values():
+            result = meeting.get_attendee(sid)
+            if result != None:
+                return meeting
+
+        return None
 
     def get_meeting_from_host(self):
         pass
