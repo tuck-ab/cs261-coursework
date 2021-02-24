@@ -1,37 +1,55 @@
 body{
   background-color: rgb(250, 231, 144); 
-  color: rgb(0, 0, 0);  font-size: 15px; 
+  color: rgb(0, 0, 0);  
+  font-size: 15px; 
   font-family:Verdana, Geneva, Tahoma, sans-serif;
   text-align: center;
-}
-
-.header{
-  background-color: #69addb; 
-  border: 5px solid rgb(55, 54, 59);
-  border-width: 5px;
-  font-size: large;
-  padding: 10px 50px 10px;
+  align-items: center;
 }
 
 input{
-  border-color: #ff0000;
-  border-width: 2.5px;
-  background-color: rgb(255, 255, 255);
+  font-weight: bold;
+  font-size: medium;
   border-radius: 10px;
   padding: 20px 20px 20px;
   width: 150px;
-  font-size: medium;
-  font-weight: bold;
 }
 
-div {
+#header{
+  background-color: #69addb;
+  padding: 30px;
+}
+
+#template-display{
   background-color: #8dec61b2;
   border: 5px solid rgb(98, 100, 99);
-  margin: 0;
-  padding: 5px 50px 5px;
+  padding: 30px 30px 30px;
+  display: block;
+  margin: 20px;
 }
 
-.createdQuestions{
+#createQuestion{
+  background-color: #bbbea586;
+}
+
+#createdQuestions{
   font-size: medium;
-  font-weight: bold;
+  background-color: rgb(255, 255, 255);
+  padding: 15px;
+}
+
+#addButton{
+  border: 5px solid rgb(255, 102, 0);
+  background-color: rgb(255, 223, 185);
+}
+
+#submitButton{
+  border: 5px solid rgb(0, 153, 51);
+  background-color: rgb(198, 255, 198);
+}
+
+#popUpDiv{
+  background-color: rgb(235, 224, 179); 
+  border: 5px solid rgb(98, 100, 99);
+  justify-content: center;
 }
