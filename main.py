@@ -246,7 +246,7 @@ def error_feedback(data):
 
     #-------- The error message can be sent to host with currentObj.getErrorMessage()
 
-    print(error)
+    emit("error_response", {"error":currentObj.getErrorMessage()}, room=meeting.host_room)
     
 ## -- Running the server
 if __name__ == "__main__":

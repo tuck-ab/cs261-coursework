@@ -64,6 +64,11 @@ socket.on("meeting_details", function(data) {
     console.log("Message recieved");
 });
 
+socket.on("error_response", function(data) {
+    var errorDisplay = document.getElementById("errorFeedbackDisplay");
+    console.log(data);
+});
+
 socket.on("test_emit", function(data) {
     console.log(data);
 });
