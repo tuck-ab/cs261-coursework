@@ -1,5 +1,6 @@
 import os
 import json
+import time
 
 from flask import Flask, render_template, request, redirect, url_for, make_response
 from flask_socketio import SocketIO, emit, join_room, leave_room
@@ -166,9 +167,21 @@ def question_response(data):
                      {"question": question(dict), "answer": answer(str)}
 
     """
+    anonFlag = True # --------------- needs anonFlag from attendee
     attendee = controller.get_attendee(request.sid)
+    meeting = controller.get_meeting_from_attendee(request.sid)
     question = json.loads(data["question"])
     answer = data["answer"]
+
+    currentObj = TextResponse(anonFlag, attendee.get_sid(), meeting.get_token(), "text", question, answer)
+
+
+    #----- database stuff can go here
+
+
+    #----- The responses can be sent to the host with currentObj.getResponseText()
+
+
     print(attendee)
     print(question)
     print(answer)
@@ -183,9 +196,27 @@ def general_feedback(data):
         data (dict): JSON data from the socket connection
                      {"feedback": feedback(str)}
     """
+
+    anonFlag = True # -------------- needs anonFlag from attendee
     feedback = data["feedback"]
+    attendee = controller.get_attendee(request.sid)
     meeting = controller.get_meeting_from_attendee(request.sid)
+    analyser = meeting.getSentimentAnalyser()
+    analyser.setSentiment(feedback)
+    score = analyser.getSentiment()
     host = meeting.get_host()
+
+    currentObj = TextMood(anonFlag, attendee.get_sid(), meeting.get_token(), "text", score, time.time(), feedback)
+    
+    analyser.set_AverageSentiment()
+    
+
+    #------- database stuff can go here
+
+
+    #------- The feedback can be sent to host with currentObj.getMoodText()
+    #------- The percentage to be displayed can be sent to thost with analyser.get_percentage()
+
 
     print(feedback)
 
@@ -200,9 +231,21 @@ def error_feedback(data):
                      {"error": error{str}}
     """
 
+    anonFlag = True # --------------- needs anonFlag from attendee
     error = data["error"]
+    attendee = controller.get_attendee(request.sid)
     meeting = controller.get_meeting_from_attendee(request.sid)
     host = meeting.get_host()
+
+    currentObj = ErrorFeedback(anonFlag, attendee.get_sid(), meeting.get_token(), "general error", error)
+    #there is also an attribute for the type of error, (audio, internet, etc) but idk if this is actually needed
+
+
+    #-------- database stuff can go here
+
+
+    #-------- The error message can be sent to host with currentObj.getErrorMessage()
+
     print(error)
     
 ## -- Running the server
