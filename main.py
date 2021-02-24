@@ -218,8 +218,7 @@ def general_feedback(data):
     #------- The feedback can be sent to host with currentObj.getMoodText()
     #------- The percentage to be displayed can be sent to thost with analyser.get_percentage()
 
-
-    print(feedback)
+    emit("feedback_response", {"feedback":currentObj.getMoodText(), "score":analyser.get_percentage()}, room=meeting.host_room)
 
 @socketio.on("error_feedback")
 def error_feedback(data):

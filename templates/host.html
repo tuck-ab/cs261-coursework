@@ -7,6 +7,7 @@
         <script src="{{ url_for('static', filename='classes/question.js') }}"></script>
         <script src="{{ url_for('static', filename='classes/questionTemplate.js') }}"></script>
         <script src="{{ url_for('static', filename='classes/errorDisplay.js') }}"></script>
+        <script src="{{ url_for('static', filename='classes/feedbackDisplay.js') }}"></script>
 
         <script src="{{ url_for('static', filename='scripts/makeQuestionPopup.js') }}"></script>
         <script src="{{ url_for('static', filename='scripts/host.js') }}"></script>
@@ -44,6 +45,14 @@
         <div>
             <p>Errors reported by attendees:</p>
             <div id="errorFeedbackDisplay">
+
+            </div>
+        </div>
+
+        <div>
+            <p>Current score of room: <span id="sentimentScore">0</span></p>
+            <p>Most recent feedback recieved:</p>
+            <div id="recentFeedbackDisplay">
 
             </div>
         </div>

@@ -1,5 +1,6 @@
 var questionTemplate = new QuestionTemplate();
 var errorDisplay = new ErrorDisplay();
+var feedbackDisplay = new FeedbackDisplay();
 
 function getCookie(name) {
     const value =  `; ${document.cookie}`;
@@ -28,6 +29,12 @@ socket.on("connection_response", function(data) {
 
 socket.on("meeting_details", function(data) {
     document.getElementById("meeting_code").innerHTML = data["meeting_code"];
+});
+
+socket.on("feedback_response", function(data) {
+    feedbackDisplay.addFeedback(data["feedback"]);
+    feedbackDisplay.displayFeedback(document.getElementById("recentFeedbackDisplay"));
+    document.getElementById("sentimentScore").innerHTML = data["score"];
 });
 
 socket.on("error_response", function(data) {

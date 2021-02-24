@@ -15,8 +15,8 @@ class ErrorDisplay {
         var HTMLString = "";
 
         for (var i = 0; i < this.errors.length; i++) {
-            HTMLString += `<p>` + this.errors[i] + `</p>`
-            HTMLString += `<input type="button" onclick="removeError(` + i.toString() + `)" value="Remove">`;
+            HTMLString += `<p>` + this.errors[i]
+            HTMLString += `<input type="button" onclick="removeError(` + i.toString() + `)" value="Remove"></p>`;
         }
 
         return HTMLString
