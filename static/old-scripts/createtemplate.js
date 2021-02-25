@@ -7,7 +7,7 @@ function updateTemplateDisplay() {
     var loopString = "";
 
     for (i = 0; i < template.length; i++) {
-        loopString = "<p>" + template[i].question + "</p>"
+        loopString = "<p id='createdQuestions'>" + template[i].question + "</p>"
 
         htmlString = htmlString + loopString;
     }

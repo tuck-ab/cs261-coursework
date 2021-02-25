@@ -9,15 +9,18 @@
 
 
         <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/hiddenpopup.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/design.css') }}">
     </head>
+
     <body>
-        <p>Template Page</p>
-
-
+        <div id="header">
+            <h1>Template Page</h1>
+            <p>[EXAMPLE] Host ID:123456</p>
+        </div>
         <div id="createQuestion" class="popup">
-            <div class="popup-content">
+            <div id="popUpDiv" class="popup-content">
 
-                <span class="close" onclick="closePopup()">Close</span><br>
+                <span id="closeButton" class="close" onclick="closePopup()">Close</span><br>
 
                 
                 <select name="questionTypes" id="questionType" onchange="questionTypeUpdate()">
@@ -35,7 +38,7 @@
 
         </div>
 
-        <input type="button" onclick="openPopup()" value="Add Question">
-        <input type="button" onclick="submitTemplate()" value="Submit">
+        <input id="addButton" type="button" onclick="openPopup()" value="Add Question">
+        <input id ="submitButton" type="button" onclick="submitTemplate()" value="Submit">
     </body>
 </html>
