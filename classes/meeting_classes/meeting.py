@@ -13,6 +13,7 @@ class Meeting:
 
         self.host = None
         self.attendees = {}
+        
         self.sentimentAnalyser = Sentiment(0,0,0,0,0,"")
 
     def getSentimentAnalyser(self):

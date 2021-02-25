@@ -95,7 +95,9 @@ def connected():
 
 @socketio.on("disconnect")
 def disconnected():
-    print("person disconnected")
+    host = controller.get_host_from_sid(request.sid)
+    if host != None:
+        controller.host_disconnect(host)
 
 @socketio.on("connect_as_host")
 def host_connect(data):

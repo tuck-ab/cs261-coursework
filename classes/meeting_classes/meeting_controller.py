@@ -63,8 +63,13 @@ class Meeting_Controller:
         else:
             return None
 
-    def host_disconnect(self):
-        pass 
+    def get_host_from_sid(self, sid):
+        for meeting in self.meetings_by_token.values():
+            if meeting.get_host() == sid:
+                return meeting.get_host()
+
+    def host_disconnect(self, host):
+        print("host disconnected")
 
     def attendee_disconnect(self):
         pass
