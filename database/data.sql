@@ -1,6 +1,6 @@
-INSERT INTO hosts VALUES(1);
-INSERT INTO hosts VALUES(2);
-INSERT INTO hosts VALUES(3);
+INSERT INTO hosts VALUES(1, "John", "a", "1");
+INSERT INTO hosts VALUES(2, "Anne", "b", "2");
+INSERT INTO hosts VALUES(3, "Steve", "c", "3");
 
 INSERT INTO meetings VALUES(1,1,"Functional Programming",60);
 INSERT INTO meetings VALUES(2,1,"Operating Systems and Computer Networks",58);
@@ -72,4 +72,4 @@ INSERT INTO text_responses VALUES(4,"O(nlogn)");
 
 INSERT INTO emoji_responses VALUES(2,":thumbsup:");
 
-INSERT INTO mult_choice_responses VALUES(3,"False","True");
+INSERT INTO mult_choice_responses VALUES(3,"True");

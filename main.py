@@ -9,6 +9,7 @@ from classes import *
 
 
 controller = Meeting_Controller()
+db_conn = DBController()
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "SecretKey"
@@ -215,6 +216,7 @@ def general_feedback(data):
     
 
     #------- database stuff can go here
+    db_conn.insertMood(currentObj)
 
 
     #------- The feedback can be sent to host with currentObj.getMoodText()
@@ -244,6 +246,7 @@ def error_feedback(data):
 
 
     #-------- database stuff can go here
+    db_conn.insertError(currentObj)
 
 
     #-------- The error message can be sent to host with currentObj.getErrorMessage()
