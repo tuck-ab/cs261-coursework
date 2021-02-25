@@ -1,5 +1,6 @@
 import os
 import json
+import time
 
 from flask import Flask, render_template, request, redirect, url_for, make_response
 from flask_socketio import SocketIO, emit, join_room, leave_room
@@ -92,6 +93,12 @@ def connected():
     """
     emit("connection_response", "connected")
 
+@socketio.on("disconnect")
+def disconnected():
+    host = controller.get_host_from_sid(request.sid)
+    if host != None:
+        controller.host_disconnect(host)
+
 @socketio.on("connect_as_host")
 def host_connect(data):
     """
@@ -133,8 +140,9 @@ def attendee_connect(data):
         to_send_back["template"] = meeting.get_template().getJSON()
 
     else:
-        to_send["connection_status"] = "not_connected"
+        to_send_back["connection_status"] = "not_connected"
 
+    print(to_send_back)
     emit("meeting_details", to_send_back)
 
 
@@ -166,25 +174,81 @@ def question_response(data):
                      {"question": question(dict), "answer": answer(str)}
 
     """
+    anonFlag = True # --------------- needs anonFlag from attendee
     attendee = controller.get_attendee(request.sid)
+    meeting = controller.get_meeting_from_attendee(request.sid)
     question = json.loads(data["question"])
     answer = data["answer"]
-    print(attendee)
-    print(question)
-    print(answer)
+
+    currentObj = TextResponse(anonFlag, attendee.get_sid(), meeting.get_token(), "text", question, answer)
+
+
+    #----- database stuff can go here
+
+
+    #----- The responses can be sent to the host with currentObj.getResponseText()
+    emit("question_answer_response", {"question":question["question"], "answer":answer}, room=meeting.host_room)
 
 @socketio.on("general_feedback")
 def general_feedback(data):
     """
-    Function called when the client sends general feedback during the presentation
+    Function called when the attendee sends general feedback during the presentation
     TODO - Sends the data to be analysed and emits any change to the host
 
     Parameters:
         data (dict): JSON data from the socket connection
                      {"feedback": feedback(str)}
     """
+
+    anonFlag = True # -------------- needs anonFlag from attendee
     feedback = data["feedback"]
-    print(feedback)
+    attendee = controller.get_attendee(request.sid)
+    meeting = controller.get_meeting_from_attendee(request.sid)
+    analyser = meeting.getSentimentAnalyser()
+    analyser.setSentiment(feedback)
+    score = analyser.getSentiment()
+    host = meeting.get_host()
+
+    currentObj = TextMood(anonFlag, attendee.get_sid(), meeting.get_token(), "text", score, time.time(), feedback)
+    
+    analyser.set_AverageSentiment()
+    
+
+    #------- database stuff can go here
+
+
+    #------- The feedback can be sent to host with currentObj.getMoodText()
+    #------- The percentage to be displayed can be sent to thost with analyser.get_percentage()
+
+    emit("feedback_response", {"feedback":currentObj.getMoodText(), "score":analyser.get_percentage()}, room=meeting.host_room)
+
+@socketio.on("error_feedback")
+def error_feedback(data):
+    """
+    Function called when the attendee reports an error to the host during a presentation
+    TODO - Sends the error to the database
+
+    Parameters:
+        data (dict): JSON data from the socket connection
+                     {"error": error{str}}
+    """
+
+    anonFlag = True # --------------- needs anonFlag from attendee
+    error = data["error"]
+    attendee = controller.get_attendee(request.sid)
+    meeting = controller.get_meeting_from_attendee(request.sid)
+    host = meeting.get_host()
+
+    currentObj = ErrorFeedback(anonFlag, attendee.get_sid(), meeting.get_token(), "general error", error)
+    #there is also an attribute for the type of error, (audio, internet, etc) but idk if this is actually needed
+
+
+    #-------- database stuff can go here
+
+
+    #-------- The error message can be sent to host with currentObj.getErrorMessage()
+
+    emit("error_response", {"error":currentObj.getErrorMessage()}, room=meeting.host_room)
     
 ## -- Running the server
 if __name__ == "__main__":

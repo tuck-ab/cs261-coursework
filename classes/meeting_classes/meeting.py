@@ -1,4 +1,5 @@
 from .attendee import Attendee
+from ..sentiment import Sentiment
 
 class Meeting:
     def __init__(self, token, code):
@@ -12,7 +13,12 @@ class Meeting:
 
         self.host = None
         self.attendees = {}
+        
+        self.sentimentAnalyser = Sentiment(0,0,0,0,0,"")
 
+    def getSentimentAnalyser(self):
+        return self.sentimentAnalyser
+        
     def set_template(self, template):
         self.template = template
 
@@ -39,6 +45,9 @@ class Meeting:
             print("Host has not been set yet")
 
         return self.host
+    
+    def get_token(self):
+        return self.host_token
 
     def __str__(self):
         out_str = "\nMeeting:\n"

@@ -2,9 +2,16 @@
 <html>
     <head>
         <script src="https://cdn.socket.io/3.1.1/socket.io.min.js"></script>
-        <script src="{{ url_for('static', filename='scripts/question.js') }}"></script>
+        <script src="{{ url_for('static', filename='scripts/socketConnection.js') }}"></script>
+
+        <script src="{{ url_for('static', filename='classes/question.js') }}"></script>
+        <script src="{{ url_for('static', filename='classes/questionTemplate.js') }}"></script>
+        <script src="{{ url_for('static', filename='classes/errorDisplay.js') }}"></script>
+        <script src="{{ url_for('static', filename='classes/feedbackDisplay.js') }}"></script>
+        <script src="{{ url_for('static', filename='classes/questionAnswerDisplay.js') }}"></script>
+
         <script src="{{ url_for('static', filename='scripts/makeQuestionPopup.js') }}"></script>
-        <script src="{{ url_for('static', filename='scripts/hostsocket.js') }}"></script>
+        <script src="{{ url_for('static', filename='scripts/host.js') }}"></script>
 
         <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/hiddenpopup.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/design.css') }}" >
@@ -39,6 +46,26 @@
             <input type="button" onclick="openPopup()" value="Add Question">
         </div>
 
-        <input type="button" onclick="sendUpdate()" value="Test">
+        <div>
+            <p>Errors reported by attendees:</p>
+            <div id="errorFeedbackDisplay">
+
+            </div>
+        </div>
+
+        <div>
+            <p>Current score of room: <span id="sentimentScore">0</span></p>
+            <p>Most recent feedback recieved:</p>
+            <div id="recentFeedbackDisplay">
+
+            </div>
+        </div>
+
+        <div>
+            <p>Recent questions answered:</p>
+            <div id="questionAnswerDisplay">
+                
+            </div>
+        </div>
     </body>
 </html>

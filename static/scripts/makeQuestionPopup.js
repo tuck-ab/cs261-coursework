@@ -20,12 +20,12 @@ function questionTypeUpdate() {
 
 function submitNormalQuestion() {
     addNormalQuestion(document.getElementById("mainQuestion").value);
+    onTemplateUpdate();
     closePopup();
 }
 
 function addNormalQuestion(question) {
     var newQuestion = new Question("normal");
     newQuestion.setQuestion(question);
-    template.push(newQuestion);
-    updateTemplateDisplay();
+    questionTemplate.addQuestion(newQuestion);
 }

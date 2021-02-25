@@ -2,12 +2,19 @@
 <html>
     <head>
         <script src="https://cdn.socket.io/3.1.1/socket.io.min.js"></script>
+        <script src="{{ url_for('static', filename='scripts/socketConnection.js') }}"></script>
 
         <script type="text/javascript">
             var meetingcode = "{{ meeting_code }}";
         </script>
-        <script src="{{ url_for('static', filename='scripts/question.js') }}"></script>
-        <script src="{{ url_for('static', filename='scripts/attendeesocket.js') }}"></script>
+        
+
+        <script src="{{ url_for('static', filename='classes/question.js') }}"></script>
+        <script src="{{ url_for('static', filename='classes/questionTemplate.js') }}"></script>
+        <script src="{{ url_for('static', filename='classes/hostQuestions.js') }}"></script>
+
+        <script src="{{ url_for('static', filename='scripts/attendee.js') }}"></script>
+
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/design.css') }}" >
     </head>
     <body>
@@ -20,6 +27,11 @@
                 <p>General Feedback for the host:</p>
                 <input type="text" id="generalFeedbackInput" name="generalFeedbackInput">
                 <input type="button" onclick="sendGeneralFeedback()" value="Send Feedback">
+            </div>
+            <div id="errorFeedback">
+                <p>Send Error message to the host:</p>
+                <input type="text" id="errorFeedbackInput" name="errorFeedbackInput">
+                <input type="button" onclick="sendErrorFeedback()" value="Send Error">
             </div>
             <p>Questions set by the host</p>
             <div id="hostQuestions">
