@@ -1,4 +1,7 @@
 var questionTemplate = new QuestionTemplate();
+var errorDisplay = new ErrorDisplay();
+var feedbackDisplay = new FeedbackDisplay();
+var questionAnswerDisplay = new QuestionAnswerDisplay();
 
 function getCookie(name) {
     const value =  `; ${document.cookie}`;
@@ -29,7 +32,24 @@ socket.on("meeting_details", function(data) {
     document.getElementById("meeting_code").innerHTML = data["meeting_code"];
 });
 
-socket.on("error_response", function(data) {
-    var errorDisplay = document.getElementById("errorFeedbackDisplay");
-    console.log(data);
+socket.on("question_answer_response", function(data) {
+    questionAnswerDisplay.addQuestionAnswerPair(data["question"], data["answer"]);
+    questionAnswerDisplay.displayQuestionAnswer(document.getElementById("questionAnswerDisplay"));
+    console.log(questionAnswerDisplay.questionAnswerList);
 });
+
+socket.on("feedback_response", function(data) {
+    feedbackDisplay.addFeedback(data["feedback"]);
+    feedbackDisplay.displayFeedback(document.getElementById("recentFeedbackDisplay"));
+    document.getElementById("sentimentScore").innerHTML = data["score"];
+});
+
+socket.on("error_response", function(data) {
+    errorDisplay.addError(data["error"]);
+    errorDisplay.displayErrors(document.getElementById("errorFeedbackDisplay"));
+});
+
+function removeError(id) {
+    errorDisplay.removeError(id);
+    errorDisplay.displayErrors(document.getElementById("errorFeedbackDisplay"));
+}
