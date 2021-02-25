@@ -27,7 +27,7 @@ CREATE TABLE feedback (
     feedbackid    INTEGER NOT NULL,
     meetingid     INTEGER NOT NULL,
     attendeeid    INTEGER NOT NULL,
-    feedbacktype  VARCHAR(8) NOT NULL CHECK (feedbacktype IN ('Error','Question','Response','Mood')),
+    feedbacktype  VARCHAR(8) NOT NULL CHECK (feedbacktype IN ('error','question','response','mood')),
     anon          INTEGER NOT NULL CHECK (anon IN (0,1)),
     PRIMARY KEY (feedbackid),
     FOREIGN KEY (meetingid) REFERENCES meetings(meetingid),
@@ -37,7 +37,7 @@ CREATE TABLE feedback (
 DROP TABLE IF EXISTS errors;
 CREATE TABLE errors (
     feedbackid  INTEGER NOT NULL,
-    errortype   VARCHAR(10) NOT NULL,
+    errortype   VARCHAR(20) NOT NULL,
     errmessage  VARCHAR(50) NOT NULL,
     PRIMARY KEY (feedbackid),
     FOREIGN KEY (feedbackid) REFERENCES feedback(feedbackid)
@@ -55,7 +55,7 @@ DROP TABLE IF EXISTS moods;
 CREATE TABLE moods (
     moodid      INTEGER NOT NULL,
     feedbackid  INTEGER NOT NULL,
-    moodtype    VARCHAR(5) NOT NULL CHECK (moodtype IN ('Text','Emoji')),
+    moodtype    VARCHAR(5) NOT NULL CHECK (moodtype IN ('text','emoji')),
     score       FLOAT NOT NULL,
     timeofmood  INTEGER NOT NULL,
     PRIMARY KEY (moodid),
@@ -73,7 +73,7 @@ CREATE TABLE text_moods (
 DROP TABLE IF EXISTS emoji_moods;
 CREATE TABLE emoji_moods (
     moodid     INTEGER NOT NULL,
-    emojitype  VARCHAR(10) NOT NULL,
+    emojitype  VARCHAR(30) NOT NULL,
     PRIMARY KEY (moodid),
     FOREIGN KEY (moodid) REFERENCES moods(moodid)
 );
@@ -82,7 +82,7 @@ DROP TABLE IF EXISTS responses;
 CREATE TABLE responses (
     responseid     INTEGER NOT NULL,
     feedbackid     INTEGER NOT NULL,
-    responsetype   VARCHAR(10) NOT NULL CHECK (responsetype IN ('Text','Emoji','MultChoice')),
+    responsetype   VARCHAR(10) NOT NULL CHECK (responsetype IN ('text','emoji','multchoice')),
     questionasked  VARCHAR(50) NOT NULL,
     PRIMARY KEY (responseid),
     FOREIGN KEY (feedbackid) REFERENCES feedback(feedbackid)
@@ -99,7 +99,7 @@ CREATE TABLE text_responses (
 DROP TABLE IF EXISTS emoji_responses;
 CREATE TABLE emoji_responses (
     responseid  INTEGER NOT NULL,
-    emojitype   VARCHAR(10) NOT NULL,
+    emojitype   VARCHAR(30) NOT NULL,
     PRIMARY KEY (responseid),
     FOREIGN KEY (responseid) REFERENCES responses(responseid)
 );
