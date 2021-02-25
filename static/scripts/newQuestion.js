@@ -19,7 +19,7 @@ class Question {
     }
 
     getJSONString() {
-        if (this.type === "multchoice") {
+        if (this.type === "multichoice") {
             return `{"question":"` + this.question + `", "type":"` + this.type + `", "choices":"` + this.choice_list + `"}`;
         }
         else {
@@ -28,7 +28,7 @@ class Question {
     }
 
     getAsJSON() {
-        if (this.type === "multchoice") {
+        if (this.type === "multichoice") {
             return { "question": this.question, "type": this.type, "choices": this.choice_list };
         }
         else {
