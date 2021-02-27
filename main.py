@@ -250,6 +250,12 @@ def disconnected():
     host = controller.get_host_from_sid(request.sid)
     if host != None:
         controller.host_disconnect(host)
+    else:
+        attendee = controller.get_attendee(request.sid)
+        if attendee != None:
+            meeting = controller.get_meeting_from_attendee(request.sid)
+            meeting.attendees.pop(attendee.sid)
+            print(meeting.attendees)
 
 @socketio.on("end_meeting")
 def end_meeting(data):
