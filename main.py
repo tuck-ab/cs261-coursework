@@ -93,12 +93,6 @@ def connected():
     """
     emit("connection_response", "connected")
 
-@socketio.on("disconnect")
-def disconnected():
-    host = controller.get_host_from_sid(request.sid)
-    if host != None:
-        controller.host_disconnect(host)
-
 @socketio.on("connect_as_host")
 def host_connect(data):
     """
@@ -249,6 +243,18 @@ def error_feedback(data):
     #-------- The error message can be sent to host with currentObj.getErrorMessage()
 
     emit("error_response", {"error":currentObj.getErrorMessage()}, room=meeting.host_room)
+
+
+@socketio.on("disconnect")
+def disconnected():
+    host = controller.get_host_from_sid(request.sid)
+    if host != None:
+        controller.host_disconnect(host)
+
+@socketio.on("end_meeting")
+def end_meeting(data):
+    meeting = controller.get_meeting_from_host(controller.get_host_from_sid(request.sid))
+    print("Meeting to end:", meeting)
     
 ## -- Running the server
 if __name__ == "__main__":

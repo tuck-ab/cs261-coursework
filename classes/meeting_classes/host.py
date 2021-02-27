@@ -7,7 +7,7 @@ class Host:
         self.sid = sid
 
     def get_sid(self):
-        return sid
+        return self.sid
 
     def get_room(self):
         return str(self.sid)
