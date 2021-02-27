@@ -80,6 +80,10 @@ def attendee_page(code):
     """
     return render_template("attendee.html", meeting_code=code)
 
+@app.route("/meetingend")
+def meeting_end():
+    return render_template("meetingEnded.html")
+
 
 ## -- Web Socket functions
 
@@ -261,6 +265,7 @@ def disconnected():
 def end_meeting(data):
     meeting = controller.get_meeting_from_host(controller.get_host_from_sid(request.sid))
     print("Meeting to end:", meeting)
+    emit("meeting_ended","string", room=meeting.attendee_room)
     
 ## -- Running the server
 if __name__ == "__main__":
