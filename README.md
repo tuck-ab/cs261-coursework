@@ -12,3 +12,4 @@
 * TextBlob
     * To install: "pip3 install -U textblob"
 
+* Site opens in : http://127.0.0.1:5000/

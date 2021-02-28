@@ -12,7 +12,6 @@ class Question {
         this.question = question;
     }
 
-
     addChoice(choice) {
         this.choice_list.push(choice);
     }

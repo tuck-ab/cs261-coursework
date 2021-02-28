@@ -15,7 +15,7 @@ function questionTypeUpdate() {
         htmlString += `<input type="button" onclick="submitNormalQuestion()" value="Submit">`;   
     }
 
-    if (questionType == "multichoice") {
+    if (questionType === "multichoice") {
         var htmlString = `<input type"text" id="mainQuestion" name="mainQuestion"><br>`;
         htmlString += `<input type="button" onclick="submitMultiChoiceQuestion()" value="Submit">`;
     }
