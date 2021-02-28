@@ -183,7 +183,7 @@ def question_response(data):
 
 
     #----- database stuff can go here
-    db_conn.insertResponse(TextResponse)
+    # db_conn.insertResponse(TextResponse)
 
 
     #----- The responses can be sent to the host with currentObj.getResponseText()
