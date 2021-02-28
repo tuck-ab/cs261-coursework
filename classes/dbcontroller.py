@@ -2,6 +2,7 @@
 # Create encryption for host password
 # Test insertResponse()
 # Look in meeting.py for getHost and getToken to look about inserting meetings/hosts into the DB
+# In host_connect() in main.py, use 'cookie' variable for meeting ID
 
 import sqlite3
 import hashlib
