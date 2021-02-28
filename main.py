@@ -81,6 +81,10 @@ def attendee_page(code):
     """
     return render_template("attendee.html", meeting_code=code)
 
+@app.route("/meetingend")
+def meeting_end():
+    return render_template("meetingEnded.html")
+
 
 ## -- Web Socket functions
 
@@ -93,12 +97,6 @@ def connected():
     client side functions.
     """
     emit("connection_response", "connected")
-
-@socketio.on("disconnect")
-def disconnected():
-    host = controller.get_host_from_sid(request.sid)
-    if host != None:
-        controller.host_disconnect(host)
 
 @socketio.on("connect_as_host")
 def host_connect(data):
@@ -252,6 +250,25 @@ def error_feedback(data):
     #-------- The error message can be sent to host with currentObj.getErrorMessage()
 
     emit("error_response", {"error":currentObj.getErrorMessage()}, room=meeting.host_room)
+
+
+@socketio.on("disconnect")
+def disconnected():
+    host = controller.get_host_from_sid(request.sid)
+    if host != None:
+        controller.host_disconnect(host)
+    else:
+        attendee = controller.get_attendee(request.sid)
+        if attendee != None:
+            meeting = controller.get_meeting_from_attendee(request.sid)
+            meeting.attendees.pop(attendee.sid)
+            print(meeting.attendees)
+
+@socketio.on("end_meeting")
+def end_meeting(data):
+    meeting = controller.get_meeting_from_host(controller.get_host_from_sid(request.sid))
+    print("Meeting to end:", meeting)
+    emit("meeting_ended","string", room=meeting.attendee_room)
     
 ## -- Running the server
 if __name__ == "__main__":

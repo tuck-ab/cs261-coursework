@@ -9,8 +9,8 @@ function getCookie(name) {
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
-function sendUpdate() {
-    socket.emit("update_from_host", {"cookie" : getCookie("meeting_token")});
+function endMeeting() {
+    socket.emit("end_meeting", "meaningless string");
 }
 
 function onTemplateUpdate() {
