@@ -1,28 +1,28 @@
-INSERT INTO hosts VALUES(1, "John", "a", "1");
-INSERT INTO hosts VALUES(2, "Anne", "b", "2");
-INSERT INTO hosts VALUES(3, "Steve", "c", "3");
+INSERT INTO hosts VALUES(1, "3_Jg9nmmL08CdGq4AAAD", "John", "a", "1");
+INSERT INTO hosts VALUES(2, "5gMlkjdf987aHFJKHDHF", "Anne", "b", "2");
+INSERT INTO hosts VALUES(3, "jdas798HFJAHKJB638GD", "Steve", "c", "3");
 
 INSERT INTO meetings VALUES(1,1,"Functional Programming",60);
 INSERT INTO meetings VALUES(2,1,"Operating Systems and Computer Networks",58);
 INSERT INTO meetings VALUES(3,2,"Artificial Intelligence",55);
 INSERT INTO meetings VALUES(4,3,"Algorithms",45);
 
-INSERT INTO attendees VALUES(1,1);
-INSERT INTO attendees VALUES(2,1);
-INSERT INTO attendees VALUES(3,1);
-INSERT INTO attendees VALUES(4,1);
-INSERT INTO attendees VALUES(1,2);
-INSERT INTO attendees VALUES(2,2);
-INSERT INTO attendees VALUES(3,2);
-INSERT INTO attendees VALUES(4,2);
-INSERT INTO attendees VALUES(1,3);
-INSERT INTO attendees VALUES(2,3);
-INSERT INTO attendees VALUES(3,3);
-INSERT INTO attendees VALUES(4,3);
-INSERT INTO attendees VALUES(1,4);
-INSERT INTO attendees VALUES(2,4);
-INSERT INTO attendees VALUES(3,4);
-INSERT INTO attendees VALUES(4,4);
+INSERT INTO attendees VALUES(1,1,"jFZMfh90SxObZyk3AAAF");
+INSERT INTO attendees VALUES(2,1,"HDLm7u7H9gxwLtIlxH11");
+INSERT INTO attendees VALUES(3,1,"afNTNFuYR3tIDM4h4h9k");
+INSERT INTO attendees VALUES(4,1,"KwLP1MhLLveenssqcWC1");
+INSERT INTO attendees VALUES(1,2,"TZfURbGoeLdGTSAU7o1e");
+INSERT INTO attendees VALUES(2,2,"96TnH0g7I1irNfJCb6ii");
+INSERT INTO attendees VALUES(3,2,"NEvbW3NPdAqkqL8EFrvd");
+INSERT INTO attendees VALUES(4,2,"0pqMFbZY20tm0YgXerWI");
+INSERT INTO attendees VALUES(1,3,"8xivu3PNaBGkvefuQdxb");
+INSERT INTO attendees VALUES(2,3,"6Tw2mC7XJXBrPLNRoalf");
+INSERT INTO attendees VALUES(3,3,"wdL8R9FbMFSvPcGUrUyH");
+INSERT INTO attendees VALUES(4,3,"nJgSpLaqYAWKK7N5S2M4");
+INSERT INTO attendees VALUES(1,4,"NASnwRa3WOuBr5Kh2y8y");
+INSERT INTO attendees VALUES(2,4,"Q81MyGH4mCCKEu0sgqR5");
+INSERT INTO attendees VALUES(3,4,"SgO1jlUa0p2hSep0iT2s");
+INSERT INTO attendees VALUES(4,4,"nqz51vYRE7NVmbJ17NE5");
 
 INSERT INTO feedback VALUES(1,1,1,"error",1);
 INSERT INTO feedback VALUES(2,1,2,"question",1);
