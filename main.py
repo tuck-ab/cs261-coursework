@@ -47,7 +47,6 @@ def search_query():
             print(search_result) #replace this line with emitting search_result
             #each result is a dictionary to be emitted
 
-    return query
 
 @app.route("/create", methods=["GET","POST"])
 def create_meeting():
