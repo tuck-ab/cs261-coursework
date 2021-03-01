@@ -1,42 +1,21 @@
-DROP TABLE IF EXISTS hosts;
-CREATE TABLE hosts (
-    hostid    INTEGER NOT NULL,
-    socketid  TEXT NOT NULL,
-    hostname  TEXT NOT NULL,
-    hostpass  TEXT NOT NULL,
-    salt      TEXT NOT NULL,
-    PRIMARY KEY (hostid)
-);
-
-DROP TABLE IF EXISTS attendees;
-CREATE TABLE attendees (
-    attendeeid INTEGER NOT NULL,
-    meetingid  INTEGER NOT NULL,
-    socketid   TEXT NOT NULL,
-    PRIMARY KEY (attendeeid, meetingid),
-    FOREIGN KEY (meetingid) REFERENCES meetings(meetingid)
-);
-
 DROP TABLE IF EXISTS meetings;
 CREATE TABLE meetings (
-    meetingid  INTEGER NOT NULL,
-    hostid     INTEGER NOT NULL,
-    title      TEXT NOT NULL,
-    runtime    INTEGER NOT NULL,
-    PRIMARY KEY (meetingid),
-    FOREIGN KEY (hostid) REFERENCES hosts(hostid)
+    meetingid    INTEGER NOT NULL,
+    title        TEXT NOT NULL,
+    meetingpass  TEXT NOT NULL,
+    meetingsalt  TEXT NOT NULL,
+    runtime      INTEGER NOT NULL,
+    date_time    TEXT NOT NULL,
+    PRIMARY KEY (meetingid)
 );
 
 DROP TABLE IF EXISTS feedback;
 CREATE TABLE feedback (
     feedbackid    INTEGER NOT NULL,
     meetingid     INTEGER NOT NULL,
-    attendeeid    INTEGER NOT NULL,
     feedbacktype  TEXT NOT NULL CHECK (feedbacktype IN ('error','question','response','mood')),
-    anon          INTEGER NOT NULL CHECK (anon IN (0,1)),
     PRIMARY KEY (feedbackid),
-    FOREIGN KEY (meetingid) REFERENCES meetings(meetingid),
-    FOREIGN KEY (attendeeid) REFERENCES attendees(attendeeid)
+    FOREIGN KEY (meetingid) REFERENCES meetings(meetingid)
 );
 
 DROP TABLE IF EXISTS errors;

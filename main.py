@@ -196,7 +196,7 @@ def question_response(data):
 
 
     #----- database stuff can go here
-    db_conn.insertResponse(currentObj)
+    db_conn.insert_response(currentObj)
 
 
     #----- The responses can be sent to the host with currentObj.getResponseText()
@@ -228,7 +228,7 @@ def general_feedback(data):
     
 
     #------- database stuff can go here
-    db_conn.insertMood(currentObj)
+    db_conn.insert_mood(currentObj)
 
 
     #------- The feedback can be sent to host with currentObj.getMoodText()
@@ -258,7 +258,7 @@ def error_feedback(data):
 
 
     #-------- database stuff can go here
-    db_conn.insertError(currentObj)
+    db_conn.insert_error(currentObj)
 
 
     #-------- The error message can be sent to host with currentObj.getErrorMessage()
