@@ -43,6 +43,10 @@ def create_meeting():
     elif request.method == "POST":
         print(request.form["templateJSON"])
         template = Template().fromJSON(json.loads(request.form["templateJSON"]))
+
+        host_info = json.loads(request.form["hostInfo"])
+        print("Name", host_info["name"])
+        print("Key Word", host_info["keyword"])
         
         ## -- Make new meeting
         new_meeting = controller.create_meeting()
