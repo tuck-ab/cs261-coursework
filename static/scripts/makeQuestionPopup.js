@@ -9,6 +9,7 @@ function closePopup() {
 }
 
 function questionTypeUpdate() {
+    counter = 2;
     var questionType = document.getElementById("questionType").value;
     var inputer = document.getElementById("questionInputer");
 
@@ -16,16 +17,15 @@ function questionTypeUpdate() {
         var htmlString = `<input type"text" id="mainQuestion" name="mainQuestion"><br>`;
         htmlString += `<input type="button" onclick="submitNormalQuestion()" value="Submit">`;   
     }
-
     if (questionType === "multichoice") {
         var htmlString = `<input type"text" id="mainQuestion" name="mainQuestion"><br>`;
         htmlString += `<input type="button" onclick="addAdditionalChoice()" value="Add More Choices">`;
         htmlString += `<input type="button" onclick="submitMultiChoiceQuestion()" value="Submit">`;
-        htmlString += `<input type"text" id="option1" name="option1"><br>`;
-        htmlString += `<input type"text" id="option2" name="option2"><br>`;
+        htmlString += `<input type"text" id="option"+1 name="option1"><br>`;
+        htmlString += `<input type"text" id="option"+2 name="option2"><br>`;
     }
-    inputer.innerHTML = htmlString;
 
+    inputer.innerHTML = htmlString;
 }
 
 
@@ -42,14 +42,16 @@ function submitNormalQuestion() {
 }
 
 
-function addMultiChoiceQuestion(question) {
-    var newQuestion = new Question("multichoice");
-    newQuestion.setQuestion(question);
-    questionTemplate.addQuestion(newQuestion);
-}
-
 function submitMultiChoiceQuestion() {
-    addMultiChoiceQuestion(document.getElementById("mainQuestion").value);
+    var newQuestion = new Question("multichoice");
+    newQuestion.setQuestion(document.getElementById("mainQuestion").value);
+    var temp = ""
+    for (var i = 1; i < counter + 1; i++) {
+        temp = ""
+        temp = "option" + i;
+        newQuestion.addChoice(document.getElementById(temp).value);
+    }
+    questionTemplate.addQuestion(newQuestion);
     onTemplateUpdate();
     closePopup();
 }
@@ -59,3 +61,4 @@ function addAdditionalChoice() {
     var inputer = document.getElementById("questionInputer");
     inputer.innerHTML += `<input type"text" id="option"+counter name="option"><br>`;
 }
+

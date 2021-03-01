@@ -18,7 +18,12 @@ class Question {
 
     getJSONString() {
         if (this.type === "multichoice") {
-            return `{"question":"` + this.question + `", "type":"` + this.type + `", "choices":"` + this.choice_list + `"}`;
+            var choices = this.choice_list[0]
+            for (var i = 1; i < this.choice_list.length; i++) {
+                choices += " , "
+                choices += this.choice_list[i]
+            }
+            return `{"question":"` + this.question + `", "type":"` + this.type + `", "choices":"` + choices + `"}`;
         }
         else {
             return `{"question":"` + this.question + `", "type":"` + this.type + `"}`;
@@ -27,7 +32,12 @@ class Question {
 
     getAsJSON() {
         if (this.type === "multichoice") {
-            return { "question": this.question, "type": this.type, "choices": this.choice_list };
+            var choices = this.choice_list[0]
+            for (var i = 1; i < this.choice_list.length; i++) {
+                choices += " , "
+                choices += this.choice_list[i]
+            }
+            return { "question": this.question, "type": this.type, "choices": choices };
         }
         else {
             return { "question": this.question, "type": this.type }; 
