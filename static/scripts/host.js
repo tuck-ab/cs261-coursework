@@ -28,6 +28,19 @@ socket.on("connection_response", function(data) {
     }
 });
 
+socket.on("meeting_ended", function(data) {
+    var sections = window.location.href.split("/")
+    var counter = 0;
+    var newURL = "";
+
+    while (counter < sections.length && sections[counter] !== "meeting") {
+        newURL += sections[counter] + "/";
+        counter += 1
+    }
+
+    window.location.href = newURL + "meetingend";
+})
+
 socket.on("meeting_details", function(data) {
     document.getElementById("meeting_code").innerHTML = data["meeting_code"];
 });
