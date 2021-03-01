@@ -169,6 +169,16 @@ class DBController:
         else:
             print("Invalid response type:", response_type)
 
+    # Searches for all meetings with a certain string in their title
+    def search_meetings(self,query):
+        try:
+            self.cursor.execute("SELECT title, date_time FROM meetings WHERE title LIKE '%?%'",(query,))
+            matches = self.cursor.fetchall()
+            return matches
+
+        except sqlite3.Error as error:
+            return error
+
     # def __checkCred(self, sockid, password):
     #     try:
     #         self.cursor.execute("SELECT hostid, hostpass, salt FROM hosts WHERE socketid = :s",{'s':sockid})
