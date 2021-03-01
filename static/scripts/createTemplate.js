@@ -32,8 +32,6 @@ function submitTemplate() {
     form.appendChild(hostHidenInput);
 
     document.body.appendChild(form);
-    console.log("submitting");
-    alert("pause");
     form.submit();
 
 }
