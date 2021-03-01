@@ -42,8 +42,11 @@ def create_meeting():
 
 
     elif request.method == "POST":
-        print(request.form["templateJSON"])
         template = Template().fromJSON(json.loads(request.form["templateJSON"]))
+
+        host_info = json.loads(request.form["hostInfo"])
+        print("Name", host_info["name"])
+        print("Key Word", host_info["keyword"])
         
         ## -- Make new meeting
         new_meeting = controller.create_meeting()
@@ -268,8 +271,8 @@ def disconnected():
 @socketio.on("end_meeting")
 def end_meeting(data):
     meeting = controller.get_meeting_from_host(controller.get_host_from_sid(request.sid))
-    print("Meeting to end:", meeting)
     emit("meeting_ended","string", room=meeting.attendee_room)
+    emit("meeting_ended", "string", room=meeting.host_room)
     
 ## -- Running the server
 if __name__ == "__main__":

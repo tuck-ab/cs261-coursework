@@ -26,7 +26,11 @@ class QuestionTemplate{
             JSONString += this.questions[i].getJSONString() + ",";
         }
 
-        JSONString = JSONString.substring(0, JSONString.length - 1) + "]}";
+        if (this.questions.length > 0) {
+            JSONString = JSONString.substring(0, JSONString.length - 1)
+        }
+        
+        JSONString += "]}";
         return JSONString;
     }
 
