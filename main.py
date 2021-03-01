@@ -26,6 +26,16 @@ def index():
     """
     return render_template("index.html")
 
+@app.route("/search")
+def search_page():
+    return render_template("search.html")
+
+@app.route("/meeting_search", methods=["POST"])
+def search_query():
+    query = request.form["query"]
+
+    return query
+
 @app.route("/create", methods=["GET","POST"])
 def create_meeting():
     """
