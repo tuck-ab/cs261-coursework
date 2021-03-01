@@ -3,7 +3,8 @@
 # Test insertResponse()
 # Look in meeting.py for getHost and getToken to look about inserting meetings/hosts into the DB
 # In host_connect() in main.py, use 'cookie' variable for meeting ID
-# time of mood in weird units
+# fix attendee ID for feedback insert
+# could add SID field for hosts and attendees
 
 import sqlite3
 import hashlib
@@ -111,7 +112,7 @@ class DBController:
         (meeting, anon, attendee) = self.__getGeneralAttributes(mood)
         moodType = mood.getMoodType()
         score = mood.getMoodScore()
-        time = mood.getMoodTime()
+        time = round(mood.getMoodTime()/60)
 
         if moodType == "text" or moodType == "emoji":
             feedback = self.__insertFeedback(meeting, attendee, "mood", anon)
@@ -160,7 +161,7 @@ class DBController:
         """
         (meeting, anon, attendee) = self.__getGeneralAttributes(response)
         responseType = response.getResponseType()
-        prompt = response.getResponsePrompt()
+        prompt = response.getResponsePrompt()['question']
 
         if responseType == "emoji" or responseType == "text" or responseType == "multchoice":
             feedback = self.__insertFeedback(meeting, attendee, "response", anon)

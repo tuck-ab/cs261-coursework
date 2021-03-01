@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS hosts;
 CREATE TABLE hosts (
     hostid    INTEGER NOT NULL,
+    socketid  TEXT NOT NULL,
     hostname  TEXT NOT NULL,
     hostpass  TEXT NOT NULL,
     salt      TEXT NOT NULL,
@@ -11,6 +12,7 @@ DROP TABLE IF EXISTS attendees;
 CREATE TABLE attendees (
     attendeeid INTEGER NOT NULL,
     meetingid  INTEGER NOT NULL,
+    socketid   TEXT NOT NULL,
     PRIMARY KEY (attendeeid, meetingid),
     FOREIGN KEY (meetingid) REFERENCES meetings(meetingid)
 );
