@@ -39,6 +39,8 @@ def search_query():
         #this could be emitted to host if necessary
     else:
         meetings_list = db_conn.search_meetings(query)
+        print("HERE")
+        print(meetings_list)
         for meetings in meetings_list:
             search_result = {
                 "title": meetings[0],
