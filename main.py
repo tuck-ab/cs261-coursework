@@ -9,6 +9,7 @@ from classes import *
 
 
 controller = Meeting_Controller()
+db_conn = DBController()
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "SecretKey"
@@ -24,6 +25,28 @@ def index():
     Renders and returns the index page to a client when they connect to the website
     """
     return render_template("index.html")
+
+@app.route("/search")
+def search_page():
+    return render_template("search.html")
+
+@app.route("/meeting_search", methods=["POST"])
+def search_query():
+    query = request.form["query"]
+
+    if len(query) < 3:
+        print("too short")
+        #this could be emitted to host if necessary
+    else:
+        meetings_list = db_conn.search_meetings(query)
+        for meetings in meetings_list:
+            search_result = {
+                "title": meetings[0],
+                "date_time": meetings[1]
+            }
+            print(search_result) #replace this line with emitting search_result
+            #each result is a dictionary to be emitted
+
 
 @app.route("/create", methods=["GET","POST"])
 def create_meeting():
@@ -41,8 +64,11 @@ def create_meeting():
 
 
     elif request.method == "POST":
-        print(request.form["templateJSON"])
         template = Template().fromJSON(json.loads(request.form["templateJSON"]))
+
+        host_info = json.loads(request.form["hostInfo"])
+        print("Name", host_info["name"])
+        print("Key Word", host_info["keyword"])
         
         ## -- Make new meeting
         new_meeting = controller.create_meeting()
@@ -80,6 +106,10 @@ def attendee_page(code):
     """
     return render_template("attendee.html", meeting_code=code)
 
+@app.route("/meetingend")
+def meeting_end():
+    return render_template("meetingEnded.html")
+
 
 ## -- Web Socket functions
 
@@ -92,12 +122,6 @@ def connected():
     client side functions.
     """
     emit("connection_response", "connected")
-
-@socketio.on("disconnect")
-def disconnected():
-    host = controller.get_host_from_sid(request.sid)
-    if host != None:
-        controller.host_disconnect(host)
 
 @socketio.on("connect_as_host")
 def host_connect(data):
@@ -184,6 +208,7 @@ def question_response(data):
 
 
     #----- database stuff can go here
+    db_conn.insert_response(currentObj)
 
 
     #----- The responses can be sent to the host with currentObj.getResponseText()
@@ -215,6 +240,7 @@ def general_feedback(data):
     
 
     #------- database stuff can go here
+    db_conn.insert_mood(currentObj)
 
 
     #------- The feedback can be sent to host with currentObj.getMoodText()
@@ -244,11 +270,31 @@ def error_feedback(data):
 
 
     #-------- database stuff can go here
+    db_conn.insert_error(currentObj)
 
 
     #-------- The error message can be sent to host with currentObj.getErrorMessage()
 
     emit("error_response", {"error":currentObj.getErrorMessage()}, room=meeting.host_room)
+
+
+@socketio.on("disconnect")
+def disconnected():
+    host = controller.get_host_from_sid(request.sid)
+    if host != None:
+        controller.host_disconnect(host)
+    else:
+        attendee = controller.get_attendee(request.sid)
+        if attendee != None:
+            meeting = controller.get_meeting_from_attendee(request.sid)
+            meeting.attendees.pop(attendee.sid)
+            print(meeting.attendees)
+
+@socketio.on("end_meeting")
+def end_meeting(data):
+    meeting = controller.get_meeting_from_host(controller.get_host_from_sid(request.sid))
+    emit("meeting_ended","string", room=meeting.attendee_room)
+    emit("meeting_ended", "string", room=meeting.host_room)
     
 ## -- Running the server
 if __name__ == "__main__":

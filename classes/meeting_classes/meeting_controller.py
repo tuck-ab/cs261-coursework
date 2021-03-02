@@ -18,6 +18,10 @@ class Meeting_Controller:
 
         return new_meeting
 
+    def end_meeting(self, meeting):
+        self.meetings_by_code.remove(meeting)
+        self.meetings_by_token.remove(meeting)
+
     def generate_host_token(self):
         ## TODO This needs to be changed to make sure it is a completely new
         ##      token, this will involve accessing the database
@@ -48,8 +52,10 @@ class Meeting_Controller:
 
         return None
 
-    def get_meeting_from_host(self):
-        pass
+    def get_meeting_from_host(self, host):
+        for meeting in self.meetings_by_token.values():
+            if meeting.get_host() == host:
+                return meeting
 
     def get_meeting_from_token(self, token):
         if token in self.meetings_by_token:
@@ -65,7 +71,7 @@ class Meeting_Controller:
 
     def get_host_from_sid(self, sid):
         for meeting in self.meetings_by_token.values():
-            if meeting.get_host() == sid:
+            if meeting.get_host().get_sid() == sid:
                 return meeting.get_host()
 
     def host_disconnect(self, host):

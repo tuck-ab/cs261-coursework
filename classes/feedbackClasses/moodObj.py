@@ -14,3 +14,6 @@ class Mood(GeneralFeedback):
     def getMoodScore(self):
         return self.moodScore
     
+    def getMoodTime(self):
+        return self.moodTime
+    

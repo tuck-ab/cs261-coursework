@@ -6,6 +6,20 @@ socket.on("connection_response", function(data) {
     }
 });
 
+socket.on("meeting_ended", function(data) {
+    console.log(window.location.href);
+    var sections = window.location.href.split("/")
+    var counter = 0;
+    var newURL = "";
+
+    while (counter < sections.length && sections[counter] !== "meeting") {
+        newURL += sections[counter] + "/";
+        counter += 1
+    }
+
+    window.location.href = newURL + "meetingend";
+});
+
 socket.on("meeting_details", function(data) {
     if (data["connection_status"] == "connected") {
         document.getElementById("connection_status").innerHTML = "Connected to room " + meetingcode.toString();

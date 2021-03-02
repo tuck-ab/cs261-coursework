@@ -9,8 +9,8 @@ function getCookie(name) {
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
 
-function sendUpdate() {
-    socket.emit("update_from_host", {"cookie" : getCookie("meeting_token")});
+function endMeeting() {
+    socket.emit("end_meeting", "meaningless string");
 }
 
 function onTemplateUpdate() {
@@ -27,6 +27,19 @@ socket.on("connection_response", function(data) {
         socket.emit("connect_as_host", {"cookie" : getCookie("meeting_token")});
     }
 });
+
+socket.on("meeting_ended", function(data) {
+    var sections = window.location.href.split("/")
+    var counter = 0;
+    var newURL = "";
+
+    while (counter < sections.length && sections[counter] !== "meeting") {
+        newURL += sections[counter] + "/";
+        counter += 1
+    }
+
+    window.location.href = newURL + "meetingend";
+})
 
 socket.on("meeting_details", function(data) {
     document.getElementById("meeting_code").innerHTML = data["meeting_code"];
