@@ -71,8 +71,10 @@ def create_meeting():
         print("Key Word", host_info["keyword"])
         
         ## -- Make new meeting
-        new_meeting = controller.create_meeting()
+        new_meeting = controller.create_meeting(db_conn)
         new_meeting.set_template(template)
+
+        db_conn.insert_meeting(new_meeting.host_token, host_info)
 
         ## -- Send the response with token
         resp = make_response(redirect(url_for("host_page")))
