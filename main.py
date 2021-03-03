@@ -44,7 +44,8 @@ def search_query():
         for meetings in meetings_list:
             search_result = {
                 "title": meetings[0],
-                "date_time": meetings[1]
+                "date_time": meetings[1],
+                "meeting_id": meetings[2]
             }
             results_list.append(search_result)
             # print(search_result) #replace this line with emitting search_result

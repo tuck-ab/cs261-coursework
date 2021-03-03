@@ -239,7 +239,7 @@ class DBController:
     def search_meetings(self,query):
         query = "%" + query + "%"
         try:
-            self.cursor.execute("SELECT title, date_time FROM meetings WHERE title LIKE ?",(query,))
+            self.cursor.execute("SELECT title, date_time, meetingid FROM meetings WHERE title LIKE ?",(query,))
             matches = self.cursor.fetchall()
             return matches
 
