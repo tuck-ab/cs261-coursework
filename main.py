@@ -186,6 +186,7 @@ def attendee_connect(data):
         join_room(meeting.attendee_room)
         
         to_send_back["template"] = meeting.get_template().getJSON()
+        to_send_back["title"] = meeting.title
 
     else:
         to_send_back["connection_status"] = "not_connected"
