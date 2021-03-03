@@ -39,10 +39,12 @@ socket.on("template_update", function(data) {
 
 function sendGeneralFeedback() {
     socket.emit("general_feedback", {"feedback":document.getElementById("generalFeedbackInput").value});
+    document.getElementById("generalFeedbackInput").value = "";
 }
 
 function sendErrorFeedback() {
     socket.emit("error_feedback", {"error":document.getElementById("errorFeedbackInput").value});
+    document.getElementById("errorFeedbackInput").value = "";
 }
 
 function sendQuestionAnswer(id) {
