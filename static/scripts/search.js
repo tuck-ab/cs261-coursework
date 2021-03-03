@@ -1,3 +1,5 @@
+var searchResults = new SearchResults();
+
 function searchUpdate() {
     $.ajax({
         data : {
@@ -7,7 +9,12 @@ function searchUpdate() {
         url : '/meeting_search'
         })
     .done(function(data) {
-        console.log(data);
+        searchResults.setResults(data["results"]);
+        searchResults.display(document.getElementById("results"));
     });
     event.preventDefault();
+}
+
+function selectResult(id) {
+    console.log(id);
 }

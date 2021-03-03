@@ -35,18 +35,22 @@ def search_query():
     query = request.form["query"]
 
     if len(query) < 3:
-        print("too short")
+        # print("too short")
         #this could be emitted to host if necessary
+        return {"results": []}
     else:
         meetings_list = db_conn.search_meetings(query)
+        results_list = []
         for meetings in meetings_list:
             search_result = {
                 "title": meetings[0],
                 "date_time": meetings[1]
             }
-            print(search_result) #replace this line with emitting search_result
+            results_list.append(search_result)
+            # print(search_result) #replace this line with emitting search_result
             #each result is a dictionary to be emitted
 
+        return {"results": results_list}
 
 @app.route("/create", methods=["GET","POST"])
 def create_meeting():
@@ -178,7 +182,7 @@ def update_from_host(data):
 
 @socketio.on("template_update")
 def template_update(data):
-    meeting = controller.get_meeting_from_token(data["cookie"])
+    meeting = controller.get_meeting_from_token(data["cookie"]) ## -- maybe change this
     questions = json.loads(data["template"])
 
     meeting.get_template().fromJSON(questions)
