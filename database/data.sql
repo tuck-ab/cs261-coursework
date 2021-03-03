@@ -1,7 +1,11 @@
-INSERT INTO meetings VALUES(1,"Functional Programming","abcde","salt",60,"2021-03-01 16:35:05");
-INSERT INTO meetings VALUES(2,"Operating Systems and Computer Networks","fghij","pepper",58,"2021-02-25 15:12:07");
-INSERT INTO meetings VALUES(3,"Artificial Intelligence","klmno","thyme",55,"2021-01-08 09:01:45");
-INSERT INTO meetings VALUES(4,"Algorithms","pqrst","basil",45,"2021-02-14 12:54:09");
+-- password: haskell
+INSERT INTO meetings VALUES(1111,"Functional Programming","0a9c51b61e2b775a59ee4773ff59f926641dd3392468fcec35c0ad2f29671b51","abb76399ad73c33e4eddaa2fd24537562299f8c7b9612972d3a207d825e66099",60,"2021-03-01 16:35:05");
+-- password: deadlock
+INSERT INTO meetings VALUES(2222,"Operating Systems and Computer Networks","64a5db987724b7c1e7d2f0be64c39dd824665e41132846605e6bdb0ae211e8fb","9669f38c5547351b67ec7879bdcb5a5c57f9769c48938d36ac603beef57f96cd",58,"2021-02-25 15:12:07");
+-- password: agents
+INSERT INTO meetings VALUES(3333,"Artificial Intelligence","a54593ba507d58f75da7e58927774b1aaecb49b9ec74cf31636d53ee56a91111","1543e6382f6c2c2ba3293b168367488989ede6e43eba7294c0281960d46d68bf",55,"2021-01-08 09:01:45");
+-- password: asymptotic
+INSERT INTO meetings VALUES(4444,"Algorithms","5f51b147a9af7c0a0e0a0fa7c5b42d610825dbb35aa03139239d3d65fb37b0ed","bf49118a49f5fc7acf71215cbbe6ffc4b085e78b59050a0ff22fa3a12170b56a",45,"2021-02-14 12:54:09");
 
 INSERT INTO feedback VALUES(1,1,"error");
 INSERT INTO feedback VALUES(2,1,"question");

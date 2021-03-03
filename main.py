@@ -60,6 +60,12 @@ def choose_meeting():
     print("meeting:", meeting)
     print("keyword:", keyword)
 
+    # Replace 1111 with the meeting ID
+    if db_conn.check_keyword(1111, keyword):
+        print("Password accepted")
+    else:
+        print("Password rejected")
+
     return "Password being checked"
 
 @app.route("/create", methods=["GET","POST"])
