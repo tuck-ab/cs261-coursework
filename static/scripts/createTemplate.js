@@ -3,13 +3,13 @@ var questionTemplate = new QuestionTemplate();
 function submitTemplate() {
     var url = window.location.href;
 
-    var nameElement = document.getElementById("hostName");
-    if (nameElement.value == "") {
+    var titleElement = document.getElementById("meetingTitle");
+    if (titleElement.value == "") {
         alert("Please set host name");
         return false
     }
 
-    var keyWordElement = document.getElementById("hostKeyWord");
+    var keyWordElement = document.getElementById("meetingKeyWord");
     if (keyWordElement.value == "") {
         alert("Please set key word");
         return false
@@ -28,7 +28,7 @@ function submitTemplate() {
     var hostHidenInput = document.createElement("input");
     hostHidenInput.type = "hidden";
     hostHidenInput.name = "hostInfo";
-    hostHidenInput.value = `{"name":"` + nameElement.value + `","keyword":"` + keyWordElement.value + `"}`;
+    hostHidenInput.value = `{"title":"` + titleElement.value + `","keyword":"` + keyWordElement.value + `"}`;
     form.appendChild(hostHidenInput);
 
     document.body.appendChild(form);
