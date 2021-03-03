@@ -16,5 +16,20 @@ function searchUpdate() {
 }
 
 function selectResult(id) {
-    console.log(id);
+    var keywordEntered = prompt("Key word:");
+
+    if (keywordEntered !== null) {
+        $.ajax({
+            data : {
+            meeting : searchResults.getResultString(id),
+            keyword : keywordEntered
+                },
+            type : 'POST',
+            url : '/meeting_submit'
+            })
+        .done(function(data) {
+            console.log(data);
+        });
+        event.preventDefault();
+    }
 }

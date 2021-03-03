@@ -52,6 +52,16 @@ def search_query():
 
         return {"results": results_list}
 
+@app.route("/meeting_submit", methods=["POST"])
+def choose_meeting():
+    meeting = json.loads(request.form["meeting"])
+    keyword = request.form["keyword"]
+
+    print("meeting:", meeting)
+    print("keyword:", keyword)
+
+    return "Password being checked"
+
 @app.route("/create", methods=["GET","POST"])
 def create_meeting():
     """

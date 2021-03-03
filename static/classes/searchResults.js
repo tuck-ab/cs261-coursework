@@ -7,6 +7,10 @@ class SearchResults {
         this.results = results;
     }
 
+    getResultString(id) {
+        return `{"date_time":` + this.results[id]["date_time"] + `, "title":` + this.results[id]["title"] + `}`;
+    }
+
     getHTMLString() {
         var HTMLString = "";
         var loopString = "";
