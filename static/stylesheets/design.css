@@ -53,3 +53,39 @@ input{
   border: 5px solid rgb(98, 100, 99);
   justify-content: center;
 }
+#afterStartAdd{
+  top:300px;
+  right:30px;
+  font-weight: bold;
+}
+.containers {
+  height: 150px;
+  top:10px;
+  overflow: scroll;
+  border: 3px solid rgb(51, 51, 51);
+  margin-bottom: 10px;
+  position: relative;
+  float: left;
+  width: 45%;
+  padding: 50px 50px 50px;
+  background-color: rgba(214, 205, 205, 0.438);
+}
+
+#currentTemplate{
+  white-space: normal;
+}
+#errorTitle{
+  color: red;
+  font-weight: bold;
+}
+
+#errorFeedbackDisplay{
+  animation: blinker 1s linear infinite;
+  font-weight: bold;
+}
+
+@keyframes blinker {
+50% {
+opacity: 25%;
+  }
+}
