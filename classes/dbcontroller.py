@@ -203,7 +203,7 @@ class DBController:
             token {int} -- Identifier for the given meeting
             details {dict} -- Stores meeting title in key 'name' and meeting password in key 'keyword'
         """
-        title = details['name']
+        title = details['title']
         password = details['keyword']
         alphabet = string.ascii_letters + string.digits
         salt = hashlib.sha256(''.join(secrets.choice(alphabet) for i in range(8)).encode('utf-8')).hexdigest()
