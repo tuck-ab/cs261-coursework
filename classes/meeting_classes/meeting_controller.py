@@ -1,14 +1,15 @@
 import random
 
 from .meeting import Meeting
+from ..dbcontroller import *
 
 class Meeting_Controller:
     def __init__(self):
         self.meetings_by_token = {}
         self.meetings_by_code = {}
 
-    def create_meeting(self):
-        token = self.generate_host_token()
+    def create_meeting(self, db_conn):
+        token = self.generate_host_token(db_conn)
         code = self.generate_join_code()
 
         new_meeting = Meeting(token, code)
@@ -22,12 +23,10 @@ class Meeting_Controller:
         self.meetings_by_code.remove(meeting)
         self.meetings_by_token.remove(meeting)
 
-    def generate_host_token(self):
-        ## TODO This needs to be changed to make sure it is a completely new
-        ##      token, this will involve accessing the database
+    def generate_host_token(self, db_conn):
         while True:
             token = str(random.randint(1000,9999))
-            if not token in self.meetings_by_token:
+            if db_conn.unique_token(token):
                 return token
 
     def generate_join_code(self):

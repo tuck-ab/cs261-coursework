@@ -1,17 +1,16 @@
-# TODO:
-# Create encryption for meeting password
-# In host_connect() in main.py, use 'cookie' variable for meeting ID
-
-import sqlite3
+import datetime
 import hashlib
+import secrets
+import sqlite3
+import string
 import time
 
 from .feedbackClasses import *
 
 class DBController:
 
-    # Establishes DB connection and a cursor
     def __init__(self):
+        # Establishes DB connection and a cursor
         try:
             self.conn = sqlite3.connect('live_feedback.db')
             self.cursor = self.conn.cursor()
@@ -23,8 +22,8 @@ class DBController:
         """
         self.conn.close()
 
-    # Helper function to insert a general feedback type
     def __insert_feedback(self, meeting, f_type):
+        # Helper function to insert a general feedback type
         try:
             self.cursor.execute("INSERT INTO feedback VALUES (NULL, :m, :t)",{'m':meeting, 't':f_type})
             self.cursor.execute("SELECT last_insert_rowid()")
@@ -79,8 +78,8 @@ class DBController:
             print("Error inserting into table feedback:", feedback)
             self.conn.rollback()
 
-    # Helper function to insert a general mood feedback
     def __insert_general_mood(self, feedback, mood_type, score, time):
+        # Helper function to insert a general mood feedback
         try:
             self.cursor.execute("INSERT INTO moods VALUES (NULL, :f, :t, :s, :l)",{'f':feedback, 't':mood_type, 's':score, 'l':time})
             self.cursor.execute("SELECT last_insert_rowid()")
@@ -95,36 +94,45 @@ class DBController:
             mood {emojiMoodObj/textMoodObj} -- Emoji or Text Mood object containing relevant details
 
         """
+        cancel = False
         meeting = mood.getMeeting()
         mood_type = mood.getMoodType()
         score = mood.getMoodScore()
-        time = round(mood.getMoodTime()/60)
-
-        if mood_type == "text" or mood_type == "emoji":
-            feedback = self.__insert_feedback(meeting, "mood")
-            if type(feedback) is int:
-                mood_ID = self.__insert_general_mood(feedback, mood_type, score, time)
-                if type(mood_ID) is int:
-                    if mood_type == "text":
-                        data = mood.getMoodText()
+        current_time = datetime.datetime.strptime(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(mood.getMoodTime())), "%Y-%m-%d %H:%M:%S")
+        try:
+            self.cursor.execute("SELECT date_time FROM meetings WHERE meetingid = :m",{'m':meeting})
+            start_time = datetime.datetime.strptime(self.cursor.fetchone()[0], "%Y-%m-%d %H:%M:%S")
+            meeting_time = current_time - start_time
+        except sqlite3.Error as error:
+            print("Error selecting meetingid from table meetings:",error)
+            cancel = True
+        if not cancel:
+            if mood_type == "text" or mood_type == "emoji":
+                feedback = self.__insert_feedback(meeting, "mood")
+                if type(feedback) is int:
+                    mood_ID = self.__insert_general_mood(feedback, mood_type, score, str(meeting_time))
+                    if type(mood_ID) is int:
+                        if mood_type == "text":
+                            data = mood.getMoodText()
+                        else:
+                            data = mood.getMoodEmoji()
+                        try:
+                            self.cursor.execute("INSERT INTO " + mood_type + "_moods VALUES (:m, :t)",{'m':mood_ID, 't':data})
+                            self.conn.commit()
+                        except sqlite3.Error as error:
+                            print("Error inserting into table " + mood_type + "_moods:", error)
+                            self.conn.rollback()
                     else:
-                        data = mood.getMoodEmoji()
-                    try:
-                        self.cursor.execute("INSERT INTO " + mood_type + "_moods VALUES (:m, :t)",{'m':mood_ID, 't':data})
-                        self.conn.commit()
-                    except sqlite3.Error as error:
-                        print("Error inserting into table " + mood_type + "_moods:", error)
+                        print("Error inserting into table moods:", mood_ID)
                         self.conn.rollback()
                 else:
-                    print("Error inserting into table moods:", mood_ID)
+                    print("Error inserting into table feedback:", feedback)
                     self.conn.rollback()
             else:
-                print("Error inserting into table feedback:", feedback)
-                self.conn.rollback()
-        else:
-            print("Invalid mood type:", mood_type)
+                print("Invalid mood type:", mood_type)
 
     def __insert_general_response(self, feedback, response_type, prompt):
+        # Helper function to insert a general response feedback
         try:
             self.cursor.execute("INSERT INTO responses VALUES (NULL, :f, :t, :p)",{'f':feedback, 't':response_type, 'p':prompt})
             self.cursor.execute("SELECT last_insert_rowid()")
@@ -141,7 +149,7 @@ class DBController:
         """
         meeting = response.getMeeting()
         response_type = response.getResponseType()
-        prompt = response.getResponsePrompt()
+        prompt = response.getResponsePrompt()['question']
 
         if response_type == "emoji" or response_type == "text" or response_type == "multchoice":
             feedback = self.__insert_feedback(meeting, "response")
@@ -166,8 +174,66 @@ class DBController:
                     self.conn.rollback()
             else:
                 print("Error inserting into table feedback:", feedback)
+                self.conn.rollback()
         else:
             print("Invalid response type:", response_type)
+
+    def unique_token(self, token):
+        """Determines if token is unique
+
+        Parameters:
+            token {int} -- Token to check uniqueness of
+
+        Returns:
+            True/False {boolean} -- Indicates whether token is unique
+        """
+        try:
+            self.cursor.execute("SELECT meetingid FROM meetings WHERE meetingid == :m",{'m':token})
+            if self.cursor.fetchone() is None:
+                return True
+            return False
+        except sqlite3.Error as error:
+            print("Error selecting meetingid from table meetings:",error)
+            return False
+
+    def insert_meeting(self, token, details):
+        """Stores newly created meeting
+
+        Parameters:
+            token {int} -- Identifier for the given meeting
+            details {dict} -- Stores meeting title in key 'name' and meeting password in key 'keyword'
+        """
+        title = details['name']
+        password = details['keyword']
+        alphabet = string.ascii_letters + string.digits
+        salt = hashlib.sha256(''.join(secrets.choice(alphabet) for i in range(8)).encode('utf-8')).hexdigest()
+        meeting_pass = hashlib.sha256((password + "--" + salt).encode('utf-8')).hexdigest()
+        t = time.time()
+        date_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(t))
+        try:
+            self.cursor.execute("INSERT INTO meetings VALUES (:m, :t, :p, :s, 0, :d)",{'m':token, 't':title, 'p':meeting_pass, 's':salt, 'd':date_time})
+            self.conn.commit()
+        except sqlite3.Error as error:
+            print("Error inserting into table meetings:",error)
+            self.conn.rollback()
+
+    def update_runtime(self, token):
+        """Updates running time of meeting given by token
+
+        Parameters:
+            token {int} -- Identifier for meeting
+        """
+        t = time.time()
+        current_time = datetime.datetime.strptime(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(t)), "%Y-%m-%d %H:%M:%S")
+        try:
+            self.cursor.execute("SELECT date_time FROM meetings WHERE meetingid = :m",{'m':token})
+            start_time = datetime.datetime.strptime(self.cursor.fetchone()[0], "%Y-%m-%d %H:%M:%S")
+            elapsed_time = current_time - start_time
+            self.cursor.execute("UPDATE meetings SET runtime = :t WHERE meetingid = :m",{'t':str(elapsed_time), 'm':token})
+            self.conn.commit()
+        except sqlite3.Error as error:
+            print(error)
+            self.conn.rollback()
 
     # Searches for all meetings with a certain string in their title
     def search_meetings(self,query):
@@ -179,73 +245,3 @@ class DBController:
 
         except sqlite3.Error as error:
             return error
-
-    # def __checkCred(self, sockid, password):
-    #     try:
-    #         self.cursor.execute("SELECT hostid, hostpass, salt FROM hosts WHERE socketid = :s",{'s':sockid})
-    #         fetched = self.cursor.fetchone()
-    #         hostpass = fetched[1]
-    #         salt = fetched[2]
-    #         if hashlib.sha1(password + "--" + salt) == hostpass:
-    #             return fetched[0]
-    #         else:
-    #             return "Incorrect credentials"
-    #     except sqlite3.Error as error:
-    #         return error
-
-    # def __newHost(self, sockid, name, password):
-    #     salt = hashlib.sha1(time.time())
-    #     hostpass = hashlib.sha1(password + "--" + salt)
-    #     try:
-    #         self.cursor.execute("INSERT INTO hosts VALUES (NULL, :s, :n, :p, :e)",{'s':sockid, 'n':name, 'p':hostpass, 'e':salt})
-    #         self.cursor.execute("SELECT last_insert_rowid()")
-    #         return self.cursor.fetchone()[0]
-    #     except sqlite3.Error as error:
-    #         return error
-
-    # def createEvent(self, sockid, name, password, meetingid, title):
-    #     """Create event with given host
-
-    #     Parameters:
-    #         sockid {string} -- Socket ID for the host
-    #         name {string} -- Name of the host
-    #         password {string} -- Host's password
-    #         meetingid {id} -- ID for the meeting
-    #         title {string} -- Title of the meeting
-    #     """
-    #     try:
-    #         self.cursor.execute("SELECT hostid FROM hosts WHERE socketid = :s",{'s':sockid})
-    #         fetched = self.cursor.fetchone()
-    #         if not fetched:
-    #             hostid = self.__newHost(sockid, name, password)
-    #         else:
-    #             hostid = self.__checkCred(sockid, password)
-            # TODO: Check hostid data type
-
-    # def createEvent(self, host, title):
-    #     """Store event
-
-    #     Parameters:
-    #         host {int} -- Identifier for host
-    #         title {string} -- Title of the event
-
-    #     Returns:
-    #         event {int} -- Identifier of created event
-
-    #     """
-    #     table = "hosts"
-    #     event = -1
-    #     try:
-    #         self.cursor.execute("SELECT hostid FROM hosts WHERE hostid = :h",{'h':host})
-    #         if not self.cursor.fetchone():
-    #            self.cursor.execute("INSERT INTO hosts VALUES (:h)",{'h':host})
-    #         table = "meetings"
-    #         self.cursor.execute("INSERT INTO meetings VALUES (NULL, :h, :t, :r)",{'h':host, 't':title, 'r':121})
-    #         self.cursor.execute("SELECT last_insert_rowid()")
-    #         event = self.cursor.fetchone()[0]
-    #         self.conn.commit()
-    #     except sqlite3.Error as error:
-    #         print("Error inserting into table",table,":",error)
-    #         self.conn.rollback()
-    #     finally:
-    #         return event

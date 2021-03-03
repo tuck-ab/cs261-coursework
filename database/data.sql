@@ -1,7 +1,7 @@
-INSERT INTO meetings VALUES(1,"Functional Programming","abcde","salt",60,"2021-03-01 16:35:05.153");
-INSERT INTO meetings VALUES(2,"Operating Systems and Computer Networks","fghij","pepper",58,"2021-02-25 15:12:07.394");
-INSERT INTO meetings VALUES(3,"Artificial Intelligence","klmno","thyme",55,"2021-01-08 09:01:45.734");
-INSERT INTO meetings VALUES(4,"Algorithms","pqrst","basil",45,"2021-02-14 12:54:09.353");
+INSERT INTO meetings VALUES(1,"Functional Programming","abcde","salt",60,"2021-03-01 16:35:05");
+INSERT INTO meetings VALUES(2,"Operating Systems and Computer Networks","fghij","pepper",58,"2021-02-25 15:12:07");
+INSERT INTO meetings VALUES(3,"Artificial Intelligence","klmno","thyme",55,"2021-01-08 09:01:45");
+INSERT INTO meetings VALUES(4,"Algorithms","pqrst","basil",45,"2021-02-14 12:54:09");
 
 INSERT INTO feedback VALUES(1,1,"error");
 INSERT INTO feedback VALUES(2,1,"question");
