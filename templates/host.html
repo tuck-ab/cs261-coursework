@@ -14,7 +14,7 @@
         <script src="{{ url_for('static', filename='scripts/host.js') }}"></script>
 
         <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/hiddenpopup.css') }}">
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/design.css') }}" >
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/design.css') }}">
     </head>
     <body>
         <div id="header">
@@ -22,7 +22,7 @@
         </div>
 
         <div id="createQuestion" class="popup">
-            <div class="popup-content">
+            <div id="popUpDiv" class="popup-content">
 
                 <span class="close" onclick="closePopup()">Close</span><br>
 
@@ -42,22 +42,7 @@
             <input type="button" onclick="endMeeting()" value="End Meeting">
         </div>
 
-        <div id="templateDisplay">
-            <p>Current template:</p>
-            <div id="currentTemplate">
-
-            </div>
-            <input type="button" onclick="openPopup()" value="Add Question">
-        </div>
-
-        <div>
-            <p>Errors reported by attendees:</p>
-            <div id="errorFeedbackDisplay">
-
-            </div>
-        </div>
-
-        <div>
+        <div class="containers">
             <p>Current score of room: <span id="sentimentScore">0</span></p>
             <p>Most recent feedback recieved:</p>
             <div id="recentFeedbackDisplay">
@@ -65,11 +50,27 @@
             </div>
         </div>
 
-        <div>
+        <div class="containers">
+            <p id="errorTitle">Errors reported by attendees:</p>
+            <div id="errorFeedbackDisplay">
+
+            </div>
+        </div>
+
+        <div class="containers">
             <p>Recent questions answered:</p>
             <div id="questionAnswerDisplay">
                 
             </div>
         </div>
+
+        <div id="templateDisplay">
+            <p>Current template:</p>
+            <div id="currentTemplate">
+
+            </div>
+            <input id="afterStartAdd" type="button" onclick="openPopup()" value="Add Question">
+        </div>
+
     </body>
 </html>
