@@ -285,6 +285,7 @@ def disconnected():
     host = controller.get_host_from_sid(request.sid)
     if host != None:
         controller.host_disconnect(host)
+        db_conn.update_runtime(host.get_meeting().host_token)
     else:
         attendee = controller.get_attendee(request.sid)
         if attendee != None:

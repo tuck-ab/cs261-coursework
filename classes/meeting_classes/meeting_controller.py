@@ -26,7 +26,7 @@ class Meeting_Controller:
     def generate_host_token(self, db_conn):
         while True:
             token = str(random.randint(1000,9999))
-            if db_conn.uniqueToken(token):
+            if db_conn.unique_token(token):
                 return token
 
     def generate_join_code(self):
