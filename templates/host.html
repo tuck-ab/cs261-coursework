@@ -16,6 +16,7 @@
         <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/hiddenpopup.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/design.css') }}">
     </head>
+  
     <body>
         <div id="header">
             <p>The code for this meeting is: <div id="meeting_code"></div></p>
@@ -37,19 +38,19 @@
                 </div>
             </div>
         </div>
-
-        <div class="containers">
+        
+        <div  id="currentScore" class="containers">
             <p>Current score of room: <span id="sentimentScore">0</span></p>
             <p>Most recent feedback recieved:</p>
             <div id="recentFeedbackDisplay">
-        <div>
-            <input type="button" onclick="endMeeting()" value="End Meeting">
+
+            </div>
         </div>
 
-        <div id="templateDisplay">
-            <p>Current template:</p>
-            <div id="currentTemplate">
-
+        <div class="containers2">
+            <p>Recent questions answered:</p>
+            <div id="questionAnswerDisplay">
+                
             </div>
         </div>
 
@@ -60,20 +61,18 @@
             </div>
         </div>
 
-        <div class="containers">
-            <p>Recent questions answered:</p>
-            <div id="questionAnswerDisplay">
-                
-            </div>
+        <div class="containers3">
+            <input id="afterStartAdd" type="button" onclick="openPopup()" value="Add Question">
+            <input type="button" onclick="endMeeting()" value="End Meeting">
         </div>
 
-        <div id="templateDisplay">
+        <div id="templateDisplay" class="containers4">
             <p>Current template:</p>
             <div id="currentTemplate">
 
             </div>
-            <input id="afterStartAdd" type="button" onclick="openPopup()" value="Add Question">
         </div>
+
 
     </body>
 </html>
