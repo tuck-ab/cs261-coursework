@@ -94,6 +94,7 @@ def create_meeting():
         ## -- Make new meeting
         new_meeting = controller.create_meeting(db_conn)
         new_meeting.set_template(template)
+        new_meeting.title = host_info["title"]
 
         db_conn.insert_meeting(new_meeting.host_token, host_info)
 

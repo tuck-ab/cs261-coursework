@@ -23,6 +23,7 @@ socket.on("meeting_ended", function(data) {
 socket.on("meeting_details", function(data) {
     if (data["connection_status"] == "connected") {
         document.getElementById("connection_status").innerHTML = "Connected to room " + meetingcode.toString();
+        document.getElementById("meeting_title").innerHTML = data["title"];
         
         hostQuestions.fromJSON(data["template"]);
         hostQuestions.displayTemplate(document.getElementById("hostQuestions"));
