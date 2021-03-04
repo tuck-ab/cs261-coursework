@@ -23,7 +23,9 @@ class Meeting:
     def getSentimentAnalyser(self):
         return self.sentimentAnalyser
 
-        
+    def getemojiSentimentAnalyser(self):
+        return self.emojiSentimentAnalyser
+
     def set_template(self, template):
         self.template = template
 

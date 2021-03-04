@@ -253,8 +253,20 @@ def emoji_response(data):
     emoji = data["emoji"]
     attendee = controller.get_attendee(request.sid)
     meeting = controller.get_meeting_from_attendee(request.sid)
-    
-    
+    emoji_analyser = meeting.getemojiSentimentAnalyser()
+    emoji_analyser.setEmojiSentiment(emoji)
+    emoji_score = emoji_analyser.getEmojiSentiment()
+    host = meeting.get_host()
+
+    currentObj = EmojiMood(anonFlag, attendee.get_sid(), meeting.get_token(), "text", emoji_score, time.time(), emoji)
+
+    emoji_analyser.set_AverageEmojiSentiment()
+
+    #--- Database stuff can go here !
+
+    emit("emoji_response", {"emoji":currentObj.getMoodEmoji(), "emoji_score":emoji_analyser.get_percentage()}, room=meeting.host_room)
+
+
 
 @socketio.on("general_feedback")
 def general_feedback(data):
