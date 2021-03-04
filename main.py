@@ -240,7 +240,9 @@ def question_response(data):
 
     #----- The responses can be sent to the host with currentObj.getResponseText()
     emit("question_answer_response", {"question": question["question"], "answer": answer}, room=meeting.host_room)
-    
+
+
+
 @socketio.on("emoji_response")
 def emoji_response(data):
     """
@@ -265,10 +267,10 @@ def emoji_response(data):
     emoji_analyser.set_AverageEmojiSentiment()
 
     #--- Database stuff can go here !
-    db_conn.insert_mood(currentObj)
 
 
     emit("emoji_response", {"emoji":currentObj.getMoodEmoji(), "emoji_score":emoji_analyser.get_percentage()}, room=meeting.host_room)
+
 
 
 

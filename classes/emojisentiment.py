@@ -8,7 +8,7 @@ class EmojiSentiment :
         self.emoji_sqr_sum = emoji_sqr_sum
         self.num_responses = num_responses
         self.average = average
-        self.last_emoji = last_emoji
+        self.last_emoji_sentiment = last_emoji_sentiment
 
 
     def getEmojiSentiment(self):
