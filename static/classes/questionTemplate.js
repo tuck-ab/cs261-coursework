@@ -11,6 +11,11 @@ class QuestionTemplate{
         var outString = "";
         for (var i = 0; i < this.questions.length; i++) {
             outString += `<p>` + this.questions[i].question + `</p>`
+            if (this.question[i].type === "multichoice") {
+                for (var j = 0; j < 4; j++) {
+                    outString += `<p>` + this.questions[i].choice_list[j] + `</p>`
+                }
+            }
         }
         return outString;
     }
@@ -40,9 +45,17 @@ class QuestionTemplate{
         var newQuestions = data["questions"];
         var newQuestion;
 
-        for(var i = 0; i < newQuestions.length; i++) {
+        for (var i = 0; i < newQuestions.length; i++) {
             newQuestion = new Question(newQuestions[i]["type"]);
             newQuestion.setQuestion(newQuestions[i]["question"]);
+            // If the question is multiple choice, add the multiple choices to the 
+            // choice_list array of the multiple choice question! 
+            if (newQuestion.type === "multichoice") {
+                for (var j = 1; j < 5; j++) {
+                    newQuestion.addChoice(newQuestions[i]["choice "+j])
+                }
+            }
+
             this.questions.push(newQuestion)
         }
     }

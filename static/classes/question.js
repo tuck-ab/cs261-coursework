@@ -5,7 +5,7 @@ class Question {
         this.question = "";
         // If the question is "multchoice" then the multiple choices are added 
         // to this list below. Note that all multiple choice questions must have 4 choices
-        this.choice_list = ["", "", "", ""];
+        this.choice_list = [];
     }
 
     setQuestion(question) {
