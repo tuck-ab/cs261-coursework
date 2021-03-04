@@ -268,7 +268,6 @@ def emoji_response(data):
     emoji_analyser.set_AverageEmojiSentiment()
 
     #--- Database stuff can go here !
-    db_conn.insert_mood(currentObj)
 
 
     emit("emoji_response", {"emoji":currentObj.getMoodEmoji(), "emoji_score":emoji_analyser.get_percentage()}, room=meeting.host_room)
