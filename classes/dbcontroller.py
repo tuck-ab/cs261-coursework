@@ -236,6 +236,12 @@ class DBController:
             self.conn.rollback()
 
     def check_keyword(self, token, keyword):
+        """Validates meeting password
+
+        Parameters:
+            token {int} -- Identifier for meeting
+            keyword {string} -- Password to check for meeting
+        """
         try:
             self.cursor.execute("SELECT meetingpass, meetingsalt FROM meetings WHERE meetingid = :m",{'m':token})
             fetched = self.cursor.fetchall()
