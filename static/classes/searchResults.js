@@ -8,7 +8,7 @@ class SearchResults {
     }
 
     getResultString(id) {
-        return `{"date_time":` + this.results[id]["date_time"] + `, "title":` + this.results[id]["title"] + `}`;
+        return `{"date_time":"` + this.results[id]["date_time"] + `", "title":"` + this.results[id]["title"] + `","meetingid":"` + this.results[id]["meeting_id"] + `"}`;
     }
 
     getHTMLString() {

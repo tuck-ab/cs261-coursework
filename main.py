@@ -44,7 +44,8 @@ def search_query():
         for meetings in meetings_list:
             search_result = {
                 "title": meetings[0],
-                "date_time": meetings[1]
+                "date_time": meetings[1],
+                "meeting_id": meetings[2]
             }
             results_list.append(search_result)
             # print(search_result) #replace this line with emitting search_result
@@ -59,6 +60,12 @@ def choose_meeting():
 
     print("meeting:", meeting)
     print("keyword:", keyword)
+
+    # Replace 1111 with the meeting ID
+    if db_conn.check_keyword(1111, keyword):
+        print("Password accepted")
+    else:
+        print("Password rejected")
 
     return "Password being checked"
 
@@ -81,12 +88,13 @@ def create_meeting():
         template = Template().fromJSON(json.loads(request.form["templateJSON"]))
 
         host_info = json.loads(request.form["hostInfo"])
-        print("Name", host_info["name"])
+        print("Name", host_info["title"])
         print("Key Word", host_info["keyword"])
         
         ## -- Make new meeting
         new_meeting = controller.create_meeting(db_conn)
         new_meeting.set_template(template)
+        new_meeting.title = host_info["title"]
 
         db_conn.insert_meeting(new_meeting.host_token, host_info)
 
@@ -178,6 +186,7 @@ def attendee_connect(data):
         join_room(meeting.attendee_room)
         
         to_send_back["template"] = meeting.get_template().getJSON()
+        to_send_back["title"] = meeting.title
 
     else:
         to_send_back["connection_status"] = "not_connected"

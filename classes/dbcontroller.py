@@ -203,7 +203,7 @@ class DBController:
             token {int} -- Identifier for the given meeting
             details {dict} -- Stores meeting title in key 'name' and meeting password in key 'keyword'
         """
-        title = details['name']
+        title = details['title']
         password = details['keyword']
         alphabet = string.ascii_letters + string.digits
         salt = hashlib.sha256(''.join(secrets.choice(alphabet) for i in range(8)).encode('utf-8')).hexdigest()
@@ -235,11 +235,25 @@ class DBController:
             print(error)
             self.conn.rollback()
 
+    def check_keyword(self, token, keyword):
+        try:
+            self.cursor.execute("SELECT meetingpass, meetingsalt FROM meetings WHERE meetingid = :m",{'m':token})
+            fetched = self.cursor.fetchall()
+            meeting_pass = fetched[0][0]
+            salt = fetched[0][1]
+            check = hashlib.sha256((keyword + "--" + salt).encode('utf-8')).hexdigest()
+            if check == meeting_pass:
+                return True
+            return False
+        except sqlite3.Error as error:
+            print("Error selecting meetingpass, meetingsalt in table meetings:",error)
+            return False
+
     # Searches for all meetings with a certain string in their title
     def search_meetings(self,query):
         query = "%" + query + "%"
         try:
-            self.cursor.execute("SELECT title, date_time FROM meetings WHERE title LIKE ?",(query,))
+            self.cursor.execute("SELECT title, date_time, meetingid FROM meetings WHERE title LIKE ?",(query,))
             matches = self.cursor.fetchall()
             return matches
 

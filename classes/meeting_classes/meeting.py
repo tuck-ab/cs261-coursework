@@ -5,6 +5,7 @@ class Meeting:
     def __init__(self, token, code):
         self.host_token = token
         self.code = code
+        self.title = ""
 
         self.host_room = token + "_h"
         self.attendee_room = token + "_a"

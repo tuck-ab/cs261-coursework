@@ -23,6 +23,7 @@ socket.on("meeting_ended", function(data) {
 socket.on("meeting_details", function(data) {
     if (data["connection_status"] == "connected") {
         document.getElementById("connection_status").innerHTML = "Connected to room " + meetingcode.toString();
+        document.getElementById("meeting_title").innerHTML = data["title"];
         
         hostQuestions.fromJSON(data["template"]);
         hostQuestions.displayTemplate(document.getElementById("hostQuestions"));
@@ -39,10 +40,12 @@ socket.on("template_update", function(data) {
 
 function sendGeneralFeedback() {
     socket.emit("general_feedback", {"feedback":document.getElementById("generalFeedbackInput").value});
+    document.getElementById("generalFeedbackInput").value = "";
 }
 
 function sendErrorFeedback() {
     socket.emit("error_feedback", {"error":document.getElementById("errorFeedbackInput").value});
+    document.getElementById("errorFeedbackInput").value = "";
 }
 
 function sendQuestionAnswer(id) {
