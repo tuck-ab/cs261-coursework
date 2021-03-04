@@ -1,3 +1,5 @@
+var multChoiceCreate = new MultChoiceCreate();
+
 function openPopup() {
     document.getElementById("createQuestion").style.display = "block";
 }
@@ -13,17 +15,34 @@ function questionTypeUpdate() {
     if (questionType === "normal") {
         var htmlString = `<input type"text" id="mainQuestion" name="mainQuestion"><br>`;
         htmlString += `<input type="button" onclick="submitNormalQuestion()" value="Submit">`;
+        inputer.innerHTML = htmlString;
     }
     else {
-        var htmlString = `<input type="text" id="mainQuestion" name="mainQuestion"><br>`;
-        htmlString += `<input type="text" id="choice 1" name="choice 1"><br>`;
-        htmlString += `<input type="text" id="choice 2" name="choice 2"><br>`;
-        htmlString += `<input type="text" id="choice 3" name="choice 3"><br>`;
-        htmlString += `<input type="text" id="choice 4" name="choice 4"><br>`;
-        htmlString += `<input type="button" onclick="submitMultiChoiceQuestion()" value="Submit">`;  
+        multChoiceCreate = new MultChoiceCreate();
+        var htmlString = `<p>Question: <input type="text" id="mainQuestion" name="mainQuestion"></p>`;
+        htmlString += `<div id="multOptions"></div>`;
+
+        htmlString += `<input type="button" onclick="addOption()" value="Add another option">`;
+        htmlString += `<input type="button" onclick="submitMultiChoiceQuestion()" value="Submit">`;
+        inputer.innerHTML = htmlString;
+
+        multChoiceCreate.display(document.getElementById("multOptions"));
     }
         
-        inputer.innerHTML = htmlString;
+}
+
+function addOption() {
+    multChoiceCreate.addOption();
+    multChoiceCreate.display(document.getElementById("multOptions"));
+}
+
+function updateOption(id) {
+    multChoiceCreate.updateOption(id, document.getElementById("option" + id.toString()).value);
+}
+
+function removeOption(id) {
+    multChoiceCreate.removeOption(id);
+    multChoiceCreate.display(document.getElementById("multOptions"));
 }
 
 
@@ -41,10 +60,13 @@ function addNormalQuestion(question) {
 
 function submitMultiChoiceQuestion() {
     var newQuestion = new Question("multichoice");
+
     newQuestion.setQuestion(document.getElementById("mainQuestion").value);
-    for (var i = 1; i < 5; i++) {
-        newQuestion.addChoice(document.getElementById("choice "+i).value);
-        }
+
+    for (var i = 0; i < multChoiceCreate.options.length; i++) {
+        newQuestion.addChoice(multChoiceCreate.options[i]);
+    }
+
     questionTemplate.addQuestion(newQuestion);
     onTemplateUpdate();
     closePopup();

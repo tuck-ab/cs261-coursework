@@ -38,7 +38,7 @@ class EmojiSentiment :
             print(str(round(last_emoji_sentiment, 3)) + " is a outlier")
             return emoji_sum / num_responses, emoji_sum, emoji_sqr_sum, num_responses
         else:
-            print(str(round(single_sentiment, 3)) + " is a inlier")
+            print(str(round(last_emoji_sentiment, 3)) + " is a inlier")
             self.sentiment_sum = t_sum
             self.sentiment_sqr_sum = t_sqr_sum
             self.num_responses = t_n
