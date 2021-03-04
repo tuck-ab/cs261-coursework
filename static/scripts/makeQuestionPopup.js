@@ -47,9 +47,11 @@ function removeOption(id) {
 
 
 function submitNormalQuestion() {
-    addNormalQuestion(document.getElementById("mainQuestion").value);
-    onTemplateUpdate();
-    closePopup();
+    if (/\S/.test(document.getElementById("mainQuestion").value)) {
+        addNormalQuestion(document.getElementById("mainQuestion").value);
+        onTemplateUpdate();
+        closePopup();
+    }
 }
 
 function addNormalQuestion(question) {
@@ -60,15 +62,16 @@ function addNormalQuestion(question) {
 
 function submitMultiChoiceQuestion() {
     var newQuestion = new Question("multichoice");
+    if (/\S/.test(document.getElementById("mainQuestion").value)) {
+        newQuestion.setQuestion(document.getElementById("mainQuestion").value);
 
-    newQuestion.setQuestion(document.getElementById("mainQuestion").value);
+        for (var i = 0; i < multChoiceCreate.options.length; i++) {
+            newQuestion.addChoice(multChoiceCreate.options[i]);
+        }
 
-    for (var i = 0; i < multChoiceCreate.options.length; i++) {
-        newQuestion.addChoice(multChoiceCreate.options[i]);
+        questionTemplate.addQuestion(newQuestion);
+        onTemplateUpdate();
+        closePopup();
     }
-
-    questionTemplate.addQuestion(newQuestion);
-    onTemplateUpdate();
-    closePopup();
 }
 
