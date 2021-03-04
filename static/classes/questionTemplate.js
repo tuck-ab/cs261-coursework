@@ -51,16 +51,12 @@ class QuestionTemplate{
             //console.log(newQuestions[i]["type"]);
             newQuestion.setQuestion(newQuestions[i]["question"]);
             // If the question is multiple choice, add the multiple choices to the 
-            // choice_list array of the multiple choice question! 
+            // choice_list array of the multiple choice question!
+            var options = newQuestions[i]["options"];
             if (newQuestion.type === "multichoice") {
-                /* for (var j = 1; j < 5; j++) {
-                    newQuestion.addChoice(newQuestions[i]["choice ` + j.toString() + `"]);
-                    console.log(newQuestions[i]["choice ` + j.toString() + `"]); */
-                newQuestion.addChoice(newQuestions[i]["choice 1"]);
-                newQuestion.addChoice(newQuestions[i]["choice 2"]);
-                newQuestion.addChoice(newQuestions[i]["choice 3"]);
-                newQuestion.addChoice(newQuestions[i]["choice 4"]);
-                console.log(newQuestions[i]["choice 4"]);
+                for (var j = 0; j < options.length; j++) {
+                    newQuestion.choice_list.push(options[j]);
+                }
             }
 
             this.questions.push(newQuestion)
