@@ -57,13 +57,16 @@ def search_query():
 def choose_meeting():
     meeting = json.loads(request.form["meeting"])
     keyword = request.form["keyword"]
+    meetingid = meeting["meetingid"]
 
     print("meeting:", meeting)
     print("keyword:", keyword)
+    print("meetingid:", meeting["meetingid"])
 
-    # Replace 1111 with the meeting ID
-    if db_conn.check_keyword(1111, keyword):
+
+    if db_conn.check_keyword(meetingid, keyword):
         print("Password accepted")
+        #host should now be taken to the old meeting feedback page
     else:
         print("Password rejected")
 
