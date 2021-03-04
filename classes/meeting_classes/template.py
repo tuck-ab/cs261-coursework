@@ -48,4 +48,4 @@ class Question:
         self.options = options
 
     def get_json(self):
-        return {"question":self.question, "type": self.type, "options":self.options}
+        return {"question":self.question, "type": self.type, "options":tuple(self.options)}
