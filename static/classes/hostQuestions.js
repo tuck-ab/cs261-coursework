@@ -15,11 +15,11 @@ class HostQuestions{
             loopString = `<p>` + this.template.questions[i].question + `</p>`;
             if (this.template.questions[i].type === "normal") {
                 loopString += `<input type="text" id="question_` + i.toString() + `">`;
-            }
-            else {
-                for (var j = 0; j < 4; j++) {
-                    console.log(this.template.questions[i].choice_list[j]);
-                    loopString += `<input type="button" onclick="updateQuestionAnswer(` + i.toString() + `,` + j.toString() + `)" value=` + this.template.questions[i].choice_list[j] + `><br>`;
+            } else {
+                var choices = this.template.questions[i].choice_list
+                for (var j = 0; j < choices.length; j++) {
+                    console.log(choices[j]);
+                    loopString += `<input type="button" onclick="sendMultChoiceAns(` + i.toString() + `,` + j.toString() + `)" value=` + choices[j] + `><br>`;
                 }
             }
             loopString += `<input type="button" onclick="sendQuestionAnswer(` + i.toString() + `)" value="Send"><br>`;

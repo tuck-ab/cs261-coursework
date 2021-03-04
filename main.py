@@ -213,6 +213,10 @@ def template_update(data):
     emit("template_update", meeting.get_template().getJSON())
     emit("template_update", {"template": meeting.get_template().getJSON()}, room=meeting.attendee_room)
 
+@socketio.on("mult_choice_response")
+def mult_choice_response(data):
+    print(data)
+
 
 @socketio.on("question_response")
 def question_response(data):
