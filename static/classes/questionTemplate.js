@@ -11,9 +11,10 @@ class QuestionTemplate{
         var outString = "";
         for (var i = 0; i < this.questions.length; i++) {
             outString += `<p>` + this.questions[i].question + `</p>`
+
             if (this.questions[i].type === "multichoice") {
-                for (var j = 0; j < 4; j++) {
-                    outString += `<p>` + this.questions[i].choice_list[j] + `</p>`
+                for (var j = 0; j < this.questions[i].choice_list.length; j++) {
+                    outString += `<p>  - ` + this.questions[i].choice_list[j] + `</p>`
                 }
             }
         }

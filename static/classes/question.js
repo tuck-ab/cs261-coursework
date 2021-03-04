@@ -17,13 +17,19 @@ class Question {
     }
 
     getJSONString() {
-        if (this.type === "normal") {
-            return `{"question":"` + this.question + `", "type":"` + this.type + `"}`;
+        var JSONString = `{"question":"` + this.question + `", "type":"` + this.type + `", "options":[`;
+
+        for (var i = 0; i < this.choice_list.length; i++) {
+            JSONString += `"` + this.choice_list[i] + `", `
         }
-        else {
-            // JSON String simply returns all the different multiple choices. 
-            return `{"question":"` + this.question + `", "type":"` + this.type + `", "choice 1":"` + this.choice_list[0] + `", "choice 2":"` + this.choice_list[1] + `", "choice 3":"` + this.choice_list[2] + `", "choice 4":"` + this.choice_list[3] + `"}`;
+
+        if (this.choice_list.length > 0) {
+            JSONString = JSONString.substring(0, JSONString.length - 2)
         }
+
+        return JSONString
+        
+
     }
 
     getAsJSON() {
