@@ -1,5 +1,6 @@
 from .attendee import Attendee
 from ..sentiment import Sentiment
+from ..emojisentiment import EmojiSentiment
 
 class Meeting:
     def __init__(self, token, code):
@@ -15,7 +16,9 @@ class Meeting:
         self.host = None
         self.attendees = {}
         
-        self.sentimentAnalyser = Sentiment(0,0,0,0,0,"")
+        self.sentimentAnalyser = Sentiment(0, 0, 0, 0, 0, "")
+        
+        self.emojiSentimentAnalyser = EmojiSentiment(0, 0, 0, 0, 0, "")
 
     def getSentimentAnalyser(self):
         return self.sentimentAnalyser

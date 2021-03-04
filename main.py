@@ -254,6 +254,7 @@ def emoji_response(data):
     attendee = controller.get_attendee(request.sid)
     meeting = controller.get_meeting_from_attendee(request.sid)
     
+    
 
 @socketio.on("general_feedback")
 def general_feedback(data):
