@@ -18,7 +18,7 @@ class Meeting:
         
         self.sentimentAnalyser = Sentiment(0, 0, 0, 0, 0, "")
         
-        self.emojiSentimentAnalyser = EmojiSentiment(0, 0, 0, 0, 0, "")
+        self.emojiSentimentAnalyser = EmojiSentiment(0, 0, 0, 0, "")
 
     def getSentimentAnalyser(self):
         return self.sentimentAnalyser

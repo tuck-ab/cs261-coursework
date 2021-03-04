@@ -263,7 +263,7 @@ def emoji_response(data):
     emoji_score = emoji_analyser.getEmojiSentiment()
     host = meeting.get_host()
 
-    currentObj = EmojiMood(anonFlag, attendee.get_sid(), meeting.get_token(), "text", emoji_score, time.time(), emoji)
+    currentObj = EmojiMood(anonFlag, attendee.get_sid(), meeting.get_token(), "emoji", emoji_score, time.time(), emoji)
 
     emoji_analyser.set_AverageEmojiSentiment()
 
