@@ -18,7 +18,8 @@ class HostQuestions{
             }
             else {
                 for (var j = 0; j < 4; j++) {
-                    loopString += `<input type="button" onclick="updateQuestionAnswer(` + i.toString() + `,` + j.toString() + `)" value="` + this.template.questions.choice_list[i] + `"><br>`;
+                    console.log(this.template.questions[i].choice_list[j]);
+                    loopString += `<input type="button" onclick="updateQuestionAnswer(` + i.toString() + `,` + j.toString() + `)" value=` + this.template.questions[i].choice_list[j] + `><br>`;
                 }
             }
             loopString += `<input type="button" onclick="sendQuestionAnswer(` + i.toString() + `)" value="Send"><br>`;

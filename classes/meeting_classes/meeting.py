@@ -19,6 +19,7 @@ class Meeting:
 
     def getSentimentAnalyser(self):
         return self.sentimentAnalyser
+
         
     def set_template(self, template):
         self.template = template

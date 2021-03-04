@@ -237,7 +237,23 @@ def question_response(data):
 
 
     #----- The responses can be sent to the host with currentObj.getResponseText()
-    emit("question_answer_response", {"question":question["question"], "answer":answer}, room=meeting.host_room)
+    emit("question_answer_response", {"question": question["question"], "answer": answer}, room=meeting.host_room)
+    
+@socketio.on("emoji_response")
+def emoji_response(data):
+    """
+    Function called when the attendee sends an emoji response during the presentation
+
+    Parameters:
+        data (dict) :JSON data from the socket connection 
+                    {"emoji":emoji score(number)}
+    """
+
+    anonFlag = True
+    emoji = data["emoji"]
+    attendee = controller.get_attendee(request.sid)
+    meeting = controller.get_meeting_from_attendee(request.sid)
+    
 
 @socketio.on("general_feedback")
 def general_feedback(data):

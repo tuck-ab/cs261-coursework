@@ -53,3 +53,23 @@ function sendQuestionAnswer(id) {
     var question = hostQuestions.template.questions[Number(id)].getJSONString();
     socket.emit("question_response", {"question":question, "answer":answer});
 }
+
+function sendVeryConfusedEmoji() {
+    socket.emit("emoji_response", { "emoji": -1.0 });
+}
+
+function sendSlightlyConfusedEmoji() {
+    socket.emit("emoji_response", { "emoji": -0.5 });
+}
+
+function sendNeutralEmoji() {
+    socket.emit("emoji_response", { "emoji": 0.0 });
+}
+
+function sendSlightlyHappyEmoji() {
+    socket.emit("emoji_response", { "emoji": 0.5 });
+}
+
+function sendVeryHappyEmoji() {
+    socket.emit("emoji_response", { "emoji": 1.0 });
+}

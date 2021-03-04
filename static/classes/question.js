@@ -12,6 +12,10 @@ class Question {
         this.question = question;
     }
 
+    addChoice(choice) {
+        this.choice_list.push(choice);
+    }
+
     getJSONString() {
         if (this.type === "normal") {
             return `{"question":"` + this.question + `", "type":"` + this.type + `"}`;
