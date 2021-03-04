@@ -1,12 +1,21 @@
+DROP TABLE IF EXISTS hosts;
+CREATE TABLE hosts (
+    hostid             INTEGER NOT NULL,
+    username           TEXT NOT NULL,
+    encrypted_pass     TEXT NOT NULL,
+    salt               TEXT NOT NULL,
+    PRIMARY KEY (hostid)
+);
+
 DROP TABLE IF EXISTS meetings;
 CREATE TABLE meetings (
     meetingid    INTEGER NOT NULL,
+    userid       INTEGER NOT NULL,
     title        TEXT NOT NULL,
-    meetingpass  TEXT NOT NULL,
-    meetingsalt  TEXT NOT NULL,
     runtime      INTEGER NOT NULL,
     date_time    TEXT NOT NULL,
-    PRIMARY KEY (meetingid)
+    PRIMARY KEY (meetingid),
+    FOREIGN KEY (userid) REFERENCES users(userid)
 );
 
 DROP TABLE IF EXISTS feedback;
