@@ -57,6 +57,9 @@ function updateOption(id) {
 function removeOption(id) {
     multChoiceCreate.removeOption(id);
     multChoiceCreate.display(document.getElementById("multOptions"));
+<<<<<<< HEAD
+>>>>>>> b1d8a05f0a6aac0077351ecd05c6583236fb346a
+=======
 >>>>>>> b1d8a05f0a6aac0077351ecd05c6583236fb346a
 }
 
@@ -78,15 +81,21 @@ function submitMultiChoiceQuestion() {
 
     newQuestion.setQuestion(document.getElementById("mainQuestion").value);
 <<<<<<< HEAD
+<<<<<<< HEAD
     for (var i = 1; i < counter + 1; i++) {
         newQuestion.addChoice(document.getElementById("option"+i).value);
         }
 =======
+=======
+>>>>>>> b1d8a05f0a6aac0077351ecd05c6583236fb346a
 
     for (var i = 0; i < multChoiceCreate.options.length; i++) {
         newQuestion.addChoice(multChoiceCreate.options[i]);
     }
 
+<<<<<<< HEAD
+>>>>>>> b1d8a05f0a6aac0077351ecd05c6583236fb346a
+=======
 >>>>>>> b1d8a05f0a6aac0077351ecd05c6583236fb346a
     questionTemplate.addQuestion(newQuestion);
     onTemplateUpdate();
