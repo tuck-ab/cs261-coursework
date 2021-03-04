@@ -20,16 +20,14 @@ class Question {
         var JSONString = `{"question":"` + this.question + `", "type":"` + this.type + `", "options":[`;
 
         for (var i = 0; i < this.choice_list.length; i++) {
-            JSONString += `"` + this.choice_list[i] + `", `
+            JSONString += `"` + this.choice_list[i] + `", `;
         }
 
         if (this.choice_list.length > 0) {
-            JSONString = JSONString.substring(0, JSONString.length - 2)
+            JSONString = JSONString.substring(0, JSONString.length - 2);
         }
 
-        return JSONString
-        
-
+        return JSONString + "]}"
     }
 
     getAsJSON() {

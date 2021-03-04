@@ -91,8 +91,7 @@ def create_meeting():
         template = Template().fromJSON(json.loads(request.form["templateJSON"]))
 
         host_info = json.loads(request.form["hostInfo"])
-        print("Name", host_info["title"])
-        print("Key Word", host_info["keyword"])
+        print("template:", template)
         
         ## -- Make new meeting
         new_meeting = controller.create_meeting(db_conn)
