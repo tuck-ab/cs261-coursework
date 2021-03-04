@@ -73,3 +73,9 @@ function sendSlightlyHappyEmoji() {
 function sendVeryHappyEmoji() {
     socket.emit("emoji_response", { "emoji": 1.0 });
 }
+
+function sendMultChoiceAns(question, option) {
+    var question = hostQuestions.template.questions[Number(question)];
+    var answer = question.choice_list[Number(option)]
+    socket.emit("mult_choice_response", {"question":question.getJSONString(), "answer":answer});
+}
