@@ -34,10 +34,12 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
 
-        if db_conn.check_host(username, password):
-            print("Correct credentials")
-        else:
+        new_token = db_conn.check_host(username, password)
+
+        if new_token is None:
             print("Incorrect credentials")
+        else:
+            print(new_token)
 
         print("username:", username)
         print("password:", password)

@@ -276,7 +276,7 @@ class DBController:
         try:
             self.cursor.execute("SELECT username FROM hosts WHERE username = :u",{'u':username})
             if self.cursor.fetchone() is None:
-                return False
+                return None
             else:
                 self.cursor.execute("SELECT encrypted_pass, salt FROM hosts WHERE username = :u",{'u':username})
                 fetched = self.cursor.fetchall()
@@ -284,11 +284,20 @@ class DBController:
                 salt = fetched[0][1]
                 check = hashlib.sha256((check_word + "--" + salt).encode('utf-8')).hexdigest()
                 if check == enc_pass:
-                    return True
-                return False
+                    alphabet = string.ascii_letters + string.digits
+                    while True:
+                        token = hashlib.sha256(''.join(secrets.choice(alphabet) for i in range(8)).encode('utf-8')).hexdigest()
+                        self.cursor.execute("SELECT hostid FROM hosts WHERE access_token = :t",{'t':token})
+                        if self.cursor.fetchone() is None:
+                            break
+                    self.cursor.execute("UPDATE hosts SET access_token = :t WHERE username = :u",{'t':token, 'u':username})
+                    self.conn.commit()
+                    return token
+                return None
         except sqlite3.Error as error:
-            print("Error selecting encrypted_pass, salt in table hosts:",error)
-            return False
+            print("Error encountered",error)
+            self.conn.rollback()
+            return None
 
     # Searches for all meetings with a certain string in their title
     def search_meetings(self,query):

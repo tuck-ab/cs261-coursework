@@ -35,7 +35,7 @@ connection.insert_response(test_mult_response) # inserts multiple choice respons
 
 connection.update_runtime(5555) # updates the length of the meeting with ID 5555
 
-print(connection.check_host("torsten", "tableaux")) # returns False; incorrect password
-print(connection.check_host("torsten", "deduction")) # returns True; correct password
+print(connection.check_host("torsten", "tableaux")) # returns None; incorrect password
+print(connection.check_host("torsten", "deduction")) # returns a new access token; correct password
 
 connection.close()
