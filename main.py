@@ -131,8 +131,8 @@ def create_meeting():
     the client to the 'host' page for a meeting along with the necessary identifiers as cookies.
     """
 
+    token = request.cookies.get("accessToken")
     if request.method == "GET":
-        token = request.cookies.get("accessToken")
         print(token)
         
         if token == None or not db_conn.check_token(token):
@@ -153,7 +153,7 @@ def create_meeting():
         new_meeting.set_template(template)
         new_meeting.title = title
 
-        db_conn.insert_meeting(new_meeting.host_token, host_info)
+        db_conn.insert_meeting(new_meeting.host_token, token, title)
 
         ## -- Send the response with token
         resp = make_response(redirect(url_for("host_page")))
