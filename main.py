@@ -215,8 +215,27 @@ def template_update(data):
 
 @socketio.on("mult_choice_response")
 def mult_choice_response(data):
-    print(data)
+    """
+    Function called when the attendee sends an multiple choice response during the presentation
 
+    Parameters:
+        data (dict) :JSON data from the socket connection 
+                    {'question': '{"question":question(str), "type": type(str), "options": options(list of str)}', 'answer': answer(str)}
+    """
+
+    anon_flag = True
+    attendee = controller.get_attendee(request.sid)
+    meeting = controller.get_meeting_from_attendee(request.sid)
+    question = json.loads(data["question"])
+    answer = data["answer"]
+
+    mult_choice_feedback = MultChoiceResponse(anon_flag, attendee.get_sid(), meeting.get_token(), "multchoice", question["question"], answer)
+    
+    #------ database stuff here
+
+    #------ emit back to host here
+    #------ host needs to be emitted the question (question["question"]) and the answer (answer)   (is there a way that this can be turned into a bar chart on front end?)
+    
 
 @socketio.on("question_response")
 def question_response(data):
@@ -235,7 +254,7 @@ def question_response(data):
     question = json.loads(data["question"])
     answer = data["answer"]
 
-    currentObj = TextResponse(anonFlag, attendee.get_sid(), meeting.get_token(), "text", question, answer)
+    currentObj = TextResponse(anonFlag, attendee.get_sid(), meeting.get_token(), "text", question["question"], answer)
 
 
     #----- database stuff can go here
@@ -266,9 +285,11 @@ def emoji_response(data):
     emoji_score = emoji_analyser.getEmojiSentiment()
     host = meeting.get_host()
 
-    currentObj = EmojiMood(anonFlag, attendee.get_sid(), meeting.get_token(), "emoji", emoji_score, time.time(), emoji)
 
     emoji_analyser.set_AverageEmojiSentiment()
+
+    currentObj = EmojiMood(anonFlag, attendee.get_sid(), meeting.get_token(), "emoji", emoji_score, time.time(), emoji_analyser.get_percentage(), emoji)
+
 
     #--- Database stuff can go here !
 
@@ -298,9 +319,10 @@ def general_feedback(data):
     score = analyser.getSentiment()
     host = meeting.get_host()
 
-    currentObj = TextMood(anonFlag, attendee.get_sid(), meeting.get_token(), "text", score, time.time(), feedback)
-    
     analyser.set_AverageSentiment()
+
+    currentObj = TextMood(anonFlag, attendee.get_sid(), meeting.get_token(), "text", score, time.time(), analyser.get_percentage(), feedback)
+    
     
 
     #------- database stuff can go here
