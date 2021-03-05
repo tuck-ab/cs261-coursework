@@ -14,6 +14,12 @@ print(connection.unique_token(5555)) # returns True, since 5555 is a non-existin
 
 connection.insert_meeting(5555, token, "Logic and Verification") # inserts new meeting
 
+connection.insert_meeting(5556, token, "Logic and Verification 2")
+connection.insert_meeting(5557, token, "Logic and Verification 3")
+connection.insert_meeting(5558, token, "Logic and Verification 4")
+
+print(connection.get_meetings(token))
+
 # test_error = ErrorFeedback(True,1,5555,"video","Whiteboard out of focus")
 # connection.insert_error(test_error) # inserts error
 

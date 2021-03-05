@@ -321,6 +321,25 @@ class DBController:
             print("Error encountered:",error)
             return False
 
+    def get_meetings(self, token):
+        """Return a list of all past meetings conducted by a host
+
+        Parameters:
+            token {string} -- Token linked to a host
+
+        Returns:
+            meetings {list} -- List of all meetings conducted by a host
+        """
+        try:
+            self.cursor.execute("SELECT hostid FROM hosts WHERE access_token = :t",{'t':token})
+            host_id = self.cursor.fetchone()[0]
+            self.cursor.execute("SELECT title, date_time, meetingid, runtime FROM meetings WHERE hostid = :h",{'h':host_id})
+            meetings = self.cursor.fetchall()
+            return meetings
+        except sqlite3.Error as error:
+            print("Error encountered:",error)
+            return error
+
     # Searches for all meetings with a certain string in their title
     def search_meetings(self,query):
         query = "%" + query + "%"

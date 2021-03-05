@@ -47,8 +47,8 @@ INSERT INTO moods VALUES(4,15,"emoji",-1,44,4);
 INSERT INTO text_moods VALUES(1,"This lecture is going very well, good job!");
 INSERT INTO text_moods VALUES(3,"I can't believe how absolutely amazing this event is. I love it!");
 
-INSERT INTO emoji_moods VALUES(2,":smile:");
-INSERT INTO emoji_moods VALUES(4,":angry:");
+INSERT INTO emoji_moods VALUES(2,2);
+INSERT INTO emoji_moods VALUES(4,3);
 
 INSERT INTO responses VALUES(1,4,"text","Express f = \x -> \y -> x * y using syntactic sugar");
 INSERT INTO responses VALUES(2,8,"emoji","How comfortable are you with mutex locks?");

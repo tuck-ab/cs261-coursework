@@ -88,7 +88,8 @@ def search_page():
 @app.route("/meeting_search", methods=["POST"])
 def search_query():
 
-    meetings_list = db_conn.search_meetings(query)
+    token = request.cookies.get("accessToken")
+    meetings_list = db_conn.get_meetings(token)
     results_list = []
     for meetings in meetings_list:
         search_result = {

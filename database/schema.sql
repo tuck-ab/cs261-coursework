@@ -11,12 +11,12 @@ CREATE TABLE hosts (
 DROP TABLE IF EXISTS meetings;
 CREATE TABLE meetings (
     meetingid    INTEGER NOT NULL,
-    userid       INTEGER NOT NULL,
+    hostid       INTEGER NOT NULL,
     title        TEXT NOT NULL,
     runtime      INTEGER NOT NULL,
     date_time    TEXT NOT NULL,
     PRIMARY KEY (meetingid),
-    FOREIGN KEY (userid) REFERENCES users(userid)
+    FOREIGN KEY (hostid) REFERENCES hosts(hostid)
 );
 
 DROP TABLE IF EXISTS feedback;
@@ -68,7 +68,7 @@ CREATE TABLE text_moods (
 DROP TABLE IF EXISTS emoji_moods;
 CREATE TABLE emoji_moods (
     moodid     INTEGER NOT NULL,
-    emojitype  TEXT NOT NULL,
+    emojitype  INTEGER NOT NULL,
     PRIMARY KEY (moodid),
     FOREIGN KEY (moodid) REFERENCES moods(moodid)
 );
