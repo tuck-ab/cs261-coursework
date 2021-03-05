@@ -5,7 +5,9 @@ from classes import *
 connection = DBController()
 
 print(connection.add_new_host("michael", "notacult")) # returns None since user 'michael' already exists
-print(connection.add_new_host("torsten", "deduction")) # returns a token since 'torsten' is a new user 
+token = connection.add_new_host("torsten", "deduction")
+print(token) # returns a token since 'torsten' is a new user
+print(connection.check_token(token)) # returns true; token has just been added
 
 print(connection.unique_token(2222)) # returns False, since meeting ID 2222 exists
 print(connection.unique_token(5555)) # returns True, since 5555 is a non-existing meeting ID
