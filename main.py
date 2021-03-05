@@ -34,6 +34,11 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
 
+        if db_conn.check_host(username, password):
+            print("Correct credentials")
+        else:
+            print("Incorrect credentials")
+
         print("username:", username)
         print("password:", password)
 
@@ -44,6 +49,11 @@ def register():
     elif request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
+
+        if db_conn.add_new_host(username, password):
+            print("Error inserting")
+        else:
+            print("Insert successful")
 
         print("username:", username)
         print("password:", password)
