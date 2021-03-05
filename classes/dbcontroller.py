@@ -299,6 +299,20 @@ class DBController:
             self.conn.rollback()
             return None
 
+    def check_token(self, token):
+        """Check if access token exists in DB
+
+        Parameters:
+            token {string} -- Token to check existence of
+        """
+        try:
+            self.cursor.execute("SELECT hostid FROM hosts WHERE access_token = :t",{'t':token})
+            if self.cursor.fetchone() is None:
+                return False
+            return True
+        except sqlite3.Error as error:
+            print("Error encountered:",error)
+
     # Searches for all meetings with a certain string in their title
     def search_meetings(self,query):
         query = "%" + query + "%"
