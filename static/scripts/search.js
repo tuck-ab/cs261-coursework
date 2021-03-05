@@ -21,13 +21,10 @@ function searchUpdate() {
 }
 
 function selectResult(id) {
-    var keywordEntered = prompt("Key word:");
-
     if (keywordEntered !== null) {
         $.ajax({
             data : {
-            meeting : searchResults.getResultString(id),
-            keyword : keywordEntered
+            meeting : searchResults.getResultString(id)
                 },
             type : 'POST',
             url : '/meeting_submit'
