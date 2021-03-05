@@ -259,7 +259,9 @@ def mult_choice_response(data):
     mult_choice_feedback = MultChoiceResponse(anon_flag, attendee.get_sid(), meeting.get_token(), "multchoice", question["question"], answer)
     
     #------ database stuff here
-    db_conn.insert_response(mult_choice_feedback)
+    response_id = db_conn.insert_response(mult_choice_feedback)
+
+    print(response_id)
 
     #------ emit back to host here
     #------ host needs to be emitted the question (question["question"]) and the answer (answer)   (is there a way that this can be turned into a bar chart on front end?)
