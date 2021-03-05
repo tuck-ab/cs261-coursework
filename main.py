@@ -34,15 +34,21 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
 
+        print("username:", username)
+        print("password:", password)
+
         new_token = db_conn.check_host(username, password)
 
         if new_token is None:
             print("Incorrect credentials")
+            return "<h1>Wrong credentials</h1>"
         else:
             print(new_token)
+            resp = make_response(redirect(url_for("index")))
+            resp.set_cookie("accessToken", new_token)
 
-        print("username:", username)
-        print("password:", password)
+            return resp
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -63,7 +69,7 @@ def register():
         print("username:", username)
         print("password:", password)
 
-        resp = make_response(render_template("index.html"))
+        resp = make_response(redirect(url_for("index")))
         resp.set_cookie("accessToken", token)
 
         return resp
