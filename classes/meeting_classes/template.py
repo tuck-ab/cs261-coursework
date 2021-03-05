@@ -16,6 +16,7 @@ class Template:
         for question in questions:
             self.questions.append(Question(question["type"]))
             self.questions[-1].set_question(question["question"])
+            self.questions[-1].set_options(question["options"])
 
         return self
 
@@ -38,8 +39,13 @@ class Question:
         self.type = q_type
         self.question = ""
 
+        self.options = []
+
     def set_question(self, question):
         self.question = question
 
+    def set_options(self, options):
+        self.options = options
+
     def get_json(self):
-        return {"question":self.question, "type": self.type}
+        return {"question":self.question, "type": self.type, "options":tuple(self.options)}

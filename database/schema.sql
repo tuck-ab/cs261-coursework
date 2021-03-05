@@ -51,6 +51,7 @@ CREATE TABLE moods (
     moodtype    TEXT NOT NULL CHECK (moodtype IN ('text','emoji')),
     score       FLOAT NOT NULL,
     timeofmood  INTEGER NOT NULL,
+    avgmood     FLOAT NOT NULL,
     PRIMARY KEY (moodid),
     FOREIGN KEY (feedbackid) REFERENCES feedback(feedbackid)
 );

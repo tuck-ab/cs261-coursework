@@ -57,6 +57,12 @@ socket.on("feedback_response", function(data) {
     document.getElementById("sentimentScore").innerHTML = data["score"];
 });
 
+socket.on("emoji_response", function(data) {
+    //feedbackDisplay.addFeedback(data["emoji"]);
+    //feedbackDisplay.displayFeedback(document.getElementById("recentEmojiFeedbackDisplay"));
+    document.getElementById("emojisentimentScore").innerHTML = data["emoji_score"];
+});
+
 socket.on("error_response", function(data) {
     errorDisplay.addError(data["error"]);
     errorDisplay.displayErrors(document.getElementById("errorFeedbackDisplay"));
