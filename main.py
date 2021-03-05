@@ -54,11 +54,17 @@ def register():
 
         if token is None:
             print("Error inserting")
+            token="token failed"
         else:
             print(token)
 
         print("username:", username)
         print("password:", password)
+
+        resp = make_response(render_template("index.html"))
+        resp.set_cookie("accessToken", token)
+
+        return resp
 
 @app.route("/search")
 def search_page():
