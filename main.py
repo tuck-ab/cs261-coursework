@@ -76,7 +76,14 @@ def register():
 
 @app.route("/search")
 def search_page():
-    return render_template("search.html")
+    if request.method == "GET":
+        token = request.cookies.get("accessToken")
+        print(token)
+        
+        if token == None or not db_conn.check_token(token):
+            return redirect(url_for("login"))
+
+        return render_template("search.html")
 
 @app.route("/meeting_search", methods=["POST"])
 def search_query():

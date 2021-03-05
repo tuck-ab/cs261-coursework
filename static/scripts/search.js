@@ -1,6 +1,6 @@
 var searchResults = new SearchResults();
 
-function searchUpdate() {
+function getMeetings() {
     $.ajax({
         data : {
         query : document.getElementById("meetingSearch").value
@@ -13,6 +13,12 @@ function searchUpdate() {
         searchResults.display(document.getElementById("results"));
     });
     event.preventDefault();
+}
+
+getMeetings();
+
+function searchUpdate() {
+    
 }
 
 function selectResult(id) {

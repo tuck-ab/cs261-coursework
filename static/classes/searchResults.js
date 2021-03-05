@@ -18,7 +18,9 @@ class SearchResults {
         for (var i = 0; i < this.results.length; i++) {
             loopString = `<div class="searchResult" onclick="selectResult(` + i.toString() + `)">`
             loopString += `<p>Title: ` + this.results[i]["title"] + `</p>`;
-            loopString += `<p>Start Time: ` + this.results[i]["date_time"] + `</p></div>`;
+            loopString += `<p>Start Time: ` + this.results[i]["date_time"] + `</p>`;
+            loopString += `<p>Duration: ` + this.results[i]["run_time"] + `</p>`;
+            loopString += `</div>`
 
             HTMLString += loopString;
         }
