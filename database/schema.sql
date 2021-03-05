@@ -4,6 +4,7 @@ CREATE TABLE hosts (
     username           TEXT NOT NULL,
     encrypted_pass     TEXT NOT NULL,
     salt               TEXT NOT NULL,
+    access_token      TEXT NOT NULL,
     PRIMARY KEY (hostid)
 );
 

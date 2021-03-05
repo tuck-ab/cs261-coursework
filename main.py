@@ -50,10 +50,12 @@ def register():
         username = request.form["username"]
         password = request.form["password"]
 
-        if db_conn.add_new_host(username, password):
+        token = db_conn.add_new_host(username, password)
+
+        if token is None:
             print("Error inserting")
         else:
-            print("Insert successful")
+            print(token)
 
         print("username:", username)
         print("password:", password)

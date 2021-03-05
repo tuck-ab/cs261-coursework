@@ -4,8 +4,8 @@ from classes import *
 
 connection = DBController()
 
-print(connection.add_new_host("michael", "notacult")) # returns False since user 'michael' already exists
-print(connection.add_new_host("torsten", "deduction")) # returns True since 'torsten' is a new user 
+print(connection.add_new_host("michael", "notacult")) # returns None since user 'michael' already exists
+print(connection.add_new_host("torsten", "deduction")) # returns a token since 'torsten' is a new user 
 
 print(connection.unique_token(2222)) # returns False, since meeting ID 2222 exists
 print(connection.unique_token(5555)) # returns True, since 5555 is a non-existing meeting ID
@@ -18,10 +18,10 @@ connection.insert_error(test_error) # inserts error
 test_question = QuestionFeedback(False,2,5555,"When can I use Modus Ponens?")
 connection.insert_question(test_question) # inserts question
 
-test_text_mood = TextMood(True,4,5555,"text",0.5,time.time(),"Great work!")
+test_text_mood = TextMood(True,4,5555,"text",0.5,time.time(),1,"Great work!")
 connection.insert_mood(test_text_mood) # inserts text mood
 
-test_emoji_mood = EmojiMood(False,3,5555,"emoji",-0.8,time.time(),":confused:")
+test_emoji_mood = EmojiMood(False,3,5555,"emoji",-0.8,time.time(),1,":confused:")
 connection.insert_mood(test_emoji_mood) # inserts emoji mood
 
 test_emoji_response = EmojiResponse(False,3,5555,"emoji","What is the symbol for implication?",":arrow_right:")

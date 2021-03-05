@@ -162,7 +162,7 @@ class DBController:
                     elif response_type == "text":
                         data = response.getResponseText()
                     else:
-                        data = response.getResponseChoice()
+                        data = response.getResponseAnswer()
                         response_type = "mult_choice"
                     try:
                         self.cursor.execute("INSERT INTO " + response_type + "_responses VALUES (:r, :d)",{'r':response_ID, 'd':data})
@@ -230,15 +230,20 @@ class DBController:
                 alphabet = string.ascii_letters + string.digits
                 salt = hashlib.sha256(''.join(secrets.choice(alphabet) for i in range(8)).encode('utf-8')).hexdigest()
                 enc_pass = hashlib.sha256((password + "--" + salt).encode('utf-8')).hexdigest()
-                self.cursor.execute("INSERT INTO hosts VALUES (NULL, :u, :p, :s)",{'u':username, 'p':enc_pass, 's':salt})
+                while True:
+                    token = hashlib.sha256(''.join(secrets.choice(alphabet) for i in range(8)).encode('utf-8')).hexdigest()
+                    self.cursor.execute("SELECT hostid FROM hosts WHERE access_token = :t",{'t':token})
+                    if self.cursor.fetchone() is None:
+                        break
+                self.cursor.execute("INSERT INTO hosts VALUES (NULL, :u, :p, :s, :t)",{'u':username, 'p':enc_pass, 's':salt, 't':token})
                 self.conn.commit()
-                return True
+                return token
             else:
-                return False
+                return None
         except sqlite3.Error as error:
             print("Error encountered:",error)
             self.conn.rollback()
-            return False
+            return None
 
     def update_runtime(self, token):
         """Updates running time of meeting given by token
