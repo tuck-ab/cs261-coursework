@@ -78,10 +78,10 @@ class DBController:
             print("Error inserting into table feedback:", feedback)
             self.conn.rollback()
 
-    def __insert_general_mood(self, feedback, mood_type, score, time):
+    def __insert_general_mood(self, feedback, mood_type, score, time, average):
         # Helper function to insert a general mood feedback
         try:
-            self.cursor.execute("INSERT INTO moods VALUES (NULL, :f, :t, :s, :l)",{'f':feedback, 't':mood_type, 's':score, 'l':time})
+            self.cursor.execute("INSERT INTO moods VALUES (NULL, :f, :t, :s, :l, :a)",{'f':feedback, 't':mood_type, 's':score, 'l':time, 'a':average})
             self.cursor.execute("SELECT last_insert_rowid()")
             return self.cursor.fetchone()[0]
         except sqlite3.Error as error:
@@ -99,6 +99,7 @@ class DBController:
         mood_type = mood.getMoodType()
         score = mood.getMoodScore()
         current_time = datetime.datetime.strptime(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(mood.getMoodTime())), "%Y-%m-%d %H:%M:%S")
+        current_avg = mood.get_current_mood_avg()
         try:
             self.cursor.execute("SELECT date_time FROM meetings WHERE meetingid = :m",{'m':meeting})
             start_time = datetime.datetime.strptime(self.cursor.fetchone()[0], "%Y-%m-%d %H:%M:%S")
@@ -110,7 +111,7 @@ class DBController:
             if mood_type == "text" or mood_type == "emoji":
                 feedback = self.__insert_feedback(meeting, "mood")
                 if type(feedback) is int:
-                    mood_ID = self.__insert_general_mood(feedback, mood_type, score, str(meeting_time))
+                    mood_ID = self.__insert_general_mood(feedback, mood_type, score, str(meeting_time), current_avg)
                     if type(mood_ID) is int:
                         if mood_type == "text":
                             data = mood.getMoodText()
@@ -236,6 +237,12 @@ class DBController:
             self.conn.rollback()
 
     def check_keyword(self, token, keyword):
+        """Validates meeting password
+
+        Parameters:
+            token {int} -- Identifier for meeting
+            keyword {string} -- Password to check for meeting
+        """
         try:
             self.cursor.execute("SELECT meetingpass, meetingsalt FROM meetings WHERE meetingid = :m",{'m':token})
             fetched = self.cursor.fetchall()
