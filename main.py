@@ -87,26 +87,22 @@ def search_page():
 
 @app.route("/meeting_search", methods=["POST"])
 def search_query():
-    query = request.form["query"]
 
-    if len(query) < 3:
-        # print("too short")
-        #this could be emitted to host if necessary
-        return {"results": []}
-    else:
-        meetings_list = db_conn.search_meetings(query)
-        results_list = []
-        for meetings in meetings_list:
-            search_result = {
-                "title": meetings[0],
-                "date_time": meetings[1],
-                "meeting_id": meetings[2]
-            }
-            results_list.append(search_result)
-            # print(search_result) #replace this line with emitting search_result
-            #each result is a dictionary to be emitted
+    meetings_list = db_conn.search_meetings(query)
+    results_list = []
+    for meetings in meetings_list:
+        search_result = {
+            "title": meetings[0],
+            "date_time": meetings[1],
+            "meeting_id": meetings[2],
+            "run_time": meetings[3],
+        }
+        
+        results_list.append(search_result)
+        # print(search_result) #replace this line with emitting search_result
+        #each result is a dictionary to be emitted
 
-        return {"results": results_list}
+    return {"results": results_list}
 
 @app.route("/meeting_submit", methods=["POST"])
 def choose_meeting():

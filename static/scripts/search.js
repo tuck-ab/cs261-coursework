@@ -3,7 +3,6 @@ var searchResults = new SearchResults();
 function getMeetings() {
     $.ajax({
         data : {
-        query : document.getElementById("meetingSearch").value
             },
         type : 'POST',
         url : '/meeting_search'
