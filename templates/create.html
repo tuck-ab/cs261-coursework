@@ -4,6 +4,7 @@
         <title>Create Meeting</title>
         <script src="{{ url_for('static', filename='classes/question.js') }}"></script>
         <script src="{{ url_for('static', filename='classes/questionTemplate.js') }}"></script>
+        <script src="{{ url_for('static', filename='classes/multChoiceCreate.js') }}"></script>
         <script src="{{ url_for('static', filename='scripts/createTemplate.js') }}"></script>
         <script src="{{ url_for('static', filename='scripts/makeQuestionPopup.js') }}"></script>
 
@@ -26,7 +27,7 @@
                 <select name="questionTypes" id="questionType" onchange="questionTypeUpdate()">
                     <option value="" selected disabled hidden>Choose Question Type</option>
                     <option value="normal">Normal Question</option>
-                    <!-- <option value="mult-choice">Multiple Choice Question</option> -->
+                    <option value="multichoice">Multiple Choice Question</option>
                 </select>
                 <div id="questionInputer">
 

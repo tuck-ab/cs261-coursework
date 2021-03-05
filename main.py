@@ -91,8 +91,7 @@ def create_meeting():
         template = Template().fromJSON(json.loads(request.form["templateJSON"]))
 
         host_info = json.loads(request.form["hostInfo"])
-        print("Name", host_info["title"])
-        print("Key Word", host_info["keyword"])
+        print("template:", template)
         
         ## -- Make new meeting
         new_meeting = controller.create_meeting(db_conn)
@@ -214,6 +213,10 @@ def template_update(data):
     emit("template_update", meeting.get_template().getJSON())
     emit("template_update", {"template": meeting.get_template().getJSON()}, room=meeting.attendee_room)
 
+@socketio.on("mult_choice_response")
+def mult_choice_response(data):
+    print(data)
+
 
 @socketio.on("question_response")
 def question_response(data):
@@ -240,7 +243,40 @@ def question_response(data):
 
 
     #----- The responses can be sent to the host with currentObj.getResponseText()
-    emit("question_answer_response", {"question":question["question"], "answer":answer}, room=meeting.host_room)
+    emit("question_answer_response", {"question": question["question"], "answer": answer}, room=meeting.host_room)
+
+
+
+@socketio.on("emoji_response")
+def emoji_response(data):
+    """
+    Function called when the attendee sends an emoji response during the presentation
+
+    Parameters:
+        data (dict) :JSON data from the socket connection 
+                    {"emoji":emoji score(number)}
+    """
+
+    anonFlag = True
+    emoji = data["emoji"]
+    attendee = controller.get_attendee(request.sid)
+    meeting = controller.get_meeting_from_attendee(request.sid)
+    emoji_analyser = meeting.getemojiSentimentAnalyser()
+    emoji_analyser.setEmojiSentiment(emoji)
+    emoji_score = emoji_analyser.getEmojiSentiment()
+    host = meeting.get_host()
+
+    currentObj = EmojiMood(anonFlag, attendee.get_sid(), meeting.get_token(), "emoji", emoji_score, time.time(), emoji)
+
+    emoji_analyser.set_AverageEmojiSentiment()
+
+    #--- Database stuff can go here !
+
+
+    emit("emoji_response", {"emoji":currentObj.getMoodEmoji(), "emoji_score":emoji_analyser.get_percentage()}, room=meeting.host_room)
+
+
+
 
 @socketio.on("general_feedback")
 def general_feedback(data):
