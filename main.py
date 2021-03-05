@@ -106,6 +106,11 @@ def create_meeting():
     """
 
     if request.method == "GET":
+        token = request.cookies.get("accessToken")
+        
+        if token == None:
+            return redirect(url_for("login"))
+
         return render_template("create.html")
 
 
