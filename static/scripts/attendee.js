@@ -53,3 +53,29 @@ function sendQuestionAnswer(id) {
     var question = hostQuestions.template.questions[Number(id)].getJSONString();
     socket.emit("question_response", {"question":question, "answer":answer});
 }
+
+function sendVeryConfusedEmoji() {
+    socket.emit("emoji_response", { "emoji": -1.0 });
+}
+
+function sendSlightlyConfusedEmoji() {
+    socket.emit("emoji_response", { "emoji": -0.5 });
+}
+
+function sendNeutralEmoji() {
+    socket.emit("emoji_response", { "emoji": 0.0 });
+}
+
+function sendSlightlyHappyEmoji() {
+    socket.emit("emoji_response", { "emoji": 0.5 });
+}
+
+function sendVeryHappyEmoji() {
+    socket.emit("emoji_response", { "emoji": 1.0 });
+}
+
+function sendMultChoiceAns(question, option) {
+    var question = hostQuestions.template.questions[Number(question)];
+    var answer = question.choice_list[Number(option)]
+    socket.emit("mult_choice_response", {"question":question.getJSONString(), "answer":answer});
+}
