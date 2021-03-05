@@ -34,6 +34,11 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
 
+        if db_conn.check_host(username, password):
+            print("Correct credentials")
+        else:
+            print("Incorrect credentials")
+
         print("username:", username)
         print("password:", password)
 
@@ -44,6 +49,13 @@ def register():
     elif request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
+
+        token = db_conn.add_new_host(username, password)
+
+        if token is None:
+            print("Error inserting")
+        else:
+            print(token)
 
         print("username:", username)
         print("password:", password)
@@ -259,6 +271,7 @@ def mult_choice_response(data):
     mult_choice_feedback = MultChoiceResponse(anon_flag, attendee.get_sid(), meeting.get_token(), "multchoice", question["question"], answer)
     
     #------ database stuff here
+    db_conn.insert_response(mult_choice_feedback)
 
     #------ emit back to host here
     #------ host needs to be emitted the question (question["question"]) and the answer (answer)   (is there a way that this can be turned into a bar chart on front end?)

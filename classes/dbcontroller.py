@@ -150,7 +150,7 @@ class DBController:
         """
         meeting = response.getMeeting()
         response_type = response.getResponseType()
-        prompt = response.getResponsePrompt()['question']
+        prompt = response.getResponsePrompt()
 
         if response_type == "emoji" or response_type == "text" or response_type == "multchoice":
             feedback = self.__insert_feedback(meeting, "response")
@@ -162,7 +162,7 @@ class DBController:
                     elif response_type == "text":
                         data = response.getResponseText()
                     else:
-                        data = response.getResponseChoice()
+                        data = response.getResponseAnswer()
                         response_type = "mult_choice"
                     try:
                         self.cursor.execute("INSERT INTO " + response_type + "_responses VALUES (:r, :d)",{'r':response_ID, 'd':data})
@@ -197,26 +197,53 @@ class DBController:
             print("Error selecting meetingid from table meetings:",error)
             return False
 
-    def insert_meeting(self, token, details):
+    def insert_meeting(self, token, host, title):
         """Stores newly created meeting
 
         Parameters:
             token {int} -- Identifier for the given meeting
-            details {dict} -- Stores meeting title in key 'name' and meeting password in key 'keyword'
+            host {int} -- Identifier for the meeting's host
+            title {string} -- Stores meeting title in key 'name' and meeting password in key 'keyword'
         """
-        title = details['title']
-        password = details['keyword']
-        alphabet = string.ascii_letters + string.digits
-        salt = hashlib.sha256(''.join(secrets.choice(alphabet) for i in range(8)).encode('utf-8')).hexdigest()
-        meeting_pass = hashlib.sha256((password + "--" + salt).encode('utf-8')).hexdigest()
         t = time.time()
         date_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(t))
         try:
-            self.cursor.execute("INSERT INTO meetings VALUES (:m, :t, :p, :s, 0, :d)",{'m':token, 't':title, 'p':meeting_pass, 's':salt, 'd':date_time})
+            self.cursor.execute("INSERT INTO meetings VALUES (:m, :h, :t, '0:00:00', :d)",{'m':token, 'h':host, 't':title, 'd':date_time})
             self.conn.commit()
         except sqlite3.Error as error:
             print("Error inserting into table meetings:",error)
             self.conn.rollback()
+
+    def add_new_host(self, username, password):
+        """Attempt to store new host
+
+        Parameters:
+            username {string} -- New host username
+            password {string} -- New host password
+
+        Returns:
+            True/False {boolean} -- Indicates whether insertion was successful
+        """
+        try:
+            self.cursor.execute("SELECT hostid FROM hosts WHERE username = :u",{'u':username})
+            if self.cursor.fetchone() is None:
+                alphabet = string.ascii_letters + string.digits
+                salt = hashlib.sha256(''.join(secrets.choice(alphabet) for i in range(8)).encode('utf-8')).hexdigest()
+                enc_pass = hashlib.sha256((password + "--" + salt).encode('utf-8')).hexdigest()
+                while True:
+                    token = hashlib.sha256(''.join(secrets.choice(alphabet) for i in range(8)).encode('utf-8')).hexdigest()
+                    self.cursor.execute("SELECT hostid FROM hosts WHERE access_token = :t",{'t':token})
+                    if self.cursor.fetchone() is None:
+                        break
+                self.cursor.execute("INSERT INTO hosts VALUES (NULL, :u, :p, :s, :t)",{'u':username, 'p':enc_pass, 's':salt, 't':token})
+                self.conn.commit()
+                return token
+            else:
+                return None
+        except sqlite3.Error as error:
+            print("Error encountered:",error)
+            self.conn.rollback()
+            return None
 
     def update_runtime(self, token):
         """Updates running time of meeting given by token
@@ -236,24 +263,31 @@ class DBController:
             print(error)
             self.conn.rollback()
 
-    def check_keyword(self, token, keyword):
-        """Validates meeting password
+    def check_host(self, username, check_word):
+        """Validates host's password
 
         Parameters:
-            token {int} -- Identifier for meeting
-            keyword {string} -- Password to check for meeting
+            username {string} -- Host's username
+            check_word {string} -- Host's password (to check)
+
+        Returns:
+            True/False {boolean} -- Indicates whether credentials match
         """
         try:
-            self.cursor.execute("SELECT meetingpass, meetingsalt FROM meetings WHERE meetingid = :m",{'m':token})
-            fetched = self.cursor.fetchall()
-            meeting_pass = fetched[0][0]
-            salt = fetched[0][1]
-            check = hashlib.sha256((keyword + "--" + salt).encode('utf-8')).hexdigest()
-            if check == meeting_pass:
-                return True
-            return False
+            self.cursor.execute("SELECT username FROM hosts WHERE username = :u",{'u':username})
+            if self.cursor.fetchone() is None:
+                return False
+            else:
+                self.cursor.execute("SELECT encrypted_pass, salt FROM hosts WHERE username = :u",{'u':username})
+                fetched = self.cursor.fetchall()
+                enc_pass = fetched[0][0]
+                salt = fetched[0][1]
+                check = hashlib.sha256((check_word + "--" + salt).encode('utf-8')).hexdigest()
+                if check == enc_pass:
+                    return True
+                return False
         except sqlite3.Error as error:
-            print("Error selecting meetingpass, meetingsalt in table meetings:",error)
+            print("Error selecting encrypted_pass, salt in table hosts:",error)
             return False
 
     # Searches for all meetings with a certain string in their title
