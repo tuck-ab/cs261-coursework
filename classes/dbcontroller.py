@@ -197,32 +197,35 @@ class DBController:
             print("Error selecting meetingid from table meetings:",error)
             return False
 
-    def insert_meeting(self, token, host, title):
+    def insert_meeting(self, meeting_token, host_token, title):
         """Stores newly created meeting
 
         Parameters:
-            token {int} -- Identifier for the given meeting
-            host {int} -- Identifier for the meeting's host
+            meeting_token {int} -- Identifier for the given meeting
+            host_token {string} -- Host's curent access token
             title {string} -- Stores meeting title in key 'name' and meeting password in key 'keyword'
         """
         t = time.time()
         date_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(t))
         try:
-            self.cursor.execute("INSERT INTO meetings VALUES (:m, :h, :t, '0:00:00', :d)",{'m':token, 'h':host, 't':title, 'd':date_time})
+            self.cursor.execute("SELECT hostid FROM hosts WHERE access_token = :t",{'t':host_token})
+            host_id = self.cursor.fetchone()[0]
+            self.cursor.execute("INSERT INTO meetings VALUES (:m, :h, :t, '0:00:00', :d)",{'m':meeting_token, 'h':host_id, 't':title, 'd':date_time})
             self.conn.commit()
         except sqlite3.Error as error:
             print("Error inserting into table meetings:",error)
             self.conn.rollback()
 
     def add_new_host(self, username, password):
-        """Attempt to store new host
+        """Attempt to store new host and generates access token
 
         Parameters:
             username {string} -- New host username
             password {string} -- New host password
 
         Returns:
-            True/False {boolean} -- Indicates whether insertion was successful
+            None {None} -- Username already exists
+            token {string} -- Token linked to host
         """
         try:
             self.cursor.execute("SELECT hostid FROM hosts WHERE username = :u",{'u':username})
@@ -264,14 +267,15 @@ class DBController:
             self.conn.rollback()
 
     def check_host(self, username, check_word):
-        """Validates host's password
+        """Validates host's password and returns new access token
 
         Parameters:
             username {string} -- Host's username
             check_word {string} -- Host's password (to check)
 
         Returns:
-            True/False {boolean} -- Indicates whether credentials match
+            None {None} -- Credentials don't match
+            token {string} -- Access token linked to host
         """
         try:
             self.cursor.execute("SELECT username FROM hosts WHERE username = :u",{'u':username})
@@ -304,6 +308,9 @@ class DBController:
 
         Parameters:
             token {string} -- Token to check existence of
+
+        Returns:
+            True/False {boolean} -- Indicates whether token exists
         """
         try:
             self.cursor.execute("SELECT hostid FROM hosts WHERE access_token = :t",{'t':token})
@@ -312,6 +319,7 @@ class DBController:
             return True
         except sqlite3.Error as error:
             print("Error encountered:",error)
+            return False
 
     # Searches for all meetings with a certain string in their title
     def search_meetings(self,query):
