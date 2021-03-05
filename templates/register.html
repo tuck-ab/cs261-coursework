@@ -3,7 +3,14 @@
     <head>
         <script>
             function sendRequest() {
-                if (document.getElementById("password").value === document.getElementById("passwordconf").value) {
+                var password = document.getElementById("password").value;
+                var username = document.getElementById("username").value;
+
+                if (username === "") {
+                    document.getElementById("error").innerHTML = "Please enter username";
+                } else if (password === "") {
+                    document.getElementById("error").innerHTML = "Please enter password";
+                }else if (password === document.getElementById("passwordconf").value) {
                     document.getElementById("registerForm").submit();
                 } else {
                     document.getElementById("error").innerHTML = "Passwords don't match";
