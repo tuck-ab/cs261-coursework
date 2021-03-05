@@ -150,7 +150,7 @@ class DBController:
         """
         meeting = response.getMeeting()
         response_type = response.getResponseType()
-        prompt = response.getResponsePrompt()['question']
+        prompt = response.getResponsePrompt()
 
         if response_type == "emoji" or response_type == "text" or response_type == "multchoice":
             feedback = self.__insert_feedback(meeting, "response")
@@ -162,7 +162,7 @@ class DBController:
                     elif response_type == "text":
                         data = response.getResponseText()
                     else:
-                        data = response.getResponseChoice()
+                        data = response.getResponseAnswer()
                         response_type = "mult_choice"
                     try:
                         self.cursor.execute("INSERT INTO " + response_type + "_responses VALUES (:r, :d)",{'r':response_ID, 'd':data})
