@@ -107,12 +107,7 @@ def search_query():
 @app.route("/meeting_submit", methods=["POST"])
 def choose_meeting():
     meeting = json.loads(request.form["meeting"])
-    keyword = request.form["keyword"]
     meetingid = meeting["meetingid"]
-
-    print("meeting:", meeting)
-    print("keyword:", keyword)
-    print("meetingid:", meeting["meetingid"])
 
 
     if db_conn.check_keyword(meetingid, keyword):
