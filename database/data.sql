@@ -12,22 +12,22 @@ INSERT INTO meetings VALUES(2222,2,"Operating Systems and Computer Networks","0:
 INSERT INTO meetings VALUES(3333,3,"Artificial Intelligence","0:55:00","2021-01-08 09:01:45");
 INSERT INTO meetings VALUES(4444,4,"Algorithms","0:45:00","2021-02-14 12:54:09");
 
-INSERT INTO feedback VALUES(1,1,"error");
-INSERT INTO feedback VALUES(2,1,"question");
-INSERT INTO feedback VALUES(3,1,"mood");
-INSERT INTO feedback VALUES(4,1,"response");
-INSERT INTO feedback VALUES(5,2,"error");
-INSERT INTO feedback VALUES(6,2,"question");
-INSERT INTO feedback VALUES(7,2,"mood");
-INSERT INTO feedback VALUES(8,2,"response");
-INSERT INTO feedback VALUES(9,3,"error");
-INSERT INTO feedback VALUES(10,3,"question");
-INSERT INTO feedback VALUES(11,3,"mood");
-INSERT INTO feedback VALUES(12,3,"response");
-INSERT INTO feedback VALUES(13,4,"error");
-INSERT INTO feedback VALUES(14,4,"question");
-INSERT INTO feedback VALUES(15,4,"mood");
-INSERT INTO feedback VALUES(16,4,"response");
+INSERT INTO feedback VALUES(1,1111,"error");
+INSERT INTO feedback VALUES(2,1111,"question");
+INSERT INTO feedback VALUES(3,1111,"mood");
+INSERT INTO feedback VALUES(4,1111,"response");
+INSERT INTO feedback VALUES(5,2222,"error");
+INSERT INTO feedback VALUES(6,2222,"question");
+INSERT INTO feedback VALUES(7,2222,"mood");
+INSERT INTO feedback VALUES(8,2222,"response");
+INSERT INTO feedback VALUES(9,3333,"error");
+INSERT INTO feedback VALUES(10,3333,"question");
+INSERT INTO feedback VALUES(11,3333,"mood");
+INSERT INTO feedback VALUES(12,3333,"response");
+INSERT INTO feedback VALUES(13,4444,"error");
+INSERT INTO feedback VALUES(14,4444,"question");
+INSERT INTO feedback VALUES(15,4444,"mood");
+INSERT INTO feedback VALUES(16,4444,"response");
 
 INSERT INTO errors VALUES(1,"audio","We can't hear you");
 INSERT INTO errors VALUES(5,"video","Screen not visible");

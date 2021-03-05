@@ -108,14 +108,14 @@ def search_query():
 @app.route("/meeting_submit", methods=["POST"])
 def choose_meeting():
     meeting = json.loads(request.form["meeting"])
-    meetingid = meeting["meetingid"]
+    meeting_id = meeting["meetingid"]
+    token = request.cookies.get("acessToken")
 
-
-    if db_conn.check_keyword(meetingid, keyword):
-        print("Password accepted")
-        #host should now be taken to the old meeting feedback page
+    information = db_conn.get_meeting_info(meeting_id, token)
+    if information is None:
+        print("Invalid access token")
     else:
-        print("Password rejected")
+        print(information)
 
     return "Password being checked"
 

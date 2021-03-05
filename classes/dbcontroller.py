@@ -338,7 +338,39 @@ class DBController:
             return meetings
         except sqlite3.Error as error:
             print("Error encountered:",error)
-            return error
+            return []
+
+    def get_meeting_info(self, meeting_id, host_token):
+        """Return meeting information
+
+        Parameters:
+            meeting_id {int} -- Identifier for meeting
+            host_token {string} -- Access token for host
+
+        Returns:
+            None {None} -- Invalid access token
+            information -- Information associated with meeting ID
+        """
+        try:
+            self.cursor.execute("SELECT access_token FROM hosts JOIN meetings ON meetings.hostid = hosts.hostid AND meetingid = :m",{'m':meeting_id})
+            access_token = self.cursor.fetchone()[0]
+            if host_token != access_token:
+                return None
+            information = {"errors": [], "questions": [], "moods": {"text": [], "emoji": []}, "responses": {"text": [], "emoji": [], "mult_choice": []}}
+            self.cursor.execute("SELECT errortype, errmessage FROM errors JOIN feedback ON errors.feedbackid = feedback.feedbackid AND meetingid = :m",{'m':meeting_id})
+            information["errors"] = self.cursor.fetchall()
+            self.cursor.execute("SELECT qmessage FROM questions JOIN feedback ON questions.feedbackid = feedback.feedbackid AND meetingid = :m",{'m':meeting_id})
+            information["questions"] = self.cursor.fetchall()
+            for (field, mood_type) in zip(["txtmessage", "emojitype"],["text","emoji"]):
+                self.cursor.execute("SELECT score, timeofmood, avgmood, "+field+" FROM "+mood_type+"_moods JOIN moods USING(moodid) JOIN feedback ON moods.feedbackid = feedback.feedbackid AND meetingid = :m",{'m':meeting_id})
+                information["moods"][mood_type] = self.cursor.fetchall()
+            for (field, response_type) in zip(["txtmessage","emojitype","attendeeanswer"],["text","emoji","mult_choice"]):
+                self.cursor.execute("SELECT questionasked, "+field+" FROM "+response_type+"_responses JOIN responses USING(responseid) JOIN feedback ON responses.feedbackid = feedback.feedbackid AND meetingid = :m",{'m':meeting_id})
+                information["responses"][response_type] = self.cursor.fetchall()
+            return information
+        except sqlite3.Error as error:
+            print("Error encountered:",error)
+            return None
 
     # Searches for all meetings with a certain string in their title
     def search_meetings(self,query):
