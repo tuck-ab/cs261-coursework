@@ -2,9 +2,9 @@ from .responseObj import Response
 
 class MultChoiceResponse(Response):
 
-    def __init__(self, anonFlag, attendeeID, meetingID, responseType, responsePrompt, responseChoice):
-        super().__init__(anonFlag, attendeeID, meetingID, responseType, responsePrompt)
-        self.responseChoice = responseChoice
+    def __init__(self, anonFlag, attendeeID, meetingID, responseType, responsePrompt, responseAnswer):
+        super().__init__(anonFlag, attendeeID, meetingID, responseType, responseAnswer)
+        self.responseAnswer = responseAnswer
     
-    def getResponseChoice(self):
-        return self.responseChoice
+    def getResponseAnswer(self):
+        return self.responseAnswer
