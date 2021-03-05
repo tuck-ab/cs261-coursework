@@ -26,6 +26,28 @@ def index():
     """
     return render_template("index.html")
 
+@app.route("/login", methods=["GET","POST"])
+def login():
+    if request.method == "GET":
+        return render_template("login.html")
+    elif request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+
+        print("username:", username)
+        print("password:", password)
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "GET":
+        return render_template("register.html")
+    elif request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+
+        print("username:", username)
+        print("password:", password)
+
 @app.route("/search")
 def search_page():
     return render_template("search.html")
@@ -84,6 +106,11 @@ def create_meeting():
     """
 
     if request.method == "GET":
+        token = request.cookies.get("accessToken")
+        
+        if token == None:
+            return redirect(url_for("login"))
+
         return render_template("create.html")
 
 
