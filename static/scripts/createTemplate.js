@@ -9,12 +9,6 @@ function submitTemplate() {
         return false
     }
 
-    var keyWordElement = document.getElementById("meetingKeyWord");
-    if (keyWordElement.value == "") {
-        alert("Please set key word");
-        return false
-    }
-
     var form = document.createElement("form");
     form.method = "post";
     form.action = url;
@@ -27,8 +21,8 @@ function submitTemplate() {
 
     var hostHidenInput = document.createElement("input");
     hostHidenInput.type = "hidden";
-    hostHidenInput.name = "hostInfo";
-    hostHidenInput.value = `{"title":"` + titleElement.value + `","keyword":"` + keyWordElement.value + `"}`;
+    hostHidenInput.name = "title";
+    hostHidenInput.value = titleElement.value;
     form.appendChild(hostHidenInput);
 
     document.body.appendChild(form);
