@@ -37,6 +37,17 @@ def login():
         print("username:", username)
         print("password:", password)
 
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "GET":
+        return render_template("register.html")
+    elif request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+
+        print("username:", username)
+        print("password:", password)
+
 @app.route("/search")
 def search_page():
     return render_template("search.html")
