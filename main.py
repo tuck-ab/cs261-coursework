@@ -135,7 +135,7 @@ def create_meeting():
         token = request.cookies.get("accessToken")
         print(token)
         
-        if token == None or db_conn.check_token(token):
+        if token == None or not db_conn.check_token(token):
             return redirect(url_for("login"))
 
         return render_template("create.html")

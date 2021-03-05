@@ -21,8 +21,8 @@
     <body>
         <form id="registerForm" action="/register" method="post">
             <p>Username: <input type="text" name="username" id="username"></p>
-            <p>Password: <input type="text" name="password" id="password"></p>
-            <p>Re-type password: <input type="text" name="passwordconf" id="passwordconf"></p>
+            <p>Password: <input type="password" name="password" id="password"></p>
+            <p>Re-type password: <input type="password" name="passwordconf" id="passwordconf"></p>
             <p id="error" style="color:red;"></p>
             <input type="button" onclick="sendRequest()" value="Register">
         </form>
