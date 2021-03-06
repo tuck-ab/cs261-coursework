@@ -392,3 +392,11 @@ class DBController:
         
         except sqlite3.Error as error:
             return error
+    
+    def sentiment_history(self, mood_type, meeting):
+        try:
+            self.cursor.execute("SELECT timeofmood, avgmood FROM moods INNER JOIN feedback ON moods.feedbackid = feedback.feedbackid WHERE moodtype = ? AND meetingid = ?",(mood_type,meeting,))
+            results = self.cursor.fetchall()
+            return results
+        except sqlite3.Error as error:
+            return error
