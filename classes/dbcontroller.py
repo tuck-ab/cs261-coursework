@@ -167,7 +167,7 @@ class DBController:
                     try:
                         self.cursor.execute("INSERT INTO " + response_type + "_responses VALUES (:r, :d)",{'r':response_ID, 'd':data})
                         self.conn.commit()
-                        return response_ID
+                        #return response_ID
                     except sqlite3.Error as error:
                         print("Error inserting into table " + response_type +"_responses:", error)
                         self.conn.rollback()
@@ -384,9 +384,9 @@ class DBController:
         except sqlite3.Error as error:
             return error
     
-    def mult_choice_frequency(self,id):
+    def mult_choice_frequency(self,question):
         try:
-            self.cursor.execute("SELECT attendeeanswer, COUNT(attendeeanswer) FROM mult_choice_responses WHERE responseid=? GROUP BY attendeeanswer",(id,))
+            self.cursor.execute("SELECT attendeeanswer, COUNT(attendeeanswer) FROM mult_choice_responses INNER JOIN responses ON mult_choice_responses.responseid = responses.responseid WHERE responses.questionasked = ? GROUP BY attendeeanswer",(question,))
             results = self.cursor.fetchall()
             return results
         
