@@ -1,9 +1,8 @@
 var searchResults = new SearchResults();
 
-function searchUpdate() {
+function getMeetings() {
     $.ajax({
         data : {
-        query : document.getElementById("meetingSearch").value
             },
         type : 'POST',
         url : '/meeting_search'
@@ -15,14 +14,17 @@ function searchUpdate() {
     event.preventDefault();
 }
 
-function selectResult(id) {
-    var keywordEntered = prompt("Key word:");
+getMeetings();
 
+function searchUpdate() {
+    
+}
+
+function selectResult(id) {
     if (keywordEntered !== null) {
         $.ajax({
             data : {
-            meeting : searchResults.getResultString(id),
-            keyword : keywordEntered
+            meeting : searchResults.getResultString(id)
                 },
             type : 'POST',
             url : '/meeting_submit'

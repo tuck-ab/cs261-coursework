@@ -8,7 +8,7 @@ class SearchResults {
     }
 
     getResultString(id) {
-        return `{"date_time":"` + this.results[id]["date_time"] + `", "title":"` + this.results[id]["title"] + `","meetingid":"` + this.results[id]["meeting_id"] + `"}`;
+        return `{"meetingid":"` + this.results[id]["meeting_id"] + `"}`;
     }
 
     getHTMLString() {
@@ -18,7 +18,9 @@ class SearchResults {
         for (var i = 0; i < this.results.length; i++) {
             loopString = `<div class="searchResult" onclick="selectResult(` + i.toString() + `)">`
             loopString += `<p>Title: ` + this.results[i]["title"] + `</p>`;
-            loopString += `<p>Start Time: ` + this.results[i]["date_time"] + `</p></div>`;
+            loopString += `<p>Start Time: ` + this.results[i]["date_time"] + `</p>`;
+            loopString += `<p>Duration: ` + this.results[i]["run_time"] + `</p>`;
+            loopString += `</div>`
 
             HTMLString += loopString;
         }

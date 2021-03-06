@@ -37,6 +37,19 @@ def login():
         print("username:", username)
         print("password:", password)
 
+        new_token = db_conn.check_host(username, password)
+
+        if new_token is None:
+            print("Incorrect credentials")
+            return "<h1>Wrong credentials</h1>"
+        else:
+            print(new_token)
+            resp = make_response(redirect(url_for("index")))
+            resp.set_cookie("accessToken", new_token)
+
+            return resp
+
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "GET":
@@ -45,52 +58,64 @@ def register():
         username = request.form["username"]
         password = request.form["password"]
 
+        token = db_conn.add_new_host(username, password)
+
+        if token is None:
+            print("Error inserting")
+            token="token failed"
+        else:
+            print(token)
+
         print("username:", username)
         print("password:", password)
 
+        resp = make_response(redirect(url_for("index")))
+        resp.set_cookie("accessToken", token)
+
+        return resp
+
 @app.route("/search")
 def search_page():
-    return render_template("search.html")
+    if request.method == "GET":
+        token = request.cookies.get("accessToken")
+        print(token)
+        
+        if token == None or not db_conn.check_token(token):
+            return redirect(url_for("login"))
+
+        return render_template("search.html")
 
 @app.route("/meeting_search", methods=["POST"])
 def search_query():
-    query = request.form["query"]
 
-    if len(query) < 3:
-        # print("too short")
-        #this could be emitted to host if necessary
-        return {"results": []}
-    else:
-        meetings_list = db_conn.search_meetings(query)
-        results_list = []
-        for meetings in meetings_list:
-            search_result = {
-                "title": meetings[0],
-                "date_time": meetings[1],
-                "meeting_id": meetings[2]
-            }
-            results_list.append(search_result)
-            # print(search_result) #replace this line with emitting search_result
-            #each result is a dictionary to be emitted
+    token = request.cookies.get("accessToken")
+    meetings_list = db_conn.get_meetings(token)
+    results_list = []
+    for meetings in meetings_list:
+        search_result = {
+            "title": meetings[0],
+            "date_time": meetings[1],
+            "meeting_id": meetings[2],
+            "run_time": meetings[3],
+        }
+        
+        results_list.append(search_result)
+        # print(search_result) #replace this line with emitting search_result
+        #each result is a dictionary to be emitted
 
-        return {"results": results_list}
+    return {"results": results_list}
 
 @app.route("/meeting_submit", methods=["POST"])
 def choose_meeting():
     meeting = json.loads(request.form["meeting"])
-    keyword = request.form["keyword"]
-    meetingid = meeting["meetingid"]
+    meeting_id = meeting["meetingid"]
+    token = request.cookies.get("acessToken")
 
-    print("meeting:", meeting)
-    print("keyword:", keyword)
-    print("meetingid:", meeting["meetingid"])
-
-
-    if db_conn.check_keyword(meetingid, keyword):
-        print("Password accepted")
-        #host should now be taken to the old meeting feedback page
+    information = db_conn.get_meeting_info(meeting_id, token)
+    if information is None:
+        print("Invalid access token")
     else:
-        print("Password rejected")
+        print(information)
 
     return "Password being checked"
 
@@ -105,10 +130,11 @@ def create_meeting():
     the client to the 'host' page for a meeting along with the necessary identifiers as cookies.
     """
 
+    token = request.cookies.get("accessToken")
     if request.method == "GET":
-        token = request.cookies.get("accessToken")
+        print(token)
         
-        if token == None:
+        if token == None or not db_conn.check_token(token):
             return redirect(url_for("login"))
 
         return render_template("create.html")
@@ -117,15 +143,16 @@ def create_meeting():
     elif request.method == "POST":
         template = Template().fromJSON(json.loads(request.form["templateJSON"]))
 
-        host_info = json.loads(request.form["hostInfo"])
+        ## host_info = json.loads(request.form["hostInfo"])
+        title = request.form["title"]
         print("template:", template)
         
         ## -- Make new meeting
         new_meeting = controller.create_meeting(db_conn)
         new_meeting.set_template(template)
-        new_meeting.title = host_info["title"]
+        new_meeting.title = title
 
-        db_conn.insert_meeting(new_meeting.host_token, host_info)
+        db_conn.insert_meeting(new_meeting.host_token, token, title)
 
         ## -- Send the response with token
         resp = make_response(redirect(url_for("host_page")))
