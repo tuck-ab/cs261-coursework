@@ -288,8 +288,11 @@ def mult_choice_response(data):
     #------ database stuff here
     db_conn.insert_response(mult_choice_feedback)
 
+    results_frequency = db_conn.mult_choice_frequency(question["question"])
+    print(results_frequency)
+
     #------ emit back to host here
-    #------ host needs to be emitted the question (question["question"]) and the answer (answer)   (is there a way that this can be turned into a bar chart on front end?)
+    #------ host needs to be emitted the question (question["question"]) and the result (results_frequency) 
     
 
 @socketio.on("question_response")
