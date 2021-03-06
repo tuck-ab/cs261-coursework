@@ -109,7 +109,7 @@ def search_query():
 def choose_meeting():
     meeting = json.loads(request.form["meeting"])
     meeting_id = meeting["meetingid"]
-    token = request.cookies.get("acessToken")
+    token = request.cookies.get("accessToken")
 
     information = db_conn.get_meeting_info(meeting_id, token)
     if information is None:
@@ -288,8 +288,11 @@ def mult_choice_response(data):
     #------ database stuff here
     db_conn.insert_response(mult_choice_feedback)
 
+    results_frequency = db_conn.mult_choice_frequency(question["question"])
+    print(results_frequency)
+
     #------ emit back to host here
-    #------ host needs to be emitted the question (question["question"]) and the answer (answer)   (is there a way that this can be turned into a bar chart on front end?)
+    #------ host needs to be emitted the question (question["question"]) and the result (results_frequency) 
     
 
 @socketio.on("question_response")
@@ -384,7 +387,6 @@ def general_feedback(data):
     #------- database stuff can go here
     db_conn.insert_mood(currentObj)
 
-
     #------- The feedback can be sent to host with currentObj.getMoodText()
     #------- The percentage to be displayed can be sent to thost with analyser.get_percentage()
 
@@ -418,6 +420,28 @@ def error_feedback(data):
     #-------- The error message can be sent to host with currentObj.getErrorMessage()
 
     emit("error_response", {"error":currentObj.getErrorMessage()}, room=meeting.host_room)
+
+
+#These two functions needs host data as input, and generate a list of coordinates for a line graph
+#In the form [(time1, averagemood1) , (time2, averagemood2) ...]
+def text_sentiment_over_time(data):
+    host = controller.get_host_from_sid(request.sid)
+    meeting = controller.get_meeting_from_host(host)
+
+    meetingid = meeting.get_token()
+
+    text_sentiment_results = db_conn.sentiment_history("text",meetingid)
+    print(text_sentiment_results)
+
+
+def emoji_sentiment_over_time(data):
+    host = controller.get_host_from_sid(request.sid)
+    meeting = controller.get_meeting_from_host(host)
+
+    meetingid = meeting.get_token()
+
+    emoji_sentiment_results = db_conn.sentiment_history("emoji",meetingid)
+    print(emoji_sentiment_results)
 
 
 @socketio.on("disconnect")
