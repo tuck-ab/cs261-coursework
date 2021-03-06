@@ -18,8 +18,7 @@ class DBController:
             print("Failed to open database connection", error)
 
     def close(self):
-        """Closes connection to database
-        """
+        # Closes connection to database
         self.conn.close()
 
     def __insert_feedback(self, meeting, f_type):
