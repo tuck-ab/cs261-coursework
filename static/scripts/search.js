@@ -8,16 +8,16 @@ function getMeetings() {
         url : '/meeting_search'
         })
     .done(function(data) {
-        searchResults.setResults(data["results"]);
+        searchResults.setResults(data["results"], document.getElementById("meetingSearch").value);
         searchResults.display(document.getElementById("results"));
     });
-    event.preventDefault();
 }
 
 getMeetings();
 
 function searchUpdate() {
-    
+    searchResults.setFilteredResults(document.getElementById("meetingSearch").value);
+    searchResults.display(document.getElementById("results"));
 }
 
 function selectResult(id) {
