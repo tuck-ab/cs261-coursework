@@ -117,6 +117,11 @@ def choose_meeting():
     else:
         print(information)
 
+        #these are the coords for a line graph of the text sentiment and emoji sentiment
+        text_over_time = text_sentiment_over_time(meeting_id)
+        emoji_over_time = emoji_sentiment_over_time(meeting_id)
+
+
     return "Password being checked"
 
 @app.route("/create", methods=["GET","POST"])
@@ -424,24 +429,18 @@ def error_feedback(data):
 
 #These two functions needs host data as input, and generate a list of coordinates for a line graph
 #In the form [(time1, averagemood1) , (time2, averagemood2) ...]
-def text_sentiment_over_time(data):
-    host = controller.get_host_from_sid(request.sid)
-    meeting = controller.get_meeting_from_host(host)
-
-    meetingid = meeting.get_token()
+def text_sentiment_over_time(meetingid):
 
     text_sentiment_results = db_conn.sentiment_history("text",meetingid)
-    print(text_sentiment_results)
+    #print(text_sentiment_results)
+    return text_sentiment_results
 
 
-def emoji_sentiment_over_time(data):
-    host = controller.get_host_from_sid(request.sid)
-    meeting = controller.get_meeting_from_host(host)
-
-    meetingid = meeting.get_token()
+def emoji_sentiment_over_time(meetingid):
 
     emoji_sentiment_results = db_conn.sentiment_history("emoji",meetingid)
-    print(emoji_sentiment_results)
+    #print(emoji_sentiment_results)
+    return emoji_sentiment_results
 
 
 @socketio.on("disconnect")
