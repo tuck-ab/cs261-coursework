@@ -21,17 +21,14 @@ function searchUpdate() {
 }
 
 function selectResult(id) {
-    if (keywordEntered !== null) {
-        $.ajax({
-            data : {
-            meeting : searchResults.getResultString(id)
-                },
-            type : 'POST',
-            url : '/meeting_submit'
-            })
-        .done(function(data) {
-            console.log(data);
-        });
-        event.preventDefault();
-    }
+    $.ajax({
+        data : {
+        meeting : searchResults.getResultString(id)
+            },
+        type : 'POST',
+        url : '/meeting_submit'
+        })
+    .done(function(data) {
+        console.log(data);
+    });
 }

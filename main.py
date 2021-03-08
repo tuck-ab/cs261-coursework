@@ -113,11 +113,10 @@ def choose_meeting():
 
     information = db_conn.get_meeting_info(meeting_id, token)
     if information is None:
-        print("Invalid access token")
+        return "Invalid access token"
     else:
-        print(information)
+        return information
 
-    return "Password being checked"
 
 @app.route("/create", methods=["GET","POST"])
 def create_meeting():
