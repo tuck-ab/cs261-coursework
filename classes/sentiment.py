@@ -20,6 +20,9 @@ class Sentiment:
 
     def setSentiment(self, string):
         self.calculateSentiment(string)
+        
+    def getSentimentCount(self):
+        return self.num_responses
 
 # Simply returns the current average sentiment of the event    
     def get_AverageSentiment(self):
