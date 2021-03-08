@@ -29,7 +29,7 @@ connection.insert_question(test_question) # inserts question
 test_text_mood = TextMood(True,4,5555,"text",0.5,time.time(),1,"Great work!")
 connection.insert_mood(test_text_mood) # inserts text mood
 
-test_emoji_mood = EmojiMood(False,3,5555,"emoji",-0.8,time.time(),1,3)
+test_emoji_mood = EmojiMood(False,3,5555,"emoji",-1.0,time.time(),1,-1.0)
 connection.insert_mood(test_emoji_mood) # inserts emoji mood
 
 test_emoji_response = EmojiResponse(False,3,5555,"emoji","What is the symbol for implication?",":arrow_right:")
