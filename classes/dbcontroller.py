@@ -362,7 +362,7 @@ class DBController:
                 "average_mood": 0,          # Overall average mood
                 "emoji": [],                # [emoji frequencies]
                 "errors": [],               # [errors]
-                "general_feedback": []      
+                "general_feedback": []      # [feedback]
             }
 
             self.cursor.execute(""" SELECT questionasked, attendeeanswer
@@ -372,24 +372,25 @@ class DBController:
                                         responses.feedbackid = feedback.feedbackid AND
                                         meetingid = :m""",{'m':meeting_id})
             polls = self.cursor.fetchall()
-            questions = {}
-            for poll in polls:
-                question = poll[0]
-                choice = poll[1]
-                if question not in questions:
-                    questions[question] = {}
-                if choice not in questions[question]:
-                    questions[question][choice] = 0
-                questions[question][choice] += 1
-            multiple_choices = []
-            for question in questions:
-                choices = []
-                frequencies = []
-                for choice in questions[question]:
-                    choices.append(choice)
-                    frequencies.append(questions[question][choice])
-                multiple_choices.append([question, choices, frequencies])
-            information["mult_choice"] = multiple_choices
+            if polls is not None:
+                questions = {}
+                for poll in polls:
+                    question = poll[0]
+                    choice = poll[1]
+                    if question not in questions:
+                        questions[question] = {}
+                    if choice not in questions[question]:
+                        questions[question][choice] = 0
+                    questions[question][choice] += 1
+                multiple_choices = []
+                for question in questions:
+                    choices = []
+                    frequencies = []
+                    for choice in questions[question]:
+                        choices.append(choice)
+                        frequencies.append(questions[question][choice])
+                    multiple_choices.append([question, choices, frequencies])
+                information["mult_choice"] = multiple_choices
 
             self.cursor.execute(""" SELECT questionasked, txtmessage
                                     FROM text_responses
@@ -398,18 +399,19 @@ class DBController:
                                         responses.feedbackid = feedback.feedbackid AND
                                         meetingid = :m""",{'m':meeting_id})
             responses = self.cursor.fetchall()
-            texts = {}
-            for response in responses:
-                asked = response[0]
-                answer = response[1]
-                if asked not in texts:
-                    texts[asked] = []
-                texts[asked].append(answer)
-            question = []
-            for text in texts:
-                answers = texts[text]
-                question.append([text,answers])
-            information["question"] = question
+            if responses is not None:
+                texts = {}
+                for response in responses:
+                    asked = response[0]
+                    answer = response[1]
+                    if asked not in texts:
+                        texts[asked] = []
+                    texts[asked].append(answer)
+                question = []
+                for text in texts:
+                    answers = texts[text]
+                    question.append([text,answers])
+                information["question"] = question
 
             self.cursor.execute(""" SELECT errmessage 
                                     FROM errors 
@@ -417,8 +419,9 @@ class DBController:
                                         errors.feedbackid = feedback.feedbackid AND 
                                         meetingid = :m""",{'m':meeting_id})
             err_messages = self.cursor.fetchall()
-            for message in err_messages:
-                information["errors"].append(message[0])
+            if err_messages is not None:
+                for message in err_messages:
+                    information["errors"].append(message[0])
 
             self.cursor.execute(""" SELECT score, avgmood, txtmessage
                                     FROM text_moods
@@ -428,12 +431,13 @@ class DBController:
                                         meetingid = :m
                                     ORDER BY timeofmood ASC""",{'m':meeting_id})
             text_moods = self.cursor.fetchall()
-            information["final_mood"] = text_moods[-1][0]
-            information["average_mood"] = text_moods[-1][1]
-            for mood in text_moods:
-                information["general_feedback"].append(mood[0]) # feedback score
-                # information["general_feedback"].append(mood[2]) # feedback message
-                # information["general_feedback"].append([mood[0],mood[2]]) # feedback score and message
+            if text_moods is not None:
+                information["final_mood"] = text_moods[-1][0]
+                information["average_mood"] = text_moods[-1][1]
+                for mood in text_moods:
+                    information["general_feedback"].append(mood[0]) # feedback score
+                    # information["general_feedback"].append(mood[2]) # feedback message
+                    # information["general_feedback"].append([mood[0],mood[2]]) # feedback score and message
 
             self.cursor.execute(""" SELECT score
                                     FROM emoji_moods
@@ -442,10 +446,11 @@ class DBController:
                                         moods.feedbackid = feedback.feedbackid AND
                                         meetingid = :m""",{'m':meeting_id})
             scores = self.cursor.fetchall()
-            emoji = [0,0,0,0,0]
-            for score in scores:
-                emoji[int(2*(score[0]+1))] += 1
-            information["emoji"] = emoji
+            if scores is not None:
+                emoji = [0,0,0,0,0]
+                for score in scores:
+                    emoji[int(2*(score[0]+1))] += 1
+                information["emoji"] = emoji
 
             return information
         except sqlite3.Error as error:
