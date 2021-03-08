@@ -286,6 +286,7 @@ def mult_choice_response(data):
     attendee = controller.get_attendee(request.sid)
     meeting = controller.get_meeting_from_attendee(request.sid)
     question = json.loads(data["question"])
+    options = question["options"]
     answer = data["answer"]
 
     mult_choice_feedback = MultChoiceResponse(anon_flag, attendee.get_sid(), meeting.get_token(), "multchoice", question["question"], answer)
@@ -294,6 +295,15 @@ def mult_choice_response(data):
     db_conn.insert_response(mult_choice_feedback)
 
     results_frequency = db_conn.mult_choice_frequency(question["question"])
+    result_list = []
+    for i in results_frequency:
+        result_list.append(i[0])
+
+    zero_freq = list(set(options) - set(result_list))
+
+    for j in zero_freq:
+        results_frequency.append((j,0))
+
     print(results_frequency)
 
     #------ emit back to host here
