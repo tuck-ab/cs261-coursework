@@ -166,7 +166,6 @@ class DBController:
                     try:
                         self.cursor.execute("INSERT INTO " + response_type + "_responses VALUES (:r, :d)",{'r':response_ID, 'd':data})
                         self.conn.commit()
-                        #return response_ID
                     except sqlite3.Error as error:
                         print("Error inserting into table " + response_type +"_responses:", error)
                         self.conn.rollback()
@@ -356,8 +355,20 @@ class DBController:
             access_token = self.cursor.fetchone()[0]
             if host_token != access_token:
                 return None
-            information = {"errors": [], "questions": [], "moods": {"text": [], "emoji": []}, "responses": {"text": [], "emoji": [], "mult_choice": []}}
-            self.cursor.execute("SELECT errortype, errmessage FROM errors JOIN feedback ON errors.feedbackid = feedback.feedbackid AND meetingid = :m",{'m':meeting_id})
+            information = {
+                "mult_choice": [],          # [[poll, [answers], [frequency]]]
+                "question": [],             # [[question, [responses]]]
+                "final_mood": 0,            # Final mood value
+                "average_mood": 0,          # Overall average mood
+                "emoji": [],                # Frequencies of emoji scores []
+                "errors": [],               # [errors]
+                "general_feedback": []      
+            }
+            self.cursor.execute("""SELECT errmessage 
+                                   FROM errors 
+                                   JOIN feedback ON 
+                                       errors.feedbackid = feedback.feedbackid AND 
+                                       meetingid = :m""",{'m':meeting_id})
             information["errors"] = self.cursor.fetchall()
             self.cursor.execute("SELECT qmessage FROM questions JOIN feedback ON questions.feedbackid = feedback.feedbackid AND meetingid = :m",{'m':meeting_id})
             information["questions"] = self.cursor.fetchall()
