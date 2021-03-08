@@ -2,6 +2,7 @@ var questionTemplate = new QuestionTemplate();
 var errorDisplay = new ErrorDisplay();
 var feedbackDisplay = new FeedbackDisplay();
 var questionAnswerDisplay = new QuestionAnswerDisplay();
+var multChoiceQuestionDisplay = new MultChoiceQuestionDisplay();
 
 function getCookie(name) {
     const value =  `; ${document.cookie}`;
@@ -23,9 +24,8 @@ socket.on("template_update", function(data) {
 });
 
 socket.on("connection_response", function(data) {
-    if (data == "connected") {
-        socket.emit("connect_as_host", {"cookie" : getCookie("meeting_token")});
-    }
+    socket.emit("connect_as_host", {"cookie" : getCookie("meeting_token")});
+    console.log("sending connect");
 });
 
 socket.on("meeting_ended", function(data) {
@@ -61,6 +61,12 @@ socket.on("emoji_response", function(data) {
     //feedbackDisplay.addFeedback(data["emoji"]);
     //feedbackDisplay.displayFeedback(document.getElementById("recentEmojiFeedbackDisplay"));
     document.getElementById("emojisentimentScore").innerHTML = data["emoji_score"];
+});
+
+socket.on("mult_choice_response", function(data) {
+    multChoiceQuestionDisplay.updateQuestion(data);
+    console.log(data);
+    multChoiceQuestionDisplay.display(document.getElementById("multChoiceAnswerDisplay"));
 });
 
 socket.on("error_response", function(data) {

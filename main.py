@@ -158,6 +158,7 @@ def create_meeting():
         new_meeting.title = title
 
         db_conn.insert_meeting(new_meeting.host_token, token, title)
+        print("done with meeting setup")
 
         ## -- Send the response with token
         resp = make_response(redirect(url_for("host_page")))
@@ -222,6 +223,8 @@ def host_connect(data):
     meeting.set_host(new_host)
     join_room(new_host.get_room())
     join_room(meeting.host_room)
+
+    print(meeting.code)
 
     emit("meeting_details", {"meeting_code":meeting.code})
     emit("template_update", meeting.get_template().getJSON())
@@ -308,6 +311,8 @@ def mult_choice_response(data):
 
     #------ emit back to host here
     #------ host needs to be emitted the question (question["question"]) and the result (results_frequency) 
+
+    emit("mult_choice_response", {"question":question["question"], "results": results_frequency}, room=meeting.host_room)
     
 
 @socketio.on("question_response")

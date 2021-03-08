@@ -3,6 +3,7 @@
     <head>
         <script src="https://cdn.socket.io/3.1.1/socket.io.min.js"></script>
         <script src="{{ url_for('static', filename='scripts/socketConnection.js') }}"></script>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
         <script src="{{ url_for('static', filename='classes/question.js') }}"></script>
         <script src="{{ url_for('static', filename='classes/questionTemplate.js') }}"></script>
@@ -10,6 +11,7 @@
         <script src="{{ url_for('static', filename='classes/errorDisplay.js') }}"></script>
         <script src="{{ url_for('static', filename='classes/feedbackDisplay.js') }}"></script>
         <script src="{{ url_for('static', filename='classes/questionAnswerDisplay.js') }}"></script>
+        <script src="{{ url_for('static', filename='classes/multChoiceQuestionDisplay.js') }}"></script>
 
         <script src="{{ url_for('static', filename='scripts/makeQuestionPopup.js') }}"></script>
         <script src="{{ url_for('static', filename='scripts/host.js') }}"></script>
@@ -70,6 +72,11 @@
             <div id="questionAnswerDisplay">
                 
             </div>
+        </div>
+
+        <div class="containers">
+            <p>Multiple Choice Question Results:</p>
+            <div id="multChoiceAnswerDisplay"></div>
         </div>
 
         <div id="templateDisplay">
