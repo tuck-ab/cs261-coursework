@@ -1,94 +1,108 @@
-DROP TABLE hosts CASCADE;
-CREATE TABLE host (
-    hostid  INTEGER,
+DROP TABLE IF EXISTS hosts;
+CREATE TABLE hosts (
+    hostid             INTEGER NOT NULL,
+    username           TEXT NOT NULL,
+    encrypted_pass     TEXT NOT NULL,
+    salt               TEXT NOT NULL,
+    access_token      TEXT NOT NULL,
     PRIMARY KEY (hostid)
 );
 
-DROP TABLE meetings CASCADE;
+DROP TABLE IF EXISTS meetings;
 CREATE TABLE meetings (
-    meetingid  INTEGER
-    title      VARCHAR(30) NOT NULL,
-    runtime    TIME NOT NULL,
-    PRIMARY KEY (meetingid)
+    meetingid    INTEGER NOT NULL,
+    hostid       INTEGER NOT NULL,
+    title        TEXT NOT NULL,
+    runtime      INTEGER NOT NULL,
+    date_time    TEXT NOT NULL,
+    PRIMARY KEY (meetingid),
+    FOREIGN KEY (hostid) REFERENCES hosts(hostid)
 );
 
-DROP TABLE feedback CASCADE;
+DROP TABLE IF EXISTS feedback;
 CREATE TABLE feedback (
-    feedbackid    INTEGER,
-    meetingid     INTEGER,
-    feedbacktype  VARCHAR(8) NOT NULL CHECK (feedbacktype IN ('Error','Question','Response','Mood')),
+    feedbackid    INTEGER NOT NULL,
+    meetingid     INTEGER NOT NULL,
+    feedbacktype  TEXT NOT NULL CHECK (feedbacktype IN ('error','question','response','mood')),
     PRIMARY KEY (feedbackid),
-    FOREIGN KEY (meetingid)
+    FOREIGN KEY (meetingid) REFERENCES meetings(meetingid)
 );
 
-DROP TABLE errors CASCADE;
+DROP TABLE IF EXISTS errors;
 CREATE TABLE errors (
-    feedbackid  INTEGER,
-    errortype   VARCHAR(10) NOT NULL,
-    errmessage  VARCHAR(50) NOT NULL,
-    PRIMARY KEY (feedbackid)
+    feedbackid  INTEGER NOT NULL,
+    errortype   TEXT NOT NULL,
+    errmessage  TEXT NOT NULL,
+    PRIMARY KEY (feedbackid),
+    FOREIGN KEY (feedbackid) REFERENCES feedback(feedbackid)
 );
 
-DROP TABLE questions CASCADE;
+DROP TABLE IF EXISTS questions;
 CREATE TABLE questions (
-    feedbackid  INTEGER,
-    qmessage    VARCHAR(50) NOT NULL,
-    PRIMARY KEY (feedbackid)
+    feedbackid  INTEGER NOT NULL,
+    qmessage    TEXT NOT NULL,
+    PRIMARY KEY (feedbackid),
+    FOREIGN KEY (feedbackid) REFERENCES feedback(feedbackid)
 );
 
-DROP TABLE moods CASCADE;
+DROP TABLE IF EXISTS moods;
 CREATE TABLE moods (
-    feedbackid  INTEGER,
-    moodid      INTEGER,
-    moodtype    VARCHAR(5) NOT NULL CHECK (moodtype IN ('Text','Emoji')),
+    moodid      INTEGER NOT NULL,
+    feedbackid  INTEGER NOT NULL,
+    moodtype    TEXT NOT NULL CHECK (moodtype IN ('text','emoji')),
     score       FLOAT NOT NULL,
-    timeofmood  TIME NOT NULL,
-    PRIMARY KEY (feedbackid),
-    FOREIGN KEY (moodid)
-);
-
-DROP TABLE text_moods CASCADE;
-CREATE TABLE text_moods (
-    moodid      INTEGER,
-    txtmessage  VARCHAR(50) NOT NULL,
+    timeofmood  INTEGER NOT NULL,
+    avgmood     FLOAT NOT NULL,
     PRIMARY KEY (moodid),
+    FOREIGN KEY (feedbackid) REFERENCES feedback(feedbackid)
 );
 
-DROP TABLE emoji_moods CASCADE;
+DROP TABLE IF EXISTS text_moods;
+CREATE TABLE text_moods (
+    moodid      INTEGER NOT NULL,
+    txtmessage  TEXT NOT NULL,
+    PRIMARY KEY (moodid),
+    FOREIGN KEY (moodid) REFERENCES moods(moodid)
+);
+
+DROP TABLE IF EXISTS emoji_moods;
 CREATE TABLE emoji_moods (
-    moodid     INTEGER,
-    emojitype  VARCHAR(10) NOT NULL,
-    PRIMARY KEY (moodid)
+    moodid     INTEGER NOT NULL,
+    emojitype  INTEGER NOT NULL,
+    PRIMARY KEY (moodid),
+    FOREIGN KEY (moodid) REFERENCES moods(moodid)
 );
 
-DROP TABLE responses CASCADE;
+DROP TABLE IF EXISTS responses;
 CREATE TABLE responses (
-    feedbackid     INTEGER,
-    responseid     INTEGER,
-    responsetype   VARCHAR(10) NOT NULL CHECK (responsetype IN ('Text','Emoji','MultChoice')),
-    questionasked  VARCHAR(50) NOT NULL,
-    PRIMARY KEY (feedbackid),
-    FOREIGN KEY (responseid)
+    responseid     INTEGER NOT NULL,
+    feedbackid     INTEGER NOT NULL,
+    responsetype   TEXT NOT NULL CHECK (responsetype IN ('text','emoji','multchoice')),
+    questionasked  TEXT NOT NULL,
+    PRIMARY KEY (responseid),
+    FOREIGN KEY (feedbackid) REFERENCES feedback(feedbackid)
 );
 
-DROP TABLE text_responses CASCADE;
+DROP TABLE IF EXISTS text_responses;
 CREATE TABLE text_responses (
-    responseid  INTEGER,
-    txtmessage  VARCHAR(50) NOT NULL,
-    PRIMARY KEY (responseid)
+    responseid  INTEGER NOT NULL,
+    txtmessage  TEXT NOT NULL,
+    PRIMARY KEY (responseid),
+    FOREIGN KEY (responseid) REFERENCES responses(responseid)
 );
 
-DROP TABLE emoji_responses CASCADE;
+DROP TABLE IF EXISTS emoji_responses;
 CREATE TABLE emoji_responses (
-    responseid  INTEGER,
-    emojitype   VARCHAR(10) NOT NULL,
-    PRIMARY KEY (responseid)
+    responseid  INTEGER NOT NULL,
+    emojitype   TEXT NOT NULL,
+    PRIMARY KEY (responseid),
+    FOREIGN KEY (responseid) REFERENCES responses(responseid)
 );
 
-DROP TABLE mult_choice_responses CASCADE;
+DROP TABLE IF EXISTS mult_choice_responses;
 CREATE TABLE mult_choice_responses (
-    responseid     INTEGER,
-    correctanswer  VARCHAR(10) NOT NULL,
-    useranswer     VARCHAR(10) NOT NULL,
-    PRIMARY KEY (responseid)
+    responseid      INTEGER NOT NULL,
+    attendeeanswer  TEXT NOT NULL,
+    PRIMARY KEY (responseid),
+    FOREIGN KEY (responseid) REFERENCES responses(responseid)
 );

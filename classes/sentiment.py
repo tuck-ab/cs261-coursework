@@ -91,3 +91,4 @@ class Sentiment:
 
     def get_percentage(self):
         return self.calculate_percentage(self.average)
+

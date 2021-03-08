@@ -2,10 +2,83 @@
 <html>
     <head>
         <script src="https://cdn.socket.io/3.1.1/socket.io.min.js"></script>
-        <script src="{{ url_for('static', filename='scripts/hostsocket.js') }}"></script>
+        <script src="{{ url_for('static', filename='scripts/socketConnection.js') }}"></script>
+
+        <script src="{{ url_for('static', filename='classes/question.js') }}"></script>
+        <script src="{{ url_for('static', filename='classes/questionTemplate.js') }}"></script>
+        <script src="{{ url_for('static', filename='classes/multChoiceCreate.js') }}"></script>
+        <script src="{{ url_for('static', filename='classes/errorDisplay.js') }}"></script>
+        <script src="{{ url_for('static', filename='classes/feedbackDisplay.js') }}"></script>
+        <script src="{{ url_for('static', filename='classes/questionAnswerDisplay.js') }}"></script>
+
+        <script src="{{ url_for('static', filename='scripts/makeQuestionPopup.js') }}"></script>
+        <script src="{{ url_for('static', filename='scripts/host.js') }}"></script>
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/hiddenpopup.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='stylesheets/design.css') }}">
     </head>
     <body>
-        <p>The code for this meeting is: <div id="meeting_code"></div></p>
+        <div id="header">
+            <p>The code for this meeting is: <div id="meeting_code"></div></p>
+        </div>
+
+        <div id="createQuestion" class="popup">
+            <div id="popUpDiv" class="popup-content">
+
+                <span class="close" onclick="closePopup()">Close</span><br>
+
+                
+                <select name="questionTypes" id="questionType" onchange="questionTypeUpdate()">
+                    <option value="" selected disabled hidden>Choose Question Type</option>
+                    <option value="normal">Normal Question</option>
+                    <option value="multichoice">Multiple Choice Question</option>
+                </select>
+                <div id="questionInputer">
+
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <input type="button" onclick="endMeeting()" value="End Meeting">
+        </div>
+
+
+        <div class="containers">
+            <p>Current score of room: <span id="sentimentScore">0</span></p>
+            <p>Most recent feedback recieved:</p>
+            <div id="recentFeedbackDisplay">
+
+            </div>
+        </div>
+
+        <div class="containers">
+            <p>Current emoji mood of room: <span id="emojisentimentScore">0</span></p>
+
+            </div>
+        </div>
+
+        <div class="containers">
+            <p id="errorTitle">Errors reported by attendees:</p>
+            <div id="errorFeedbackDisplay">
+
+            </div>
+        </div>
+
+        <div class="containers">
+            <p>Recent questions answered:</p>
+            <div id="questionAnswerDisplay">
+                
+            </div>
+        </div>
+
+        <div id="templateDisplay">
+            <p>Current template:</p>
+            <div id="currentTemplate">
+
+            </div>
+            <input id="afterStartAdd" type="button" onclick="openPopup()" value="Add Question">
+        </div>
 
     </body>
 </html>

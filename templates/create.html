@@ -2,11 +2,48 @@
 <html>
     <head>
         <title>Create Meeting</title>
+        <script src="{{ url_for('static', filename='classes/question.js') }}"></script>
+        <script src="{{ url_for('static', filename='classes/questionTemplate.js') }}"></script>
+        <script src="{{ url_for('static', filename='classes/multChoiceCreate.js') }}"></script>
+        <script src="{{ url_for('static', filename='scripts/createTemplate.js') }}"></script>
+        <script src="{{ url_for('static', filename='scripts/makeQuestionPopup.js') }}"></script>
+
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/hiddenpopup.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/design.css') }}">
     </head>
+
     <body>
-        <p>Creating a meeting page</p>
-        <form action="/create" method="post">
-            <input type="submit" value="Create">
-        </form>
+        <div id="header">
+            <h1>Template Page</h1>
+            <p>[EXAMPLE] Host ID:123456</p>
+        </div>
+        <div id="createQuestion" class="popup">
+            <div id="popUpDiv" class="popup-content">
+
+                <span id="closeButton" class="close" onclick="closePopup()">Close</span><br>
+
+                
+                <select name="questionTypes" id="questionType" onchange="questionTypeUpdate()">
+                    <option value="" selected disabled hidden>Choose Question Type</option>
+                    <option value="normal">Normal Question</option>
+                    <option value="multichoice">Multiple Choice Question</option>
+                </select>
+                <div id="questionInputer">
+
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <p>Title: <input type="text" id="meetingTitle"></p>
+        </div>
+
+        <div id="templateDisplay">
+
+        </div>
+
+        <input id="addButton" type="button" onclick="openPopup()" value="Add Question">
+        <input id ="submitButton" type="button" onclick="submitTemplate()" value="Submit">
     </body>
 </html>

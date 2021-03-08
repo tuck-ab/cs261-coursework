@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            function sendRequest() {
+                var password = document.getElementById("password").value;
+                var username = document.getElementById("username").value;
+
+                if (username === "") {
+                    document.getElementById("error").innerHTML = "Please enter username";
+                } else if (password === "") {
+                    document.getElementById("error").innerHTML = "Please enter password";
+                }else if (password === document.getElementById("passwordconf").value) {
+                    document.getElementById("registerForm").submit();
+                } else {
+                    document.getElementById("error").innerHTML = "Passwords don't match";
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <form id="registerForm" action="/register" method="post">
+            <p>Username: <input type="text" name="username" id="username"></p>
+            <p>Password: <input type="password" name="password" id="password"></p>
+            <p>Re-type password: <input type="password" name="passwordconf" id="passwordconf"></p>
+            <p id="error" style="color:red;"></p>
+            <input type="button" onclick="sendRequest()" value="Register">
+        </form>
+    </body>
+</html>
