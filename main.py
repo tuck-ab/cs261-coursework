@@ -117,6 +117,11 @@ def choose_meeting():
     else:
         print(information)
 
+        #these are the coords for a line graph of the text sentiment and emoji sentiment
+        text_over_time = text_sentiment_over_time(meeting_id)
+        emoji_over_time = emoji_sentiment_over_time(meeting_id)
+
+
     return "Password being checked"
 
 @app.route("/create", methods=["GET","POST"])
@@ -281,6 +286,7 @@ def mult_choice_response(data):
     attendee = controller.get_attendee(request.sid)
     meeting = controller.get_meeting_from_attendee(request.sid)
     question = json.loads(data["question"])
+    options = question["options"]
     answer = data["answer"]
 
     mult_choice_feedback = MultChoiceResponse(anon_flag, attendee.get_sid(), meeting.get_token(), "multchoice", question["question"], answer)
@@ -289,6 +295,15 @@ def mult_choice_response(data):
     db_conn.insert_response(mult_choice_feedback)
 
     results_frequency = db_conn.mult_choice_frequency(question["question"])
+    result_list = []
+    for i in results_frequency:
+        result_list.append(i[0])
+
+    zero_freq = list(set(options) - set(result_list))
+
+    for j in zero_freq:
+        results_frequency.append((j,0))
+
     print(results_frequency)
 
     #------ emit back to host here
@@ -424,24 +439,18 @@ def error_feedback(data):
 
 #These two functions needs host data as input, and generate a list of coordinates for a line graph
 #In the form [(time1, averagemood1) , (time2, averagemood2) ...]
-def text_sentiment_over_time(data):
-    host = controller.get_host_from_sid(request.sid)
-    meeting = controller.get_meeting_from_host(host)
-
-    meetingid = meeting.get_token()
+def text_sentiment_over_time(meetingid):
 
     text_sentiment_results = db_conn.sentiment_history("text",meetingid)
-    print(text_sentiment_results)
+    #print(text_sentiment_results)
+    return text_sentiment_results
 
 
-def emoji_sentiment_over_time(data):
-    host = controller.get_host_from_sid(request.sid)
-    meeting = controller.get_meeting_from_host(host)
-
-    meetingid = meeting.get_token()
+def emoji_sentiment_over_time(meetingid):
 
     emoji_sentiment_results = db_conn.sentiment_history("emoji",meetingid)
-    print(emoji_sentiment_results)
+    #print(emoji_sentiment_results)
+    return emoji_sentiment_results
 
 
 @socketio.on("disconnect")
