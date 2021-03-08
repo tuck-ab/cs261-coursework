@@ -207,6 +207,7 @@ def connected():
     Sends back a response to verify the connection and to trigger any required
     client side functions.
     """
+    print("someone connected")
     emit("connection_response", "connected")
 
 @socketio.on("connect_as_host")

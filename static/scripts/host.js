@@ -78,3 +78,5 @@ function removeError(id) {
     errorDisplay.removeError(id);
     errorDisplay.displayErrors(document.getElementById("errorFeedbackDisplay"));
 }
+
+socket.emit("connect_as_host", {"cookie" : getCookie("meeting_token")});
