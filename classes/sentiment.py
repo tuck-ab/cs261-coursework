@@ -41,16 +41,49 @@ class Sentiment:
         sd = math.sqrt(t_sqr_sum / t_n - t_mean ** 2)  # standard_deviation calculation
         UB = t_mean + 2 * sd  # upper_outlier_indicator
         LB = t_mean - 2 * sd  # lower_outlier_indicator
-        if single_sentiment > UB or single_sentiment < LB:
-            print(str(round(single_sentiment, 3)) + " is a outlier")
-            return sum / n, sum, sqr_sum, n
+        if single_sentiment > UB:
+            print(str(round(single_sentiment, 3)) + " is aN outlier")
+            if UB > 0:
+                percent_dif = (single_sentiment - UB)/UB  # how far away is the outlier, percent in decimal form
+            elif UB < 0:
+                percent_dif = (UB - single_sentiment)/UB  
+            # if percent difference is less than 1, add outlier to the average, else outlier is too far from the average - remove it
+            if percent_dif < 1:
+                # has less of an impact (make up for it with the rest)
+                new_sentiment_value = single_sentiment*(1-percent_dif) + (sum/n)*percent_dif # only worth percent dif
+                # that % dif will be the % of the original sum that we use 
+                t_sum = sum + new_sentiment_value
+                t_sqr_sum = sqr_sum + new_sentiment_value ** 2
+                t_n = n + 1
+                t_mean = t_sum / t_n
+            else: 
+                t_sum = sum
+                t_sqr_sum = sqr_sum
+                t_mean = sum / n
+        elif single_sentiment < LB:
+            print(str(round(single_sentiment, 3)) + " is aN outlier")
+            if LB < 0:
+                percent_dif = (single_sentiment - LB)/LB # how far away is the outlier, percent in decimal form
+            elif LB > 0:
+                percent_dif = (LB - single_sentiment)/LB 
+             # if percent difference is less than 1, add outlier to the average, else outlier is too far from the average - remove it
+            if percent_dif < 1:
+                new_sentiment_value = single_sentiment*(1-percent_dif) + (sum/n)*percent_dif
+                t_sum = sum + new_sentiment_value
+                t_sqr_sum = sqr_sum + new_sentiment_value ** 2
+                t_n = n + 1
+                t_mean = t_sum / t_n
+            else: 
+                t_sum = sum
+                t_sqr_sum = sqr_sum
+                t_mean = sum / n
         else:
-            print(str(round(single_sentiment, 3)) + " is a inlier")
-            self.sentiment_sum = t_sum
-            self.sentiment_sqr_sum = t_sqr_sum
-            self.num_responses = t_n
-            self.average = t_mean
-            return t_mean, t_sum, t_sqr_sum, t_n
+            print(str(round(single_sentiment, 3)) + " is aN inlier")
+        self.sentiment_sum = t_sum
+        self.sentiment_sqr_sum = t_sqr_sum
+        self.num_responses = t_n
+        self.average = t_mean
+        return t_mean, t_sum, t_sqr_sum, t_n
 
     def calculate_percentage(self, average):
         percent = (average + 1) * 50
@@ -59,17 +92,3 @@ class Sentiment:
     def get_percentage(self):
         return self.calculate_percentage(self.average)
 
-
-#s = Sentiment(0,0,0,0,0)
-#s.setSentiment("The platform provides universal access to the world's best education, partnering with top universities and organizations to offer courses online.")
-#print(s.getSentiment())
-
-#print("Values after first sentiment: ", s.set_AverageSentiment())
-#print("AverAGE", s.get_AverageSentiment())  
-#print("Percentage: ", s.get_percentage())
-
-#s.setSentiment("wonderful")
-#print(s.getSentiment())
-#print("Values after second sentiment: ", s.set_AverageSentiment())
-#print("AverAGE", s.get_AverageSentiment())
-#print("Percentage: ", s.get_percentage())
