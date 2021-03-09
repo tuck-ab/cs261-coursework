@@ -6,6 +6,8 @@ function openPopup() {
 
 function closePopup() {
     document.getElementById("createQuestion").style.display = "none";
+    document.getElementById("questionType").value = "Choose Question Type"
+    document.getElementById("questionInputer").innerHTML = "";
 }
 
 function questionTypeUpdate() {
