@@ -1,4 +1,5 @@
 var searchResults = new SearchResults();
+var meetingInfo;
 
 function getMeetings() {
     $.ajax({
@@ -21,17 +22,16 @@ function searchUpdate() {
 }
 
 function selectResult(id) {
-    if (keywordEntered !== null) {
-        $.ajax({
-            data : {
-            meeting : searchResults.getResultString(id)
-                },
-            type : 'POST',
-            url : '/meeting_submit'
-            })
-        .done(function(data) {
-            console.log(data);
-        });
-        event.preventDefault();
-    }
+    $.ajax({
+        data : {
+        meeting : searchResults.getResultString(id)
+            },
+        type : 'POST',
+        url : '/meeting_submit'
+        })
+    .done(function(data) {
+        meetingInfo = new MeetingInfo(data);
+        document.getElementById("search").style = "display:none";
+        meetingInfo.display(document.getElementById("info"));
+    });
 }
