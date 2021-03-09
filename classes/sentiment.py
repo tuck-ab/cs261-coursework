@@ -20,6 +20,9 @@ class Sentiment:
 
     def setSentiment(self, string):
         self.calculateSentiment(string)
+        
+    def getSentimentCount(self):
+        return self.num_responses
 
 # Simply returns the current average sentiment of the event    
     def get_AverageSentiment(self):
@@ -49,7 +52,7 @@ class Sentiment:
                 percent_dif = (UB - single_sentiment)/UB  
             # if percent difference is less than 1, add outlier to the average, else outlier is too far from the average - remove it
             if percent_dif < 1:
-                # has less of an impact (make up for it with the rest)
+                # calculate new sentiment value where outlier has less of an impact 
                 new_sentiment_value = single_sentiment*(1-percent_dif) + (sum/n)*percent_dif # only worth percent dif
                 # that % dif will be the % of the original sum that we use 
                 t_sum = sum + new_sentiment_value
@@ -57,6 +60,7 @@ class Sentiment:
                 t_n = n + 1
                 t_mean = t_sum / t_n
             else: 
+                # keep the original values (without adding last_sentiment)
                 t_sum = sum
                 t_sqr_sum = sqr_sum
                 t_mean = sum / n
