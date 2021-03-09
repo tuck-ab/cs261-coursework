@@ -18,8 +18,7 @@ class DBController:
             print("Failed to open database connection", error)
 
     def close(self):
-        """Closes connection to database
-        """
+        # Closes connection to database
         self.conn.close()
 
     def __insert_feedback(self, meeting, f_type):
@@ -167,7 +166,6 @@ class DBController:
                     try:
                         self.cursor.execute("INSERT INTO " + response_type + "_responses VALUES (:r, :d)",{'r':response_ID, 'd':data})
                         self.conn.commit()
-                        #return response_ID
                     except sqlite3.Error as error:
                         print("Error inserting into table " + response_type +"_responses:", error)
                         self.conn.rollback()
@@ -357,17 +355,103 @@ class DBController:
             access_token = self.cursor.fetchone()[0]
             if host_token != access_token:
                 return None
-            information = {"errors": [], "questions": [], "moods": {"text": [], "emoji": []}, "responses": {"text": [], "emoji": [], "mult_choice": []}}
-            self.cursor.execute("SELECT errortype, errmessage FROM errors JOIN feedback ON errors.feedbackid = feedback.feedbackid AND meetingid = :m",{'m':meeting_id})
-            information["errors"] = self.cursor.fetchall()
-            self.cursor.execute("SELECT qmessage FROM questions JOIN feedback ON questions.feedbackid = feedback.feedbackid AND meetingid = :m",{'m':meeting_id})
-            information["questions"] = self.cursor.fetchall()
-            for (field, mood_type) in zip(["txtmessage", "emojitype"],["text","emoji"]):
-                self.cursor.execute("SELECT score, timeofmood, avgmood, "+field+" FROM "+mood_type+"_moods JOIN moods USING(moodid) JOIN feedback ON moods.feedbackid = feedback.feedbackid AND meetingid = :m",{'m':meeting_id})
-                information["moods"][mood_type] = self.cursor.fetchall()
-            for (field, response_type) in zip(["txtmessage","emojitype","attendeeanswer"],["text","emoji","mult_choice"]):
-                self.cursor.execute("SELECT questionasked, "+field+" FROM "+response_type+"_responses JOIN responses USING(responseid) JOIN feedback ON responses.feedbackid = feedback.feedbackid AND meetingid = :m",{'m':meeting_id})
-                information["responses"][response_type] = self.cursor.fetchall()
+            information = {
+                "mult_choice": [],          # [[poll, [answers], [frequency]]]
+                "question": [],             # [[question, [responses]]]
+                "final_mood": 0,            # Final mood value
+                "average_mood": 0,          # Overall average mood
+                "emoji": [],                # [emoji frequencies]
+                "errors": [],               # [errors]
+                "general_feedback": []      # [feedback]
+            }
+
+            self.cursor.execute(""" SELECT questionasked, attendeeanswer
+                                    FROM mult_choice_responses
+                                    JOIN responses USING (responseid)
+                                    JOIN feedback ON
+                                        responses.feedbackid = feedback.feedbackid AND
+                                        meetingid = :m""",{'m':meeting_id})
+            polls = self.cursor.fetchall()
+            if polls is not None:
+                questions = {}
+                for poll in polls:
+                    question = poll[0]
+                    choice = poll[1]
+                    if question not in questions:
+                        questions[question] = {}
+                    if choice not in questions[question]:
+                        questions[question][choice] = 0
+                    questions[question][choice] += 1
+                multiple_choices = []
+                for question in questions:
+                    choices = []
+                    frequencies = []
+                    for choice in questions[question]:
+                        choices.append(choice)
+                        frequencies.append(questions[question][choice])
+                    multiple_choices.append([question, choices, frequencies])
+                information["mult_choice"] = multiple_choices
+
+            self.cursor.execute(""" SELECT questionasked, txtmessage
+                                    FROM text_responses
+                                    JOIN responses USING (responseid)
+                                    JOIN feedback ON
+                                        responses.feedbackid = feedback.feedbackid AND
+                                        meetingid = :m""",{'m':meeting_id})
+            responses = self.cursor.fetchall()
+            if responses is not None:
+                texts = {}
+                for response in responses:
+                    asked = response[0]
+                    answer = response[1]
+                    if asked not in texts:
+                        texts[asked] = []
+                    texts[asked].append(answer)
+                question = []
+                for text in texts:
+                    answers = texts[text]
+                    question.append([text,answers])
+                information["question"] = question
+
+            self.cursor.execute(""" SELECT errmessage 
+                                    FROM errors 
+                                    JOIN feedback ON 
+                                        errors.feedbackid = feedback.feedbackid AND 
+                                        meetingid = :m""",{'m':meeting_id})
+            err_messages = self.cursor.fetchall()
+            if err_messages is not None:
+                for message in err_messages:
+                    information["errors"].append(message[0])
+
+            self.cursor.execute(""" SELECT score, avgmood, txtmessage
+                                    FROM text_moods
+                                    JOIN moods USING (moodid)
+                                    JOIN feedback ON
+                                        moods.feedbackid = feedback.feedbackid AND
+                                        meetingid = :m
+                                    ORDER BY timeofmood ASC""",{'m':meeting_id})
+            text_moods = self.cursor.fetchall()
+            if text_moods is not None:
+                information["final_mood"] = text_moods[-1][0]
+                information["average_mood"] = text_moods[-1][1]
+                for mood in text_moods:
+                    information["general_feedback"].append(mood[0]) # feedback score
+                    # information["general_feedback"].append(mood[2]) # feedback message
+                    # information["general_feedback"].append([mood[0],mood[2]]) # feedback score and message
+
+            self.cursor.execute(""" SELECT score
+                                    FROM emoji_moods
+                                    JOIN moods USING (moodid)
+                                    JOIN feedback ON
+                                        moods.feedbackid = feedback.feedbackid AND
+                                        meetingid = :m""",{'m':meeting_id})
+            scores = self.cursor.fetchall()
+            if scores is not None:
+                emoji = [0,0,0,0,0]
+                for score in scores:
+                    emoji[int(2*(score[0]+1))] += 1
+                information["emoji"] = emoji
+
             return information
         except sqlite3.Error as error:
             print("Error encountered:",error)
