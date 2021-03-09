@@ -2,14 +2,13 @@ class Template:
     def __init__(self):
         self.questions = []
 
-    def fromJSON(self, json_dict):
+    def from_json(self, json_dict):
         """Maps the JSON dictionary given to the correct format for this object
 
         The current JSON format used is:
             {"questions": [{"question": "", "type":""}, ... , {"question": "", "type":""}]}
 
         """
-
         questions = json_dict["questions"]
         self.questions = []
 
@@ -20,11 +19,10 @@ class Template:
 
         return self
 
-    def getJSON(self):
+    def get_json(self):
         """
         Returns a python dictionary to be used to send the template in a JSON format 
         """
-
         json_dict = {"questions": []}
         for item in self.questions:
             json_dict["questions"].append(item.get_json())
@@ -32,7 +30,7 @@ class Template:
         return json_dict
 
     def __str__(self):
-        return str(self.getJSON())
+        return str(self.get_json())
 
 class Question:
     def __init__(self, q_type):

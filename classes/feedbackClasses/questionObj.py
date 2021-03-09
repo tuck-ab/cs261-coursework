@@ -2,12 +2,9 @@ from .generalFeedbackObj import GeneralFeedback
 
 class QuestionFeedback(GeneralFeedback):
 
-    def __init__(self, anonFlag, attendeeID, meetingID, questionText):
-        super().__init__(anonFlag, attendeeID, meetingID)
-        self.questionText = questionText
+    def __init__(self, attendee_id, meeting_id, question_text):
+        super().__init__(attendee_id, meeting_id)
+        self.question_text = question_text
     
-    def getQuestionText(self):
-        return self.questionText
-
-
-test7 = QuestionFeedback(True,23,43,"kj")
+    def get_question_text(self):
+        return self.question_text

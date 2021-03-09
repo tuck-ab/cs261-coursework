@@ -1,15 +1,15 @@
 class GeneralPrompt:
 
-    def __init__(self, hostID, meetingID, promptText):
-        self.hostID = hostID
-        self.promptText = promptText
-        self.meetingID = meetingID
+    def __init__(self, host_id, meeting_id, prompt_text):
+        self.host_id = host_id
+        self.prompt_text = prompt_text
+        self.meeting_id = meeting_id
     
-    def getHost(self):
-        return self.hostID
+    def get_host(self):
+        return self.host_id
 
-    def getPromptText(self):
-        return self.promptText
+    def get_prompt_text(self):
+        return self.prompt_text
     
-    def getMeeting(self):
-        return self.meetingID
+    def get_meeting(self):
+        return self.meeting_id

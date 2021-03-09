@@ -1,16 +1,12 @@
 class GeneralFeedback:
 
-    def __init__(self, anonFlag, attendeeID, meetingID):
-        self.anonFlag = anonFlag
-        self.attendeeID = attendeeID
-        self.meetingID = meetingID
-    
-    def getAnon(self):
-        return self.anonFlag
+    def __init__(self, attendee_id, meeting_id):
+        self.attendee_id = attendee_id
+        self.meeting_id = meeting_id
 
-    def getAttendee(self):
-        return self.attendeeID
+    def get_attendee(self):
+        return self.attendee_id
 
-    def getMeeting(self):
-        return self.meetingID
+    def get_meeting(self):
+        return self.meeting_id
     
