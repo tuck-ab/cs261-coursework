@@ -115,6 +115,7 @@ def choose_meeting():
     if information is None:
         return "Invalid access token"
     else:
+        print(information)
         return information
 
         #these are the coords for a line graph of the text sentiment and emoji sentiment

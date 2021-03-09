@@ -1,4 +1,5 @@
 var searchResults = new SearchResults();
+var meetingInfo;
 
 function getMeetings() {
     $.ajax({
@@ -29,6 +30,8 @@ function selectResult(id) {
         url : '/meeting_submit'
         })
     .done(function(data) {
-        console.log(data);
+        meetingInfo = new MeetingInfo(data);
+        document.getElementById("search").style = "display:none";
+        meetingInfo.display(document.getElementById("info"));
     });
 }
