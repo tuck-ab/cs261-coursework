@@ -2,13 +2,13 @@ from .moodObj import Mood
 
 class EmojiMood(Mood):
 
-    def __init__(self, anonFlag, attendeeID, meetingID, moodType, moodScore, moodTime, current_mood_avg, moodEmoji):
-        super().__init__(anonFlag, attendeeID, meetingID, moodType, moodScore, moodTime, current_mood_avg)
-        self.moodEmoji = moodEmoji
+    def __init__(self, attendee_id, meeting_id, mood_type, mood_score, mood_time, current_mood_avg, mood_emoji):
+        super().__init__(attendee_id, meeting_id, mood_type, mood_score, mood_time, current_mood_avg)
+        self.mood_emoji = mood_emoji
     
-    def getMoodEmoji(self):
-        return self.moodEmoji
+    def get_mood_emoji(self):
+        return self.mood_emoji
 
-    def setEmojiMoodScore(self, score):
-        self.moodScore = score
-        return self.moodScore
+    def set_emoji_mood_score(self, score):
+        self.mood_score = score
+        return self.mood_score

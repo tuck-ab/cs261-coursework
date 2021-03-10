@@ -73,7 +73,7 @@ function setTemplate1() {
 }
 
 function setTemplate2() {
-    var template = [{"type":"normal", "question": "Whad did you find helpful about the session?"},
+    var template = [{"type":"normal", "question": "What did you find helpful about the session?"},
                     {"type":"normal", "question": "What do you think needs to be improved?"},
                     {"type":"normal", "question": "Do you have any other comments?"},
                     {"type":"multichoice", "question":"How was the content of the session?", "options": ["Too Much", "Good Amount", "Not enough"]},
@@ -86,7 +86,7 @@ function setTemplate2() {
 }
 
 function setTemplate3() {
-    var template = [{"type":"normal", "question": "Whad did you find helpful about the session?"},
+    var template = [{"type":"normal", "question": "What did you find helpful about the session?"},
                     {"type":"normal", "question": "What do you think needs to be improved?"},
                     {"type":"normal", "question": "Do you have any other comments?"},
                     {"type":"normal", "question": "How did the session benifit/not-benefit you?"},

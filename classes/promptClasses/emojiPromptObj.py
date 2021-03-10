@@ -2,15 +2,15 @@ from .generalPromptObj import GeneralPrompt
 
 class EmojiPrompt(GeneralPrompt):
 
-    def __init__(self, hostID, meetingID, promptText, allowedEmojis = list()):
-        super().__init__(hostID, meetingID, promptText)
-        self.allowedEmojis = allowedEmojis
+    def __init__(self, host_id, meeting_id, prompt_text, allowed_emojis = list()):
+        super().__init__(host_id, meeting_id, prompt_text)
+        self.allowed_emojis = allowed_emojis
     
-    def getAllowedEmojis(self):
-        return self.allowedEmojis
+    def get_allowed_emojis(self):
+        return self.allowed_emojis
 
-    def addEmoji(self,emoji):
-        self.allowedEmojis.append(emoji)
+    def add_emoji(self,emoji):
+        self.allowed_emojis.append(emoji)
     
-    def removeEmoji(self,emoji):
-        self.allowedEmojis.remove(emoji)
+    def remove_emoji(self,emoji):
+        self.allowed_emojis.remove(emoji)

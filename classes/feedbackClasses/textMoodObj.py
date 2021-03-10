@@ -2,13 +2,13 @@ from .moodObj import Mood
 
 class TextMood(Mood):
 
-    def __init__(self, anonFlag, attendeeID, meetingID, moodType, moodScore, moodTime, current_mood_avg, moodText):
-        super().__init__(anonFlag, attendeeID, meetingID, moodType, moodScore, moodTime, current_mood_avg)
-        self.moodText = moodText
+    def __init__(self, attendee_id, meeting_id, mood_type, mood_score, mood_time, current_mood_avg, mood_text):
+        super().__init__(attendee_id, meeting_id, mood_type, mood_score, mood_time, current_mood_avg)
+        self.mood_text = mood_text
     
-    def getMoodText(self):
-        return self.moodText
+    def get_mood_text(self):
+        return self.mood_text
 
-    def setTextMoodScore(self, score):
-        self.moodScore = score
-        return self.moodScore
+    def set_text_mood_score(self, score):
+        self.mood_score = score
+        return self.mood_score
