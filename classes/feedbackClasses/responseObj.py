@@ -2,13 +2,13 @@ from .generalFeedbackObj import GeneralFeedback
 
 class Response(GeneralFeedback):
 
-    def __init__(self, anonFlag, attendeeID, meetingID, responseType, responsePrompt):
-        super().__init__(anonFlag, attendeeID, meetingID)
-        self.responseType = responseType
-        self.responsePrompt = responsePrompt
+    def __init__(self, attendee_id, meeting_id, response_type, response_prompt):
+        super().__init__(attendee_id, meeting_id)
+        self.response_type = response_type
+        self.response_prompt = response_prompt
     
-    def getResponseType(self):
-        return self.responseType
+    def get_response_type(self):
+        return self.response_type
         
-    def getResponsePrompt(self):
-        return self.responsePrompt
+    def get_response_prompt(self):
+        return self.response_prompt

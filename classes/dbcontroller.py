@@ -37,9 +37,9 @@ class DBController:
             error {ErrorFeedback} -- ErrorFeedback object containing details of error
 
         """
-        meeting = error.getMeeting()
-        err_type = error.getErrorType()
-        err_msg = error.getErrorMessage()
+        meeting = error.get_meeting()
+        err_type = error.get_error_type()
+        err_msg = error.get_error_message()
 
         feedback = self.__insert_feedback(meeting, "error")
 
@@ -61,8 +61,8 @@ class DBController:
             question {QuestionFeedback} -- QuestionFeedback object containing details of question
 
         """
-        meeting = question.getMeeting()
-        qstn_msg = question.getQuestionText()
+        meeting = question.get_meeting()
+        qstn_msg = question.get_question_text()
 
         feedback = self.__insert_feedback(meeting, "question")
 
@@ -94,10 +94,10 @@ class DBController:
 
         """
         cancel = False
-        meeting = mood.getMeeting()
-        mood_type = mood.getMoodType()
-        score = mood.getMoodScore()
-        current_time = datetime.datetime.strptime(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(mood.getMoodTime())), "%Y-%m-%d %H:%M:%S")
+        meeting = mood.get_meeting()
+        mood_type = mood.get_mood_type()
+        score = mood.get_mood_score()
+        current_time = datetime.datetime.strptime(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(mood.get_mood_time())), "%Y-%m-%d %H:%M:%S")
         current_avg = mood.get_current_mood_avg()
         try:
             self.cursor.execute("SELECT date_time FROM meetings WHERE meetingid = :m",{'m':meeting})
@@ -113,9 +113,9 @@ class DBController:
                     mood_ID = self.__insert_general_mood(feedback, mood_type, score, str(meeting_time), current_avg)
                     if type(mood_ID) is int:
                         if mood_type == "text":
-                            data = mood.getMoodText()
+                            data = mood.get_mood_text()
                         else:
-                            data = mood.getMoodEmoji()
+                            data = mood.get_mood_emoji()
                         try:
                             self.cursor.execute("INSERT INTO " + mood_type + "_moods VALUES (:m, :t)",{'m':mood_ID, 't':data})
                             self.conn.commit()
@@ -147,9 +147,9 @@ class DBController:
             response {emojiResponseObj/multChoiceResponseObj/testResponseObj} -- Emoji, Multiple Choice, or Text Response object containing relevant details
 
         """
-        meeting = response.getMeeting()
-        response_type = response.getResponseType()
-        prompt = response.getResponsePrompt()
+        meeting = response.get_meeting()
+        response_type = response.get_response_type()
+        prompt = response.get_response_prompt()
 
         if response_type == "emoji" or response_type == "text" or response_type == "multchoice":
             feedback = self.__insert_feedback(meeting, "response")
@@ -157,11 +157,11 @@ class DBController:
                 response_ID = self.__insert_general_response(feedback, response_type, prompt)
                 if type(response_ID) is int:
                     if response_type == "emoji":
-                        data = response.getResponseEmoji()
+                        data = response.get_response_emoji()
                     elif response_type == "text":
-                        data = response.getResponseText()
+                        data = response.get_response_text()
                     else:
-                        data = response.getResponseAnswer()
+                        data = response.get_response_answer()
                         response_type = "mult_choice"
                     try:
                         self.cursor.execute("INSERT INTO " + response_type + "_responses VALUES (:r, :d)",{'r':response_ID, 'd':data})

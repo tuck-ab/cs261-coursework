@@ -7,7 +7,6 @@ from flask_socketio import SocketIO, emit, join_room, leave_room
 
 from classes import *
 
-
 controller = Meeting_Controller()
 db_conn = DBController()
 
@@ -34,21 +33,15 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
 
-        print("username:", username)
-        print("password:", password)
-
         new_token = db_conn.check_host(username, password)
 
         if new_token is None:
-            print("Incorrect credentials")
             return "<h1>Wrong credentials</h1>"
         else:
-            print(new_token)
             resp = make_response(redirect(url_for("index")))
             resp.set_cookie("accessToken", new_token)
 
             return resp
-
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -61,13 +54,7 @@ def register():
         token = db_conn.add_new_host(username, password)
 
         if token is None:
-            print("Error inserting")
             token="token failed"
-        else:
-            print(token)
-
-        print("username:", username)
-        print("password:", password)
 
         resp = make_response(redirect(url_for("index")))
         resp.set_cookie("accessToken", token)
@@ -78,7 +65,6 @@ def register():
 def search_page():
     if request.method == "GET":
         token = request.cookies.get("accessToken")
-        print(token)
         
         if token == None or not db_conn.check_token(token):
             return redirect(url_for("login"))
@@ -100,8 +86,6 @@ def search_query():
         }
         
         results_list.append(search_result)
-        # print(search_result) #replace this line with emitting search_result
-        #each result is a dictionary to be emitted
 
     return {"results": results_list}
 
@@ -115,15 +99,10 @@ def choose_meeting():
     if information is None:
         return "Invalid access token"
     else:
-        print(information)
         return information
 
-        #these are the coords for a line graph of the text sentiment and emoji sentiment
         text_over_time = text_sentiment_over_time(meeting_id)
         emoji_over_time = emoji_sentiment_over_time(meeting_id)
-
-
-    return "Password being checked"
 
 @app.route("/create", methods=["GET","POST"])
 def create_meeting():
@@ -135,23 +114,18 @@ def create_meeting():
     If the request is a POST request then it deals with the template recieved and redirects
     the client to the 'host' page for a meeting along with the necessary identifiers as cookies.
     """
-
     token = request.cookies.get("accessToken")
     if request.method == "GET":
-        print(token)
         
         if token == None or not db_conn.check_token(token):
             return redirect(url_for("login"))
 
         return render_template("create.html")
 
-
     elif request.method == "POST":
-        template = Template().fromJSON(json.loads(request.form["templateJSON"]))
+        template = Template().from_json(json.loads(request.form["templateJSON"]))
 
-        ## host_info = json.loads(request.form["hostInfo"])
         title = request.form["title"]
-        print("template:", template)
         
         ## -- Make new meeting
         new_meeting = controller.create_meeting(db_conn)
@@ -159,7 +133,6 @@ def create_meeting():
         new_meeting.title = title
 
         db_conn.insert_meeting(new_meeting.host_token, token, title)
-        print("done with meeting setup")
 
         ## -- Send the response with token
         resp = make_response(redirect(url_for("host_page")))
@@ -173,7 +146,6 @@ def join_meeting():
 
     Redirects the client to the 'attendee_page' adding the room code to the HTML
     """
-
     code = request.form["meetingCode"]
 
     return redirect(url_for("attendee_page", code=code))
@@ -183,7 +155,6 @@ def host_page():
     """
     Renders and returns the page for a meeting's host
     """
-
     return render_template("host.html") 
 
 @app.route("/meeting/attendee/<code>")
@@ -197,7 +168,6 @@ def attendee_page(code):
 def meeting_end():
     return render_template("meetingEnded.html")
 
-
 ## -- Web Socket functions
 
 @socketio.on("connect")
@@ -208,7 +178,6 @@ def connected():
     Sends back a response to verify the connection and to trigger any required
     client side functions.
     """
-    print("someone connected")
     emit("connection_response", "connected")
 
 @socketio.on("connect_as_host")
@@ -226,10 +195,8 @@ def host_connect(data):
     join_room(new_host.get_room())
     join_room(meeting.host_room)
 
-    print(meeting.code)
-
     emit("meeting_details", {"meeting_code":meeting.code})
-    emit("template_update", meeting.get_template().getJSON())
+    emit("template_update", meeting.get_template().get_json())
 
 @socketio.on("connect_as_attendee")
 def attendee_connect(data):
@@ -251,15 +218,13 @@ def attendee_connect(data):
         join_room(new_attendee.get_room())
         join_room(meeting.attendee_room)
         
-        to_send_back["template"] = meeting.get_template().getJSON()
+        to_send_back["template"] = meeting.get_template().get_json()
         to_send_back["title"] = meeting.title
 
     else:
         to_send_back["connection_status"] = "not_connected"
 
-    print(to_send_back)
     emit("meeting_details", to_send_back)
-
 
 @socketio.on("update_from_host")
 def update_from_host(data):
@@ -269,13 +234,13 @@ def update_from_host(data):
 
 @socketio.on("template_update")
 def template_update(data):
-    meeting = controller.get_meeting_from_token(data["cookie"]) ## -- maybe change this
+    meeting = controller.get_meeting_from_token(data["cookie"])
     questions = json.loads(data["template"])
 
-    meeting.get_template().fromJSON(questions)
+    meeting.get_template().from_json(questions)
 
-    emit("template_update", meeting.get_template().getJSON())
-    emit("template_update", {"template": meeting.get_template().getJSON()}, room=meeting.attendee_room)
+    emit("template_update", meeting.get_template().get_json())
+    emit("template_update", {"template": meeting.get_template().get_json()}, room=meeting.attendee_room)
 
 @socketio.on("mult_choice_response")
 def mult_choice_response(data):
@@ -286,17 +251,14 @@ def mult_choice_response(data):
         data (dict) :JSON data from the socket connection 
                     {'question': '{"question":question(str), "type": type(str), "options": options(list of str)}', 'answer': answer(str)}
     """
-
-    anon_flag = True
     attendee = controller.get_attendee(request.sid)
     meeting = controller.get_meeting_from_attendee(request.sid)
     question = json.loads(data["question"])
     options = question["options"]
     answer = data["answer"]
 
-    mult_choice_feedback = MultChoiceResponse(anon_flag, attendee.get_sid(), meeting.get_token(), "multchoice", question["question"], answer)
+    mult_choice_feedback = MultChoiceResponse(attendee.get_sid(), meeting.get_token(), "multchoice", question["question"], answer)
     
-    #------ database stuff here
     db_conn.insert_response(mult_choice_feedback)
 
     results_frequency = db_conn.mult_choice_frequency(question["question"])
@@ -308,11 +270,6 @@ def mult_choice_response(data):
 
     for j in zero_freq:
         results_frequency.append((j,0))
-
-    print(results_frequency)
-
-    #------ emit back to host here
-    #------ host needs to be emitted the question (question["question"]) and the result (results_frequency) 
 
     emit("mult_choice_response", {"question":question["question"], "results": results_frequency}, room=meeting.host_room)
     
@@ -328,23 +285,16 @@ def question_response(data):
                      {"question": question(dict), "answer": answer(str)}
 
     """
-    anonFlag = True # --------------- needs anonFlag from attendee
     attendee = controller.get_attendee(request.sid)
     meeting = controller.get_meeting_from_attendee(request.sid)
     question = json.loads(data["question"])
     answer = data["answer"]
 
-    currentObj = TextResponse(anonFlag, attendee.get_sid(), meeting.get_token(), "text", question["question"], answer)
+    text_response = TextResponse(attendee.get_sid(), meeting.get_token(), "text", question["question"], answer)
 
+    db_conn.insert_response(text_response)
 
-    #----- database stuff can go here
-    db_conn.insert_response(currentObj)
-
-
-    #----- The responses can be sent to the host with currentObj.getResponseText()
     emit("question_answer_response", {"question": question["question"], "answer": answer}, room=meeting.host_room)
-
-
 
 @socketio.on("emoji_response")
 def emoji_response(data):
@@ -355,30 +305,21 @@ def emoji_response(data):
         data (dict) :JSON data from the socket connection 
                     {"emoji":emoji score(number)}
     """
-
-    anonFlag = True
     emoji = data["emoji"]
     attendee = controller.get_attendee(request.sid)
     meeting = controller.get_meeting_from_attendee(request.sid)
-    emoji_analyser = meeting.getemojiSentimentAnalyser()
-    emoji_analyser.setEmojiSentiment(emoji)
-    emoji_score = emoji_analyser.getEmojiSentiment()
+    emoji_analyser = meeting.get_emoji_sentiment_analyser()
+    emoji_analyser.set_emoji_sentiment(emoji)
+    emoji_score = emoji_analyser.get_emoji_sentiment()
     host = meeting.get_host()
 
+    emoji_analyser.set_average_emoji_sentiment()
 
-    emoji_analyser.set_AverageEmojiSentiment()
+    emoji_mood = EmojiMood(attendee.get_sid(), meeting.get_token(), "emoji", emoji_score, time.time(), emoji_analyser.get_percentage(), emoji)
 
-    currentObj = EmojiMood(anonFlag, attendee.get_sid(), meeting.get_token(), "emoji", emoji_score, time.time(), emoji_analyser.get_percentage(), emoji)
+    db_conn.insert_mood(emoji_mood)
 
-
-    #--- Database stuff can go here !
-    db_conn.insert_mood(currentObj)
-
-
-    emit("emoji_response", {"emoji":currentObj.getMoodEmoji(), "emoji_score":emoji_analyser.get_percentage()}, room=meeting.host_room)
-
-
-
+    emit("emoji_response", {"emoji":emoji_mood.get_mood_emoji(), "emoji_score":emoji_analyser.get_percentage()}, room=meeting.host_room)
 
 @socketio.on("general_feedback")
 def general_feedback(data):
@@ -390,29 +331,21 @@ def general_feedback(data):
         data (dict): JSON data from the socket connection
                      {"feedback": feedback(str)}
     """
-
-    anonFlag = True # -------------- needs anonFlag from attendee
     feedback = data["feedback"]
     attendee = controller.get_attendee(request.sid)
     meeting = controller.get_meeting_from_attendee(request.sid)
-    analyser = meeting.getSentimentAnalyser()
-    analyser.setSentiment(feedback)
-    score = analyser.getSentiment()
+    analyser = meeting.get_sentiment_analyser()
+    analyser.set_sentiment(feedback)
+    score = analyser.get_sentiment()
     host = meeting.get_host()
 
-    analyser.set_AverageSentiment()
+    analyser.set_average_sentiment()
 
-    currentObj = TextMood(anonFlag, attendee.get_sid(), meeting.get_token(), "text", score, time.time(), analyser.get_percentage(), feedback)
+    text_mood = TextMood(attendee.get_sid(), meeting.get_token(), "text", score, time.time(), analyser.get_percentage(), feedback)
     
-    
+    db_conn.insert_mood(text_mood)
 
-    #------- database stuff can go here
-    db_conn.insert_mood(currentObj)
-
-    #------- The feedback can be sent to host with currentObj.getMoodText()
-    #------- The percentage to be displayed can be sent to thost with analyser.get_percentage()
-
-    emit("feedback_response", {"feedback":currentObj.getMoodText(), "score":analyser.get_percentage()}, room=meeting.host_room)
+    emit("feedback_response", {"feedback":text_mood.get_mood_text(), "score":analyser.get_percentage()}, room=meeting.host_room)
 
 @socketio.on("error_feedback")
 def error_feedback(data):
@@ -424,54 +357,35 @@ def error_feedback(data):
         data (dict): JSON data from the socket connection
                      {"error": error{str}}
     """
-
-    anonFlag = True # --------------- needs anonFlag from attendee
     error = data["error"]
     attendee = controller.get_attendee(request.sid)
     meeting = controller.get_meeting_from_attendee(request.sid)
     host = meeting.get_host()
 
-    currentObj = ErrorFeedback(anonFlag, attendee.get_sid(), meeting.get_token(), "general error", error)
-    #there is also an attribute for the type of error, (audio, internet, etc) but idk if this is actually needed
+    error_feedback = ErrorFeedback(attendee.get_sid(), meeting.get_token(), "general error", error)
 
+    db_conn.insert_error(error_feedback)
 
-    #-------- database stuff can go here
-    db_conn.insert_error(currentObj)
+    emit("error_response", {"error":error_feedback.get_error_message()}, room=meeting.host_room)
 
-
-    #-------- The error message can be sent to host with currentObj.getErrorMessage()
-
-    emit("error_response", {"error":currentObj.getErrorMessage()}, room=meeting.host_room)
-
-
-#These two functions needs host data as input, and generate a list of coordinates for a line graph
-#In the form [(time1, averagemood1) , (time2, averagemood2) ...]
 def text_sentiment_over_time(meetingid):
-
     text_sentiment_results = db_conn.sentiment_history("text",meetingid)
-    #print(text_sentiment_results)
     return text_sentiment_results
 
-
 def emoji_sentiment_over_time(meetingid):
-
     emoji_sentiment_results = db_conn.sentiment_history("emoji",meetingid)
-    #print(emoji_sentiment_results)
     return emoji_sentiment_results
-
 
 @socketio.on("disconnect")
 def disconnected():
     host = controller.get_host_from_sid(request.sid)
     if host != None:
-        controller.host_disconnect(host)
         db_conn.update_runtime(host.get_meeting().host_token)
     else:
         attendee = controller.get_attendee(request.sid)
         if attendee != None:
             meeting = controller.get_meeting_from_attendee(request.sid)
             meeting.attendees.pop(attendee.sid)
-            print(meeting.attendees)
 
 @socketio.on("end_meeting")
 def end_meeting(data):

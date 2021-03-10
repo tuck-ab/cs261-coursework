@@ -2,9 +2,9 @@ from .responseObj import Response
 
 class EmojiResponse(Response):
 
-    def __init__(self, anonFlag, attendeeID, meetingID, responseType, responsePrompt, responseEmoji):
-        super().__init__(anonFlag, attendeeID, meetingID, responseType, responsePrompt)
-        self.responseEmoji = responseEmoji
+    def __init__(self, attendee_id, meeting_id, response_type, response_prompt, response_emoji):
+        super().__init__(attendee_id, meeting_id, response_type, response_prompt)
+        self.response_emoji = response_emoji
     
-    def getResponseEmoji(self):
-        return self.responseEmoji
+    def get_response_emoji(self):
+        return self.response_emoji

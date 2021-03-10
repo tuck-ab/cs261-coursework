@@ -2,13 +2,13 @@ from .generalFeedbackObj import GeneralFeedback
 
 class ErrorFeedback(GeneralFeedback):
 
-    def __init__(self, anonFlag, attendeeID, meetingID, errorType, errorMessage):
-        super().__init__(anonFlag, attendeeID, meetingID)
-        self.errorType = errorType
-        self.errorMessage = errorMessage
+    def __init__(self, attendee_id, meeting_id, error_type, error_message):
+        super().__init__(attendee_id, meeting_id)
+        self.error_type = error_type
+        self.error_message = error_message
     
-    def getErrorType(self):
-        return self.errorType
+    def get_error_type(self):
+        return self.error_type
     
-    def getErrorMessage(self):
-        return self.errorMessage
+    def get_error_message(self):
+        return self.error_message

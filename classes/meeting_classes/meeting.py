@@ -16,24 +16,21 @@ class Meeting:
         self.host = None
         self.attendees = {}
         
-        self.sentimentAnalyser = Sentiment(0, 0, 0, 0, 0, "")
+        self.sentiment_analyser = Sentiment(0, 0, 0, 0, 0, "")
         
-        self.emojiSentimentAnalyser = EmojiSentiment(0, 0, 0, 0, "")
+        self.emoji_sentiment_analyser = EmojiSentiment(0, 0, 0, 0, "")
 
-    def getSentimentAnalyser(self):
-        return self.sentimentAnalyser
+    def get_sentiment_analyser(self):
+        return self.sentiment_analyser
 
-    def getemojiSentimentAnalyser(self):
-        return self.emojiSentimentAnalyser
+    def get_emoji_sentiment_analyser(self):
+        return self.emoji_sentiment_analyser
 
     def set_template(self, template):
         self.template = template
 
     def get_template(self):
         return self.template
-
-    def attendee_in_meeting(self, attendee):
-        pass
 
     def add_attendee(self, attendee):
         self.attendees[attendee.sid] = attendee
@@ -48,9 +45,6 @@ class Meeting:
         self.host = host
 
     def get_host(self):
-        if self.host == None:
-            print("Host has not been set yet")
-
         return self.host
     
     def get_token(self):
