@@ -1,1 +1,0 @@
-console.log("Example JavaScript code execution");
