@@ -3,6 +3,7 @@ class MultChoiceCreate {
         this.options = ["",""]
     }
 
+    // Generates a string of HTML which represents the information
     getHTMLString() {
         var HTMLString = "";
         var loopString = "";

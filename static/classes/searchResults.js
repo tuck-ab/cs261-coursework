@@ -24,6 +24,7 @@ class SearchResults {
         return `{"meetingid":"` + this.filtered_results[id]["meeting_id"] + `"}`;
     }
 
+    // Generates a string of HTML which represents the information
     getHTMLString() {
         var HTMLString = "";
         var loopString = "";

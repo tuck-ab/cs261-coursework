@@ -10,6 +10,7 @@ class FeedbackDisplay {
         }
     }
 
+    // Generates a string of HTML which represents the information
     getHTMLString() {
         var HTMLString = "";
         

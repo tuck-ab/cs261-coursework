@@ -7,6 +7,7 @@ class QuestionTemplate{
         this.questions.push(question);
     }
 
+    // Generates a string of HTML which represents the information
     getDisplayString() {
         var outString = "";
         for (var i = 0; i < this.questions.length; i++) {

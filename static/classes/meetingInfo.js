@@ -7,6 +7,7 @@ class MeetingInfo {
         this.averageMood = info["average_mood"];
     }
 
+    // Generates a string of HTML which represents the information
     getHTMLString() {
         var HTMLString = "";
         var loopString;

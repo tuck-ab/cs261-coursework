@@ -3,6 +3,7 @@ class MultChoiceQuestionDisplay {
         this.questions = []
     }
 
+    // Generates a string of HTML which represents the information
     getHTMLString() {
         var HTMLString = "";
         

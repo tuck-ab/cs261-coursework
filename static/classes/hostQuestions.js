@@ -7,6 +7,7 @@ class HostQuestions{
         this.template.fromJSON(data);
     }
 
+    // Generates a string of HTML which represents the information
     getDisplayString() {
         var outString = "";
         var loopString = "";
